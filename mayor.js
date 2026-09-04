@@ -232,11 +232,12 @@ function generateClientMayorResponse(userText) {
     };
   }
 
-  if (query.includes('contact') || query.includes('email') || query.includes('hire') || query.includes('reach')) {
+  if (query.includes('contact') || query.includes('email') || query.includes('hire') || query.includes('reach') || query.includes('message') || query.includes('whatsapp') || query.includes('whatsap') || query.includes('social')) {
     return {
-      text: "You can reach Diptarka Samanta directly through several channels:\n\n• **Social Market**: Send a direct message at the [Social Market](social_market.html).\n• **Services & Consultancy**: Request custom AI/ML solutions at the [Iron Wharf](industry_port.html).\n• **LinkedIn & GitHub**: Connect via the social links on the island dashboard.",
+      text: "You can connect with Diptarka Samanta through several channels:\n\n• **Social Market**: Send a direct message at the [Social Market](social_market.html).\n• **Services & Consultancy**: Request custom AI/ML solutions at the [Iron Wharf](industry_port.html).\n• **Direct Links**: Connect via GitHub or LinkedIn on the island dashboard.",
       choices: [
-        { text: "Open Social Market", url: "social_market.html" }
+        { text: "Open Social Market", url: "social_market.html" },
+        { text: "View Freelance Options", url: "industry_port.html" }
       ]
     };
   }
