@@ -197,6 +197,88 @@ function parseMarkdown(text) {
   return escaped.replace(/\n/g, '<br>');
 }
 
+// Client Mayor Knowledge Engine for static hosting (e.g. GitHub Pages)
+function generateClientMayorResponse(userText) {
+  const query = userText.toLowerCase();
+  
+  if (query.includes('hello') || query.includes('hi') || query.includes('hey') || query.includes('greetings') || query.includes('sir')) {
+    return {
+      text: "Greetings, traveler! I am the Mayor of Aethelgard. It is a pleasure to welcome you to our sovereign digital island. I oversee town operations on behalf of our **Artificial Intelligence & Machine Learning Engineer, Diptarka Samanta**.\n\nHow may I guide your journey today? You can explore our 9 island sectors or ask me about Diptarka's AI/ML engineering work!",
+      choices: [
+        { text: "Who is Diptarka Samanta?", trigger: "architect" },
+        { text: "Tell me about Island landmarks", trigger: "landmarks" },
+        { text: "How to contact Diptarka?", trigger: "contact" }
+      ]
+    };
+  }
+
+  if (query.includes('who') || query.includes('architect') || query.includes('diptarka') || query.includes('about')) {
+    return {
+      text: "**Diptarka Samanta** is an **Artificial Intelligence & Machine Learning Engineer** who engineered the digital island of Aethelgard.\n\n• **Specializations**: Deep Learning, Natural Language Processing (NLP), Full-Stack Web Architecture, and Computer Vision.\n• **Background**: Pursuing B.Tech in CSE (AI & Machine Learning) at UEM Kolkata.\n• **Key Innovations**: Created Scanimation Studio (Barrier-Grid Optical Illusions) and autonomous AI systems.\n\nVisit the [Home Manor](home.html) for Diptarka's personal bio, or check the [Stellar Observatory](observatory.html) to see his AI projects!",
+      choices: [
+        { text: "View AI Projects", trigger: "projects" },
+        { text: "Check Tech Stack", trigger: "skills" }
+      ]
+    };
+  }
+
+  if (query.includes('landmark') || query.includes('sector') || query.includes('place') || query.includes('map') || query.includes('island')) {
+    return {
+      text: "Aethelgard features 9 sovereign sectors designed by our Architect:\n\n1. [Stellar Observatory](observatory.html) - AI & ML Projects\n2. [Grand Academy](academy.html) - Education & Certifications\n3. [Chronos Clock Tower](clock_tower.html) - Career Timeline\n4. [Core Terminal](code_terminal.html) - Interactive Tech Stack\n5. [Home Manor](home.html) - Biography & Resume\n6. [Grand Library](library.html) - Publications & Technical Notes\n7. [Luna Park / Playground](playground.html) - Games & Scanimation Studio\n8. [Social Market](social_market.html) - Social Links & Contact Form\n9. [Iron Wharf](industry_port.html) - Services & Freelance Consultancy",
+      choices: [
+        { text: "Visit Observatory", url: "observatory.html" },
+        { text: "Visit Playground", url: "playground.html" }
+      ]
+    };
+  }
+
+  if (query.includes('contact') || query.includes('email') || query.includes('hire') || query.includes('reach')) {
+    return {
+      text: "You can reach Diptarka Samanta directly through several channels:\n\n• **Social Market**: Send a direct message at the [Social Market](social_market.html).\n• **Services & Consultancy**: Request custom AI/ML solutions at the [Iron Wharf](industry_port.html).\n• **LinkedIn & GitHub**: Connect via the social links on the island dashboard.",
+      choices: [
+        { text: "Open Social Market", url: "social_market.html" }
+      ]
+    };
+  }
+
+  if (query.includes('scanimation') || query.includes('game') || query.includes('play') || query.includes('luna')) {
+    return {
+      text: "Welcome to [Luna Park / Playground](playground.html)! This sector houses our flagship **Scanimation Studio** demo, featuring real-time barrier-grid optical kinegrams.\n\nYou can also launch the full AI-powered web app live at [Scanimation Studio](https://scanimation.onrender.com)!",
+      choices: [
+        { text: "Go to Playground", url: "playground.html" },
+        { text: "Launch Full App", url: "https://scanimation.onrender.com" }
+      ]
+    };
+  }
+
+  if (query.includes('project') || query.includes('work') || query.includes('repo')) {
+    return {
+      text: "Diptarka has built impressive AI/ML applications showcased at the [Stellar Observatory](observatory.html):\n\n• **Scanimation Studio**: Barrier-grid optical illusion generator powered by AI.\n• **Mayor AI Challenge**: Real-time neural island town hall chatbot.\n• **Aethelgard Island**: Glassmorphic digital portfolio platform.",
+      choices: [
+        { text: "Explore Observatory", url: "observatory.html" }
+      ]
+    };
+  }
+
+  if (query.includes('skill') || query.includes('tech') || query.includes('stack') || query.includes('code')) {
+    return {
+      text: "Diptarka's core technical toolkit includes:\n\n• **Languages**: Python, JavaScript, HTML5/CSS3, C/C++\n• **AI/ML**: PyTorch, TensorFlow, NLP (Llama 3.1, Transformers), OpenCV\n• **Web & Cloud**: Node.js, Flask, FastAPI, Docker, Render, GitHub Pages\n\nTest his skill analyzer live inside the [Core Terminal](code_terminal.html)!",
+      choices: [
+        { text: "Launch Core Terminal", url: "code_terminal.html" }
+      ]
+    };
+  }
+
+  // Default Mayor fallback
+  return {
+    text: `Ah, an intriguing query regarding "${userText}"! As Mayor of Aethelgard, I recommend exploring our island sectors to learn more about Diptarka Samanta's AI engineering work:\n\n• [Stellar Observatory](observatory.html) for AI/ML projects\n• [Chronos Clock Tower](clock_tower.html) for career history\n• [Core Terminal](code_terminal.html) for technical skills\n• [Social Market](social_market.html) to send Diptarka a message!`,
+    choices: [
+      { text: "Tell me about Island landmarks", trigger: "landmarks" },
+      { text: "Who is Diptarka Samanta?", trigger: "architect" }
+    ]
+  };
+}
+
 // Call dynamic LLM and stream tokens
 async function streamLLMResponse(userText) {
   showTypingIndicator();
@@ -246,7 +328,7 @@ async function streamLLMResponse(userText) {
 
   let response;
   try {
-    // Attempt local API proxy first
+    // Attempt local API proxy first (when python server.py is running)
     response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -254,38 +336,27 @@ async function streamLLMResponse(userText) {
     });
     
     if (!response.ok) {
-      throw new Error("Local proxy failed, falling back to direct API");
+      throw new Error("Local proxy unavailable");
     }
   } catch (e) {
-    console.warn("API proxy unreachable or returned error:", e);
-    try {
-      // Fallback: call NVIDIA directly from browser
-      const directUrl = "https://integrate.api.nvidia.com/v1/chat/completions";
-      const apiKey = "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";
-      response = await fetch(directUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: "meta/llama-3.1-8b-instruct",
-          messages: conversationHistory,
-          temperature: 1,
-          top_p: 0.95,
-          max_tokens: 16384,
-          stream: true
-        })
-      });
-    } catch (directError) {
-      console.error("Direct API call failed too:", directError);
-      removeTypingIndicator();
-      thoughtAccordion.remove();
-      replyContentDiv.innerHTML = `<span style="color: #f87171; font-weight: 500;">System Error: Unreachable neural network. Please verify that your local python server is running and connected to the internet.</span>`;
-      chatBody.appendChild(mayorBubble);
-      scrollToBottom();
-      return;
+    // Static hosting mode (GitHub Pages) without Python backend server
+    console.log("Static mode active: using Client Mayor Knowledge Engine");
+    removeTypingIndicator();
+    
+    const clientReply = generateClientMayorResponse(userText);
+    
+    const clientMayorBubble = document.createElement('div');
+    clientMayorBubble.className = 'chat-msg msg-mayor';
+    clientMayorBubble.innerHTML = parseMarkdown(clientReply.text);
+    chatBody.appendChild(clientMayorBubble);
+    
+    if (clientReply.choices) {
+      addChoiceButtons(clientReply.choices);
     }
+    
+    scrollToBottom();
+    conversationHistory.push({ role: 'assistant', content: clientReply.text });
+    return;
   }
 
   removeTypingIndicator();
