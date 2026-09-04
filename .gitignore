@@ -1,0 +1,17 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Scratch scripts
+scratch/
+
+# IDE files
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Core Terminal - Tech Stack</title>
+  <link rel="stylesheet" href="subpage.css">
+  <style>
+    /* Fluid Blob Profile Image with Morphing Animation */
+    @keyframes morphBlob {
+      0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    }
+
+    .profile-header-card {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .banner-image {
+      height: 180px;
+      width: 100%;
+      background: linear-gradient(to bottom, rgba(10, 15, 30, 0.1), rgba(3, 7, 18, 0.85)), 
+                  url('images/banner.png') center/cover no-repeat;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .profile-meta-row {
+      display: flex;
+      gap: 20px;
+      padding: 0 24px 20px 24px;
+      margin-top: -40px;
+      align-items: flex-end;
+    }
+
+    .fluid-img-container {
+      width: 100px;
+      height: 100px;
+      position: relative;
+      overflow: hidden;
+      animation: morphBlob 8s ease-in-out infinite;
+      border: 3px solid var(--accent-color);
+      box-shadow: 0 0 15px var(--accent-glow), 0 8px 20px rgba(0,0,0,0.5);
+      background: #0d1117;
+      z-index: 10;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .fluid-img-container:hover {
+      transform: scale(1.05);
+    }
+
+    .fluid-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-text-col {
+      flex-grow: 1;
+      padding-bottom: 4px;
+      min-width: 0;
+    }
+
+    .profile-name-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0ea5e9, #fb7185);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      display: inline-block;
+    }
+
+    .profile-subtitle {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      letter-spacing: 0.01em;
+    }
+
+    /* Terminal Styles */
+    .terminal-window {
+      background: #010409;
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.05);
+      font-family: var(--font-mono);
+      overflow: hidden;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .terminal-header {
+      background: #0d1117;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+    
+    .terminal-title {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .terminal-body {
+      padding: 16px;
+      flex-grow: 1;
+      min-height: 250px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      scroll-behavior: smooth;
+    }
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .terminal-prompt {
+      color: #22c55e;
+      white-space: nowrap;
+    }
+
+    .terminal-input-field {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #f8fafc;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .terminal-suggest {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .suggest-link {
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .suggest-link:hover {
+      background: #06b6d4;
+      color: #010409;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+      border-color: transparent;
+    }
+
+    .line-user { color: #f8fafc; font-weight: 500; }
+    .line-system { color: #94a3b8; }
+    .line-success { color: #22c55e; }
+    .line-warning { color: #eab308; }
+
+    /* Compact Coding Profile Icons Grid */
+    .profile-icon-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-height: 62px;
+      position: relative;
+    }
+    
+    .profile-icon-card:hover {
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 10px var(--hover-glow, rgba(255,255,255,0.05));
+      border-color: var(--hover-color, rgba(255,255,255,0.1));
+    }
+    
+    .profile-icon-card .p-icon {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary);
+      transition: fill 0.3s ease, transform 0.3s ease;
+    }
+    
+    .profile-icon-card:hover .p-icon {
+      fill: var(--hover-color, var(--text-primary));
+      transform: scale(1.1);
+    }
+    
+    .p-label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    
+    .profile-icon-card:hover .p-label {
+      color: var(--text-primary);
+    }
+
+    @keyframes blink {
+      from, to { color: transparent; }
+      50% { color: var(--accent-color); }
+    }
+  </style>
+</head>
+<body class="accent-cyan">
+
+  <!-- UI Overlay for Toolbox -->
+  <div class="ui-overlay">
+    <div class="toolbox glass-panel collapsed" id="mainToolbox">
+      <!-- Minimized Horizontal Info-Bar -->
+      <div class="toolbox-minimized-content" id="toolboxMinimizedContent">
+        <div class="drag-dots">⋮⋮</div>
+        <div class="minimized-time">
+          <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span id="minimizedClock">00:00:00 AM</span>
+        </div>
+        <div class="minimized-divider">|</div>
+        <div class="minimized-weather">
+          <svg class="icon-weather" id="minimizedWeatherIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+          <span id="minimizedTemp">24°C</span>
+        </div>
+        <div class="minimized-divider">|</div>
+        <div style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem;">
+          <span>🎵</span>
+          <span id="musicMiniPlayState" class="mini-play-state" style="color: var(--text-secondary); font-family: var(--font-mono); font-weight: bold;">⏸</span>
+        </div>
+        <button class="toolbox-toggle-btn" id="expandBtn" onclick="toggleToolboxCollapse(event)" aria-label="Expand Toolbox">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Expanded Detailed Dashboard -->
+      <div class="toolbox-expanded-content" id="toolboxExpandedContent">
+        <!-- Header Row -->
+        <div class="toolbox-header-row" id="toolboxDragHandle">
+          <div class="header-left">
+             <span class="drag-dots-icon">⋮⋮</span>
+             <span class="header-title">CITY TOOLBOX</span>
+          </div>
+          <div class="header-right" onclick="event.stopPropagation()">
+            <!-- Sound toggle button -->
+            <button class="header-btn" id="soundToggle" onclick="toggleAmbientSound(event)" title="Toggle Sound">
+              <svg id="soundIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M3.63 3.63L2.05 5.2l4.5 4.5H3v5h3.33L11 19.33V14.2l5.73 5.73c-.7.5-1.5.87-2.38 1.07v2.06c1.43-.3 2.73-.97 3.82-1.89l2.25 2.25 1.58-1.58L3.63 3.63zM9 14.17L6.83 12H5v1h4v1.17zM19 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.96-3.87l-1.48 1.48c.33.73.52 1.54.52 2.39 0 2.25-1.28 4.2-3.17 5.16l1.49 1.49C20.52 16.92 22 14.64 22 12c0-1.45-.42-2.8-1.04-3.87zM11 4.67L8.83 6.84l1.58 1.58 1.58-1.58V4.67z"/></svg>
+            </button>
+            <!-- Auto/Manual toggle button -->
+            <button class="header-btn mode-btn active" id="btn-mode-auto" onclick="toggleControlMode(event)" title="Toggle Control Mode">
+              <svg class="icon-sparkles" viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+              <span id="controlModeText">Auto</span>
+            </button>
+            <!-- Collapse button -->
+            <button class="header-btn" id="collapseBtn" onclick="toggleToolboxCollapse(event)" title="Collapse Toolbox">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 1: Clock, Time and Date -->
+        <div class="toolbox-row-clock">
+          <div class="row-clock-left">
+            <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span class="clock-display" id="clock">00:00:00 AM</span>
+          </div>
+          <div class="row-clock-right" id="calendarDate">
+            Loading Date...
+          </div>
+        </div>
+
+        <!-- Row 2: Dropdown Selectors -->
+        <div class="toolbox-row-selectors">
+          <!-- Calendar selector -->
+          <button class="selector-btn" id="selectorCalendar" onclick="toggleDropdown('calendar')">
+            <div class="selector-btn-left">
+              <svg class="icon-calendar" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>Calendar</span>
+            </div>
+            <svg class="chevron-icon" id="chevronCalendar" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <!-- Weather selector -->
+          <button class="selector-btn" id="selectorWeather" onclick="toggleDropdown('weather')">
+            <div class="selector-btn-left">
+              <svg class="icon-weather-main" id="currentWeatherIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+              <span id="currentWeatherText">24°C</span>
+            </div>
+            <svg class="chevron-icon" id="chevronWeather" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Soundtrack selector -->
+        <div class="toolbox-row-music-selector" style="margin-top: 10px;">
+          <button class="selector-btn selector-btn-full" id="selectorMusic" onclick="toggleDropdown('music')" style="width: 100%; display: flex; justify-content: space-between;">
+            <div class="selector-btn-left">
+              <svg class="icon-music" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--accent-color);"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              <span id="musicStatusText">Soundtrack: Heat Waves</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="mini-play-state" style="font-size: 0.65rem; color: var(--text-secondary);">⏸</span>
+              <svg class="chevron-icon" id="chevronMusic" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- Content Panel (Collapsible dropdown panels) -->
+        <div class="toolbox-dropdown-panel" id="dropdownPanel" style="display: none;">
+          <!-- Calendar Dropdown -->
+          <div class="dropdown-content-item" id="contentCalendar" style="display: none;">
+            <div class="calendar-header">
+              <span class="calendar-month-year" id="calendarMonthYear">July 2026</span>
+              <span class="calendar-today-label" onclick="goToToday()">Today</span>
+            </div>
+            <div class="calendar-weekdays">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Weather Dropdown -->
+          <div class="dropdown-content-item" id="contentWeather" style="display: none;">
+            <div class="weather-header">
+              <div class="weather-location">
+                <svg class="icon-pin" viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span id="weatherLocationName">Local Area</span>
+              </div>
+              <button class="gps-btn" id="gpsBtn" onclick="syncGPS(event)">
+                <svg class="icon-sync" id="gpsIcon" viewBox="0 0 24 24" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                <span>GPS</span>
+              </button>
+            </div>
+            <div class="weather-subheader">WEATHER ATMOSPHERE</div>
+            <div class="weather-grid">
+              <button class="weather-btn active" id="weather-clear" onclick="setWeather('clear')">Clear</button>
+              <button class="weather-btn" id="weather-rain" onclick="setWeather('rain')">Rain</button>
+              <button class="weather-btn" id="weather-snow" onclick="setWeather('snow')">Snow</button>
+              <button class="weather-btn" id="weather-thunderstorm" onclick="setWeather('thunderstorm')">Thunderstorm</button>
+              <button class="weather-btn" id="weather-fog" onclick="setWeather('fog')">Fog</button>
+              <button class="weather-btn" id="weather-cloudy" onclick="setWeather('cloudy')">Cloudy</button>
+            </div>
+          </div>
+
+          <!-- Music Dropdown -->
+          <div class="dropdown-content-item" id="contentMusic" style="display: none;">
+            <div class="music-player-container">
+              <!-- Song Details Cover Row -->
+              <div class="music-cover-row">
+                <div class="vinyl-container">
+                  <div class="vinyl-record" id="vinylRecord">
+                    <div class="vinyl-center"></div>
+                  </div>
+                </div>
+                <div class="music-details">
+                  <span class="music-title" id="musicTitle">Heat Waves</span>
+                  <span class="music-artist" id="musicArtist">Glass Animals</span>
+                  <div class="music-badge-row">
+                    <span class="music-tag">Chiptune Synth</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Animated Visualizer & Scrolling Lyrics -->
+              <div class="music-visual-row">
+                <div class="lyrics-container">
+                  <div class="lyrics-text" id="lyricsText">"Sometimes all I think about is you..."</div>
+                </div>
+                <div class="audio-visualizer" id="visualizer">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+              </div>
+
+              <!-- Playback Controls -->
+              <div class="music-controls" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
+                <!-- Save Button -->
+                <button class="music-btn save-song-btn-circle" id="saveSongBtn" onclick="toggleSaveCurrentSong(event)" title="Save to Favorites">
+                  <svg class="heart-icon" id="heartIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;transition: all 0.2s; pointer-events: none;">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
+
+                <!-- Prev Button -->
+                <button class="music-btn control-prev" onclick="playPrevSong()" title="Previous Song">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                
+                <!-- Play / Pause Button -->
+                <button class="music-btn control-play" id="musicPlayBtn" onclick="toggleMusicPlayback()" title="Play / Pause">
+                  <svg id="musicPlayIcon" viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;margin-left: 2px;"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+
+                <!-- Next Button -->
+                <button class="music-btn control-next" onclick="playNextSong()" title="Next Song">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 18l8.5-6L6 6zm9-12h2v12h-2z"/></svg>
+                </button>
+
+                <!-- Download MP3 Button -->
+                <button class="music-btn control-download" onclick="downloadCurrentSong()" title="Download MP3">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+
+              <!-- Quick List of Playlist Songs -->
+              <div class="playlist-container">
+                <div class="playlist-header">SOUNDTRACK PLAYLIST</div>
+                <div class="playlist-list" id="playlistList">
+                  <!-- Generated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Time of Day Indicator and Picker -->
+        <div class="toolbox-row-bottom">
+          <div class="bottom-left" id="currentTimeOfDayDisplay">
+            <svg class="icon-timeofday" id="bottomTimeIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <span id="bottomTimeText">Night</span>
+          </div>
+          <div class="bottom-right-pill">
+            <button class="time-btn" id="btn-sunrise" onclick="selectTimeManual('sunrise')">Dawn</button>
+            <button class="time-btn" id="btn-day" onclick="selectTimeManual('day')">Day</button>
+            <button class="time-btn" id="btn-sunset" onclick="selectTimeManual('sunset')">Dusk</button>
+            <button class="time-btn" id="btn-night" onclick="selectTimeManual('night')">Night</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back button -->
+  <a href="index.html" class="back-btn glass-panel">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+    Back to Map
+  </a>
+
+  <div class="subpage-wrapper">
+    <!-- Blended Profile Header Card (Banner & Blob Photo) -->
+    <div class="profile-header-card glass-panel">
+      <!-- Top banner image (Banner.png) -->
+      <div class="banner-image"></div>
+      
+      <!-- Profile Info Row -->
+      <div class="profile-meta-row" style="align-items: center;">
+        <!-- Wrapper for Photo & Status Pill -->
+        <div class="profile-photo-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0;">
+          <!-- Morphing Blob Profile Image -->
+          <div class="fluid-img-container" style="margin: 0;">
+            <img src="images/Diptarka.png" alt="Diptarka Samanta">
+          </div>
+          <!-- Status Badge Capsule -->
+          <div class="status-pill" style="background: rgba(3,7,18,0.7); border: 1px solid rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); box-shadow: 0 4px 12px rgba(0,0,0,0.4); backdrop-filter: blur(8px); pointer-events: none;">
+            <span style="width: 5px; height: 5px; background: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #22c55e;"></span>
+            STATUS: ONLINE
+          </div>
+        </div>
+        
+        <!-- Name, Role & Contact Grid -->
+        <div class="profile-text-col">
+          <h1 class="profile-name-title">Diptarka Samanta</h1>
+          <div class="profile-subtitle">Artificial Intelligence and Machine Learning Engineer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid: Equalized heights left and right columns -->
+    <div class="content-grid" style="grid-template-columns: 1.2fr 0.8fr; gap: 24px; align-items: stretch;">
+      
+      <!-- Left Column: CMD Terminal (Fills height: 100% box-sizing) -->
+      <section class="glass-panel" style="padding: 20px; display: flex; flex-direction: column; gap: 12px; height: 100%; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+          <h3 style="font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color); margin: 0;">Interactive Terminal</h3>
+          <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-secondary);">v2.1.0-sys</span>
+        </div>
+        
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+          Query technical telemetry directly by triggering commands below or type in the input.
+        </p>
+
+        <!-- Suggestion triggers -->
+        <div class="terminal-suggest">
+          <button class="suggest-link" onclick="runCommand('help')">help</button>
+          <button class="suggest-link" onclick="runCommand('skills')">skills</button>
+          <button class="suggest-link" onclick="runCommand('git')">git status</button>
+          <button class="suggest-link" onclick="runCommand('system')">system</button>
+          <button class="suggest-link" onclick="runCommand('clear')">clear</button>
+        </div>
+
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">bash - diptarka@Aethelgard</div>
+            <div style="width: 42px;"></div>
+          </div>
+          
+          <div class="terminal-body" id="termBody">
+            <div class="line-system">Access Granted. Node core version 20.10.0 active.</div>
+            <div class="line-success">Type 'help' to audit skills, projects, and diagnostics.</div>
+            <br>
+            <div class="terminal-input-row">
+              <span class="terminal-prompt">diptarka:~$</span>
+              <input type="text" class="terminal-input-field" id="termInput" autofocus onkeypress="handleTermEnter(event)">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Coding Profiles (Fills height: 100% box-sizing) -->
+      <section class="glass-panel" style="padding: 20px; display: flex; flex-direction: column; gap: 16px; height: 100%; box-sizing: border-box;">
+        <h3 style="font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color); margin: 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">Coding Profiles</h3>
+        
+        <!-- Profile Icons Grid (3 rows of 5 = 15 items compact layout) -->
+        <div class="profiles-icon-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+          <!-- LeetCode -->
+          <div class="profile-icon-card" style="--hover-color: #ffa116; --hover-glow: rgba(255, 161, 22, 0.3);" onmouseenter="hoverProfile('leetcode')" onclick="visitProfile('leetcode')" title="LeetCode Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M16.102 17.93l-2.69 2.607c-.466.451-1.211.451-1.677 0l-4.51-4.375a1.24 1.24 0 010-1.628l4.51-4.374c.466-.452 1.211-.452 1.677 0l2.69 2.607c.466.452.466 1.18 0 1.631l-1.85 1.792 1.85 1.792c.466.452.466 1.18 0 1.631zM11.53 3.327a1.21 1.21 0 011.66 0l7.13 6.924c.46.447.46 1.171 0 1.618l-1.93 1.874a.407.407 0 01-.58 0L12.36 8.441a.407.407 0 00-.58 0L6.33 13.743a.407.407 0 01-.58 0L3.82 11.869a1.21 1.21 0 010-1.618l7.71-7.924z"/></svg>
+            <span class="p-label">LeetCode</span>
+          </div>
+
+          <!-- HackerRank -->
+          <div class="profile-icon-card" style="--hover-color: #2ec866; --hover-glow: rgba(46, 200, 102, 0.3);" onmouseenter="hoverProfile('hackerrank')" onclick="visitProfile('hackerrank')" title="HackerRank Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M12 2c5.522 0 10 4.477 10 10s-4.478 10-10 10S2 17.523 2 12 6.478 2 12 2zm1.96 4.966h-3.92v2.33h3.92v-2.33zm0 4.364h-3.92v2.33h3.92v-2.33zm0 4.364h-3.92v2.33h3.92v-2.33z"/></svg>
+            <span class="p-label">HackerRank</span>
+          </div>
+
+          <!-- CodeChef -->
+          <div class="profile-icon-card" style="--hover-color: #d0a068; --hover-glow: rgba(208, 160, 104, 0.3);" onmouseenter="hoverProfile('codechef')" onclick="visitProfile('codechef')" title="CodeChef Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm1 14.5h-2v-5h2v5zm0-6.5h-2V8h2v2z"/></svg>
+            <span class="p-label">CodeChef</span>
+          </div>
+
+          <!-- Codeforces -->
+          <div class="profile-icon-card" style="--hover-color: #3b82f6; --hover-glow: rgba(59, 130, 246, 0.3);" onmouseenter="hoverProfile('codeforces')" onclick="visitProfile('codeforces')" title="Codeforces Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M4.5 9h3v10h-3V9zm5-4h3v14h-3V5zm5 8h3v6h-3v-6z"/></svg>
+            <span class="p-label">Codeforces</span>
+          </div>
+
+          <!-- GitHub -->
+          <div class="profile-icon-card" style="--hover-color: #f8fafc; --hover-glow: rgba(248, 250, 252, 0.2);" onmouseenter="hoverProfile('github')" onclick="visitProfile('github')" title="GitHub Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.577.688.48C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            <span class="p-label">GitHub</span>
+          </div>
+
+          <!-- GeeksforGeeks -->
+          <div class="profile-icon-card" style="--hover-color: #2f8d46; --hover-glow: rgba(47, 141, 70, 0.3);" onmouseenter="hoverProfile('gfg')" onclick="visitProfile('gfg')" title="GeeksforGeeks Profile">
+            <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 3H7a2 2 0 0 0-2 2v3a2 2 0 0 1-2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2h2"/>
+              <path d="M15 3h2a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0-2 2v3a2 2 0 0 1-2 2h-2"/>
+              <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-size="8" font-family="monospace" font-weight="900" fill="currentColor" stroke="none">gfg</text>
+            </svg>
+            <span class="p-label">GFG</span>
+          </div>
+
+          <!-- Dropbox -->
+          <div class="profile-icon-card" style="--hover-color: #0061ff; --hover-glow: rgba(0, 97, 255, 0.3);" onmouseenter="hoverProfile('dropbox')" onclick="visitProfile('dropbox')" title="Dropbox Share Vault">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M6.354 3.738L2.016 6.551l3.529 2.87 4.338-2.825-3.529-2.858zm11.292 0L14.117 6.596l4.338 2.825 3.529-2.87-4.338-2.813zM2.016 12.22l4.338 2.813 3.529-2.858-4.338-2.825-3.529 2.87zm19.968.032l-3.529-2.87-4.338 2.825 3.529 2.858 4.338-2.813zm-11.851.68v1.332L6.354 17.13l1.458.951 4.316-2.858v-1.321L6.354 11.026v1.332zm7.766-.68v1.321l4.316 2.858 1.458-.951-5.774-3.864v-1.332l-5.774-2.858v1.332L17.892 12.25z"/></svg>
+            <span class="p-label">Dropbox</span>
+          </div>
+
+          <!-- Kaggle -->
+          <div class="profile-icon-card" style="--hover-color: #20beff; --hover-glow: rgba(32, 190, 255, 0.3);" onmouseenter="hoverProfile('kaggle')" onclick="visitProfile('kaggle')" title="Kaggle Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M18.82 20H15.6l-5.7-6.95L8.5 14.7V20H5.5V4h3v8.1l6.76-8.1h3.38l-7.76 8.7L18.82 20z"/></svg>
+            <span class="p-label">Kaggle</span>
+          </div>
+
+          <!-- Slot 1 (StrataScratch) -->
+          <div class="profile-icon-card" id="slot1Card" style="--hover-color: #5cb85c; --hover-glow: rgba(92, 184, 92, 0.3);" onmouseenter="hoverProfile('slot1')" onclick="visitProfile('slot1')" title="StrataScratch Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2-.9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+            <span class="p-label" id="slot1Label">StrataScratch</span>
+            <button onclick="toggleSlotEdit('slot1', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+
+          <!-- Slot 2 (Puter) -->
+          <div class="profile-icon-card" id="slot2Card" style="--hover-color: #7c3aed; --hover-glow: rgba(124, 58, 237, 0.3);" onmouseenter="hoverProfile('slot2')" onclick="visitProfile('slot2')" title="Puter Profile">
+            <svg class="p-icon" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 12H3V4h18v10z"/></svg>
+            <span class="p-label" id="slot2Label">Puter</span>
+            <button onclick="toggleSlotEdit('slot2', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+
+          <!-- Slot 3 -->
+          <div class="profile-icon-card" id="slot3Card" style="--hover-color: #0ea5e9; --hover-glow: rgba(14, 165, 233, 0.3);" onmouseenter="hoverProfile('slot3')" onclick="visitProfile('slot3')" title="Custom Slot 3">
+            <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span class="p-label" id="slot3Label">Slot 3</span>
+            <button onclick="toggleSlotEdit('slot3', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+
+          <!-- Slot 4 -->
+          <div class="profile-icon-card" id="slot4Card" style="--hover-color: #0ea5e9; --hover-glow: rgba(14, 165, 233, 0.3);" onmouseenter="hoverProfile('slot4')" onclick="visitProfile('slot4')" title="Custom Slot 4">
+            <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span class="p-label" id="slot4Label">Slot 4</span>
+            <button onclick="toggleSlotEdit('slot4', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+
+          <!-- Slot 5 -->
+          <div class="profile-icon-card" id="slot5Card" style="--hover-color: #0ea5e9; --hover-glow: rgba(14, 165, 233, 0.3);" onmouseenter="hoverProfile('slot5')" onclick="visitProfile('slot5')" title="Custom Slot 5">
+            <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span class="p-label" id="slot5Label">Slot 5</span>
+            <button onclick="toggleSlotEdit('slot5', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+
+          <!-- Slot 6 -->
+          <div class="profile-icon-card" id="slot6Card" style="--hover-color: #0ea5e9; --hover-glow: rgba(14, 165, 233, 0.3);" onmouseenter="hoverProfile('slot6')" onclick="visitProfile('slot6')" title="Custom Slot 6">
+            <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span class="p-label" id="slot6Label">Slot 6</span>
+            <button onclick="toggleSlotEdit('slot6', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+
+          <!-- Slot 7 -->
+          <div class="profile-icon-card" id="slot7Card" style="--hover-color: #0ea5e9; --hover-glow: rgba(14, 165, 233, 0.3);" onmouseenter="hoverProfile('slot7')" onclick="visitProfile('slot7')" title="Custom Slot 7">
+            <svg class="p-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span class="p-label" id="slot7Label">Slot 7</span>
+            <button onclick="toggleSlotEdit('slot7', event)" style="position: absolute; top: 2px; right: 2px; background: none; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; transition: color 0.2s;" title="Edit Link">
+              <svg viewBox="0 0 24 24" style="width:8px;height:8px;fill:currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Slot Link Editor Form (Initially Hidden) -->
+        <div id="slotEditDrawer" style="display: none; background: rgba(3,7,18,0.5); border: 1px solid rgba(255,255,255,0.06); padding: 10px; border-radius: 8px; margin-top: -6px; flex-direction: column; gap: 8px;">
+          <div style="font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em;" id="editorTitle">Configure Custom Slot</div>
+          <input type="hidden" id="editingSlotKey" value="">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <input type="text" id="slotNameInput" placeholder="Name (e.g. LinkedIn)" style="width: 100%; box-sizing: border-box; padding: 6px; font-size: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--text-primary); outline: none;">
+            <input type="text" id="slotUrlInput" placeholder="https://linkedin.com/in/username" style="width: 100%; box-sizing: border-box; padding: 6px; font-size: 0.75rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: var(--text-primary); outline: none;">
+            <div style="display: flex; gap: 6px; justify-content: flex-end;">
+              <button onclick="closeSlotEditor(event)" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: var(--text-secondary); padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer;">Cancel</button>
+              <button onclick="saveSlotLink()" style="background: var(--accent-color); border: none; color: #030712; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; cursor: pointer;">Save Link</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Continuity & Analytics Graph Box -->
+        <div class="analytics-card glass-panel" style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.03); padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span id="analyticsTitle" style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.08em;">LeetCode Analytics</span>
+            <span id="analyticsStatus" style="font-size: 0.65rem; color: #22c55e;">● Live Telemetry</span>
+          </div>
+          <div id="analyticsDesc" style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.3;">
+            Problem Solving Status: 450+ Solved | 1850 Rating (Knight)
+          </div>
+          
+          <!-- Dynamic SVG Line Chart -->
+          <div style="height: 45px; width: 100%; position: relative; margin-top: 4px; overflow: visible;">
+            <svg id="analyticsSvg" viewBox="0 0 100 30" preserveAspectRatio="none" style="width: 100%; height: 100%; overflow: visible; transition: all 0.3s;">
+              <defs>
+                <linearGradient id="svgGlow" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="var(--accent-color)" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="var(--accent-color)" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <!-- Area fill -->
+              <path id="svgAreaPath" d="M 0 25 L 10 18 L 20 28 L 30 12 L 40 22 L 50 8 L 60 15 L 70 5 L 80 18 L 90 10 L 100 2 L 100 30 L 0 30 Z" fill="url(#svgGlow)"></path>
+              <!-- Line stroke -->
+              <path id="svgLinePath" d="M 0 25 L 10 18 L 20 28 L 30 12 L 40 22 L 50 8 L 60 15 L 70 5 L 80 18 L 90 10 L 100 2" fill="none" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: d 0.5s ease;"></path>
+            </svg>
+          </div>
+
+          <!-- Dynamic 7x15 Grid of Heatmap contributions -->
+          <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 4px;">
+            <div style="font-size: 0.62rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.05em;">Activity Matrix (Continuity)</div>
+            <div id="heatmapGrid" style="display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px;">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom Section: Technical Domain & Expertise Summary Box -->
+    <div class="glass-panel" style="padding: 24px; margin-top: 24px;">
+      <h3 style="font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color); margin-top: 0; margin-bottom: 20px;">Technical Domain & Expertise Summary</h3>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- Coding Domains -->
+        <div class="glass-panel" style="background: rgba(255,255,255,0.01); padding: 18px; border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 12px;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>🧠</span> Solving Coding Domains
+          </h4>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.85rem; padding: 0; margin: 0; color: var(--text-secondary);">
+            <li style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;">
+              <span>Natural Language Processing (NLP)</span>
+              <span style="color: var(--accent-color); font-weight: 600;">Expert</span>
+            </li>
+            <li style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;">
+              <span>Machine Learning & Neural Networks</span>
+              <span style="color: var(--accent-color); font-weight: 600;">Expert</span>
+            </li>
+            <li style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;">
+              <span>Data Structures & Algorithms</span>
+              <span style="color: var(--accent-color); font-weight: 600;">Advanced</span>
+            </li>
+            <li style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 2px;">
+              <span>Database Management Systems (DBMS)</span>
+              <span style="color: var(--accent-color); font-weight: 600;">Expert</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Languages Expert -->
+        <div class="glass-panel" style="background: rgba(255,255,255,0.01); padding: 18px; border: 1px solid rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 12px;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>💻</span> Languages I Am Expert
+          </h4>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Python -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                <span>Python (ML / NLP)</span>
+                <span style="color: var(--accent-color); font-weight: 600;">95%</span>
+              </div>
+              <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                <div style="width: 95%; height: 100%; background: var(--accent-color); box-shadow: 0 0 8px var(--accent-glow);"></div>
+              </div>
+            </div>
+
+            <!-- SQL/NoSQL -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                <span>SQL / Databases (PostgreSQL, MySQL, H2)</span>
+                <span style="color: var(--accent-color); font-weight: 600;">90%</span>
+              </div>
+              <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                <div style="width: 90%; height: 100%; background: var(--accent-color); box-shadow: 0 0 8px var(--accent-glow);"></div>
+              </div>
+            </div>
+
+            <!-- JavaScript -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                <span>JavaScript / TypeScript (Systems & UI)</span>
+                <span style="color: var(--accent-color); font-weight: 600;">88%</span>
+              </div>
+              <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                <div style="width: 88%; height: 100%; background: var(--accent-color); box-shadow: 0 0 8px var(--accent-glow);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const termBody = document.getElementById('termBody');
+    const termInput = document.getElementById('termInput');
+
+    const commands = {
+      help: () => `
+Available Commands:
+  <strong>help</strong>     - Show this help summary.
+  <strong>skills</strong>   - Audit languages, frameworks, and databases.
+  <strong>git</strong>      - Review commit stats and active git indicators.
+  <strong>system</strong>   - Fetch environment telemetry and CPU cores.
+  <strong>clear</strong>    - Flush terminal console.
+      `,
+      skills: () => `
+<span class="line-success">== Languages & Core Stack ==</span>
+  • JavaScript (ES6+), TypeScript, HTML5, CSS3, Python, Bash
+<span class="line-success">== Libraries & UI Frameworks ==</span>
+  • React.js, Next.js, Vue.js, SASS, WebGL, TailwindCSS
+<span class="line-success">== Backend & Data Systems ==</span>
+  • Node.js, Express, FastAPl, MongoDB, PostgreSQL, Redis
+<span class="line-success">== Infrastructure & Cloud ==</span>
+  • AWS, Docker, Kubernetes, Netlify, Vercel, Git Pipelines
+      `,
+      git: () => `
+<span class="line-success">git log -n 3 --oneline</span>
+  • <span class="line-warning">48b1fc5</span> [feat] Added Web Audio API wind synthesizer for main map (10 mins ago)
+  • <span class="line-warning">a892b10</span> [style] Implemented glassmorphic CSS widgets & animations (2 hours ago)
+  • <span class="line-warning">c82110a</span> [init] Labeled coordinate maps integrated (1 day ago)
+
+<span class="line-success">git branch -a</span>
+  * <span class="line-success">main</span>
+    origin/main
+      `,
+      system: () => {
+        const now = new Date();
+        return `
+System Diagnostics:
+  • OS: Aethelgard Cloud Container (Linux 6.2.0-ext)
+  • CPU: 8 Cores (AMD EPYC @ 3.4GHz)
+  • RAM: 16 GB DDR5 Alloc
+  • Load: 0.15, 0.08, 0.02
+  • Latency: 22ms
+  • Time: ${now.toISOString()}
+  • Power: Solar/Wind Hybrid Grid (Online)
+        `;
+      }
+    };
+
+    function printLine(htmlText, className = "") {
+      const line = document.createElement('div');
+      if (className) line.className = className;
+      line.innerHTML = htmlText;
+      
+      const inputRow = termBody.querySelector('.terminal-input-row');
+      termBody.insertBefore(line, inputRow);
+      termBody.scrollTop = termBody.scrollHeight;
+    }
+
+    function runCommand(cmdText) {
+      cmdText = cmdText.trim();
+      if (!cmdText) return;
+
+      printLine(`diptarka:~$ ${cmdText}`, "line-user");
+
+      const parsedCmd = cmdText.toLowerCase();
+      
+      if (parsedCmd === 'clear') {
+        const lines = Array.from(termBody.children);
+        lines.forEach(line => {
+          if (!line.classList.contains('terminal-input-row')) {
+            line.remove();
+          }
+        });
+      } else if (commands[parsedCmd]) {
+        printLine(commands[parsedCmd]());
+      } else if (parsedCmd === 'git status' || parsedCmd === 'git') {
+        printLine(commands['git']());
+      } else {
+        printLine(`bash: command not found: ${cmdText}. Type 'help' for options.`, "line-warning");
+      }
+
+      termInput.value = '';
+      termInput.focus();
+    }
+
+    function handleTermEnter(e) {
+      if (e.key === 'Enter') {
+        runCommand(termInput.value);
+      }
+    }
+
+    // ----------------------------------------------------
+    // Profiles Hover Graph & Redirection Logic
+    // ----------------------------------------------------
+    const profilesConfig = {
+      leetcode: {
+        name: "LeetCode",
+        url: "https://leetcode.com/u/DiptarkaSamanta/",
+        color: "#ffa116",
+        desc: "Problem Solving Status: 450+ Solved | 1850 Rating (Knight)",
+        graphPoints: "M 0 25 L 10 18 L 20 28 L 30 12 L 40 22 L 50 8 L 60 15 L 70 5 L 80 18 L 90 10 L 100 2",
+        areaPoints: "M 0 25 L 10 18 L 20 28 L 30 12 L 40 22 L 50 8 L 60 15 L 70 5 L 80 18 L 90 10 L 100 2 L 100 30 L 0 30 Z"
+      },
+      hackerrank: {
+        name: "HackerRank",
+        url: "https://www.hackerrank.com/profile/DiptarkaSamanta",
+        color: "#2ec866",
+        desc: "Expert Badge in Algorithms, Functional Programming & Python",
+        graphPoints: "M 0 20 L 15 10 L 30 25 L 45 15 L 60 5 L 75 18 L 90 12 L 100 15",
+        areaPoints: "M 0 20 L 15 10 L 30 25 L 45 15 L 60 5 L 75 18 L 90 12 L 100 15 L 100 30 L 0 30 Z"
+      },
+      codechef: {
+        name: "CodeChef",
+        url: "https://www.codechef.com/users/diptarka2003",
+        color: "#d0a068",
+        desc: "Competitive Rating: 4-Star Coder | Max Rating: 1910",
+        graphPoints: "M 0 28 L 20 20 L 40 10 L 60 22 L 80 8 L 100 18",
+        areaPoints: "M 0 28 L 20 20 L 40 10 L 60 22 L 80 8 L 100 18 L 100 30 L 0 30 Z"
+      },
+      codeforces: {
+        name: "Codeforces",
+        url: "https://codeforces.com/",
+        color: "#3b82f6",
+        desc: "Rank: Candidate Master | Peak Rating: 1980",
+        graphPoints: "M 0 15 L 10 22 L 20 18 L 30 5 L 40 12 L 50 20 L 60 8 L 70 14 L 80 3 L 90 10 L 100 2",
+        areaPoints: "M 0 15 L 10 22 L 20 18 L 30 5 L 40 12 L 50 20 L 60 8 L 70 14 L 80 3 L 90 10 L 100 2 L 100 30 L 0 30 Z"
+      },
+      github: {
+        name: "GitHub",
+        url: "https://github.com/Diptarka-Samanta",
+        color: "#f8fafc",
+        desc: "Contribution Activity: 1,450+ commits | 24 Repositories Deployed",
+        graphPoints: "M 0 30 L 10 24 L 20 20 L 30 18 L 40 22 L 50 15 L 60 10 L 70 8 L 80 12 L 90 5 L 100 1",
+        areaPoints: "M 0 30 L 10 24 L 20 20 L 30 18 L 40 22 L 50 15 L 60 10 L 70 8 L 80 12 L 90 5 L 100 1 L 100 30 L 0 30 Z"
+      },
+      gfg: {
+        name: "GeeksforGeeks",
+        url: "https://www.geeksforgeeks.org/explore?page=3",
+        color: "#2f8d46",
+        desc: "GFG Profile: Solved 300+ problems | Coding Score: 1200+ | Expert badge",
+        graphPoints: "M 0 12 L 15 22 L 30 15 L 45 28 L 60 10 L 75 18 L 90 5 L 100 2",
+        areaPoints: "M 0 12 L 15 22 L 30 15 L 45 28 L 60 10 L 75 18 L 90 5 L 100 2 L 100 30 L 0 30 Z"
+      },
+      dropbox: {
+        name: "Dropbox",
+        url: "https://www.dropbox.com/home",
+        color: "#0061ff",
+        desc: "Asset Deployment Vault: secure sharing of build archives and designs",
+        graphPoints: "M 0 20 L 25 22 L 50 10 L 75 18 L 100 14",
+        areaPoints: "M 0 20 L 25 22 L 50 10 L 75 18 L 100 14 L 100 30 L 0 30 Z"
+      },
+      kaggle: {
+        name: "Kaggle",
+        url: "https://www.kaggle.com/datasets",
+        color: "#20beff",
+        desc: "Kaggle Profile: Notebooks Expert | Dataset contributor & ML competitions",
+        graphPoints: "M 0 30 L 15 22 L 30 25 L 45 12 L 60 18 L 75 10 L 90 20 L 100 5",
+        areaPoints: "M 0 30 L 15 22 L 30 25 L 45 12 L 60 18 L 75 10 L 90 20 L 100 5 L 100 30 L 0 30 Z"
+      },
+      slot1: {
+        name: "StrataScratch",
+        url: "https://platform.stratascratch.com/coding",
+        color: "#5cb85c",
+        desc: "StrataScratch Profile: SQL & Data Science coding exercises.",
+        graphPoints: "M 0 25 L 30 20 L 60 22 L 100 12",
+        areaPoints: "M 0 25 L 30 20 L 60 22 L 100 12 L 100 30 L 0 30 Z"
+      },
+      slot2: {
+        name: "Puter",
+        url: "https://puter.com/",
+        color: "#7c3aed",
+        desc: "Puter: Web-based Desktop & Cloud OS environment.",
+        graphPoints: "M 0 20 L 30 22 L 60 15 L 100 10",
+        areaPoints: "M 0 20 L 30 22 L 60 15 L 100 10 L 100 30 L 0 30 Z"
+      },
+      slot3: {
+        name: "Slot 3",
+        url: "",
+        color: "#0ea5e9",
+        desc: "Custom Link Slot 3. Click the edit icon to configure your own URL.",
+        graphPoints: "M 0 15 L 30 18 L 60 25 L 100 8",
+        areaPoints: "M 0 15 L 30 18 L 60 25 L 100 8 L 100 30 L 0 30 Z"
+      },
+      slot4: {
+        name: "Slot 4",
+        url: "",
+        color: "#0ea5e9",
+        desc: "Custom Link Slot 4. Click the edit icon to configure your own URL.",
+        graphPoints: "M 0 28 L 30 15 L 60 18 L 100 20",
+        areaPoints: "M 0 28 L 30 15 L 60 18 L 100 20 L 100 30 L 0 30 Z"
+      },
+      slot5: {
+        name: "Slot 5",
+        url: "",
+        color: "#0ea5e9",
+        desc: "Custom Link Slot 5. Click the edit icon to configure your own URL.",
+        graphPoints: "M 0 25 L 20 28 L 50 15 L 100 5",
+        areaPoints: "M 0 25 L 20 28 L 50 15 L 100 5 L 100 30 L 0 30 Z"
+      },
+      slot6: {
+        name: "Slot 6",
+        url: "",
+        color: "#0ea5e9",
+        desc: "Custom Link Slot 6. Click the edit icon to configure your own URL.",
+        graphPoints: "M 0 12 L 30 25 L 70 8 L 100 18",
+        areaPoints: "M 0 12 L 30 25 L 70 8 L 100 18 L 100 30 L 0 30 Z"
+      },
+      slot7: {
+        name: "Slot 7",
+        url: "",
+        color: "#0ea5e9",
+        desc: "Custom Link Slot 7. Click the edit icon to configure your own URL.",
+        graphPoints: "M 0 30 L 40 10 L 80 20 L 100 2",
+        areaPoints: "M 0 30 L 40 10 L 80 20 L 100 2 L 100 30 L 0 30 Z"
+      }
+    };
+
+    function hoverProfile(platformKey) {
+      const data = profilesConfig[platformKey];
+      if (!data) return;
+
+      document.getElementById('analyticsTitle').textContent = `${data.name} Analytics`;
+      document.getElementById('analyticsDesc').textContent = data.desc;
+      
+      const svg = document.getElementById('analyticsSvg');
+      svg.style.setProperty('--accent-color', data.color);
+      
+      document.getElementById('svgLinePath').setAttribute('d', data.graphPoints);
+      document.getElementById('svgAreaPath').setAttribute('d', data.areaPoints);
+      
+      generateHeatmap(data.color);
+    }
+
+    function visitProfile(platformKey) {
+      if (platformKey.startsWith('slot')) {
+        const savedUrl = localStorage.getItem(`${platformKey}Url`);
+        if (savedUrl && savedUrl !== 'https://' && savedUrl.trim() !== '') {
+          window.open(savedUrl, '_blank');
+        } else {
+          toggleSlotEdit(platformKey);
+        }
+      } else {
+        const data = profilesConfig[platformKey];
+        if (data && data.url) {
+          window.open(data.url, '_blank');
+        }
+      }
+    }
+
+    function generateHeatmap(baseColor) {
+      const grid = document.getElementById('heatmapGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+      for (let i = 0; i < 105; i++) {
+        const level = Math.floor(Math.random() * 4);
+        const block = document.createElement('span');
+        block.style.height = '8px';
+        block.style.borderRadius = '2px';
+        
+        if (level === 0) {
+          block.style.background = 'rgba(255, 255, 255, 0.05)';
+        } else {
+          const opacity = level === 1 ? 0.25 : level === 2 ? 0.6 : 1.0;
+          block.style.background = baseColor;
+          block.style.opacity = opacity;
+          if (level === 3) {
+            block.style.boxShadow = `0 0 5px ${baseColor}`;
+          }
+        }
+        grid.appendChild(block);
+      }
+    }
+
+    function toggleSlotEdit(slotKey, e) {
+      if (e) e.stopPropagation();
+      const drawer = document.getElementById('slotEditDrawer');
+      const keyField = document.getElementById('editingSlotKey');
+      
+      if (drawer.style.display === 'flex' && keyField.value === slotKey) {
+        drawer.style.display = 'none';
+        return;
+      }
+      
+      drawer.style.display = 'flex';
+      keyField.value = slotKey;
+      
+      document.getElementById('editorTitle').textContent = `Configure ${slotKey.toUpperCase()}`;
+      document.getElementById('slotNameInput').value = localStorage.getItem(`${slotKey}Name`) || slotKey.toUpperCase();
+      document.getElementById('slotUrlInput').value = localStorage.getItem(`${slotKey}Url`) || 'https://';
+    }
+
+    function closeSlotEditor(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('slotEditDrawer').style.display = 'none';
+    }
+
+    function saveSlotLink() {
+      const slotKey = document.getElementById('editingSlotKey').value;
+      const nameVal = document.getElementById('slotNameInput').value.trim() || slotKey.toUpperCase();
+      const urlVal = document.getElementById('slotUrlInput').value.trim() || 'https://';
+
+      localStorage.setItem(`${slotKey}Name`, nameVal);
+      localStorage.setItem(`${slotKey}Url`, urlVal);
+
+      document.getElementById(`${slotKey}Label`).textContent = nameVal;
+      profilesConfig[slotKey].name = nameVal;
+      profilesConfig[slotKey].url = urlVal;
+      profilesConfig[slotKey].desc = `Saved Link: ${nameVal} | Target: ${urlVal}`;
+
+      document.getElementById('slotEditDrawer').style.display = 'none';
+    }
+
+    // Load initial layout settings
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load custom slots
+      for (let i = 1; i <= 7; i++) {
+        const key = `slot${i}`;
+        const savedName = localStorage.getItem(`${key}Name`);
+        const savedUrl = localStorage.getItem(`${key}Url`);
+        if (savedName) {
+          document.getElementById(`${key}Label`).textContent = savedName;
+          profilesConfig[key].name = savedName;
+        }
+        if (savedUrl) {
+          profilesConfig[key].url = savedUrl;
+          profilesConfig[key].desc = `Saved Link: ${savedName || key.toUpperCase()} | Target: ${savedUrl}`;
+        }
+      }
+
+      // Initialize LeetCode active graph
+      hoverProfile('leetcode');
+    });
+  </script>
+  <script src="toolbox.js?v=2.2.0"></script>
+</body>
+</html>

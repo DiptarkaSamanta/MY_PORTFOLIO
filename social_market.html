@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Port Market - Socials & Contact</title>
+  <link rel="stylesheet" href="subpage.css">
+  <style>
+    .market-stall-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .stall-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .stall-logo {
+      font-size: 2rem;
+      background: rgba(255,255,255,0.04);
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s;
+    }
+    .stall-card:hover .stall-logo {
+      background: var(--accent-color);
+      transform: scale(1.08) rotate(-5deg);
+    }
+    .stall-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stall-name {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .stall-handle {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-color);
+    }
+    .success-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3,7,18,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .success-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .popup-box {
+      max-width: 400px;
+      padding: 30px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .popup-icon {
+      font-size: 3rem;
+      animation: float 2s infinite alternate;
+    }
+    @keyframes float {
+      to { transform: translateY(-8px); }
+    }
+
+    /* --- Interactive Social Wheel --- */
+    .social-portal-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      position: relative;
+      overflow: hidden;
+      min-height: 480px;
+    }
+    
+    .social-portal-header {
+      text-align: center;
+      margin-bottom: 25px;
+      width: 100%;
+    }
+    
+    .social-portal-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 6px 0;
+      letter-spacing: -0.01em;
+    }
+    
+    .social-portal-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    
+    .social-portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      color: var(--accent-color);
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .social-portal-badge.paused {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    .social-portal-badge .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      animation: pulse-glow 1.5s infinite;
+    }
+
+    .social-portal-badge.paused .badge-dot {
+      background: #f59e0b;
+      animation: none;
+    }
+
+    @keyframes pulse-glow {
+      0% { transform: scale(0.9); opacity: 0.5; }
+      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 6px var(--accent-color); }
+      100% { transform: scale(0.9); opacity: 0.5; }
+    }
+
+    .resume-btn {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      font: inherit;
+      margin-left: 4px;
+      font-weight: bold;
+    }
+    
+    .social-wheel-container {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .social-wheel-wrapper {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: wheel-spin 25s linear infinite;
+      transition: filter 0.3s;
+    }
+    
+    /* Center button positioning */
+    .center-button-wrapper {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .center-button {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid var(--text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s, border-color 0.3s;
+      z-index: 11;
+    }
+    
+    .center-button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-color);
+    }
+    
+    .center-button:active {
+      transform: scale(0.95);
+    }
+    
+    .center-button svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-primary);
+      stroke-width: 2.5;
+      fill: none;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.3s;
+    }
+
+    .center-button:hover svg {
+      stroke: var(--accent-color);
+    }
+    
+    /* When open, the icon rotates 315deg (morphing + to x) */
+    .social-wheel-container.open .center-button svg {
+      transform: rotate(315deg);
+    }
+    
+    /* Wheel Items */
+    .wheel-item {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s;
+      pointer-events: auto;
+    }
+    
+    /* Positioning and staggered delay variables for 8 items */
+    .wheel-item:nth-child(1) { --angle: 0deg; transition-delay: 0s; }
+    .wheel-item:nth-child(2) { --angle: 45deg; transition-delay: 0.06s; }
+    .wheel-item:nth-child(3) { --angle: 90deg; transition-delay: 0.12s; }
+    .wheel-item:nth-child(4) { --angle: 135deg; transition-delay: 0.18s; }
+    .wheel-item:nth-child(5) { --angle: 180deg; transition-delay: 0.24s; }
+    .wheel-item:nth-child(6) { --angle: 225deg; transition-delay: 0.3s; }
+    .wheel-item:nth-child(7) { --angle: 270deg; transition-delay: 0.36s; }
+    .wheel-item:nth-child(8) { --angle: 315deg; transition-delay: 0.42s; }
+    
+    /* Open State styling */
+    .social-wheel-container.open .wheel-item {
+      transform: translate(-50%, -50%) rotate(var(--angle)) translate(110px) rotate(calc(-1 * var(--angle))) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    /* Closed State styling (spiraled in) */
+    .social-wheel-container.closed .wheel-item {
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) + 720deg)) translate(0) rotate(calc(-1 * var(--angle) - 720deg)) scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* Link wrapper */
+    .wheel-icon-link {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1.5px solid var(--brand-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      box-shadow: 0 0 10px var(--brand-glow), inset 0 0 8px rgba(255, 255, 255, 0.02);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s, background-color 0.3s;
+      animation: icon-counter-spin 25s linear infinite;
+    }
+    
+    .wheel-icon-link:hover {
+      transform: scale(1.18);
+      background: rgba(15, 23, 42, 0.98);
+      box-shadow: 0 0 20px var(--brand-color), 0 0 35px var(--brand-glow), inset 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+    
+    .wheel-icon-link svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--brand-color);
+      transition: fill 0.3s, stroke 0.3s, transform 0.3s;
+    }
+
+    /* For outline SVG brands, use stroke instead of fill */
+    .wheel-icon-link.use-stroke svg {
+      fill: none;
+      stroke: var(--brand-color);
+      stroke-width: 2px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .wheel-icon-link:hover svg {
+      transform: scale(1.05);
+    }
+
+    /* Tooltip styling */
+    .wheel-item-tooltip {
+      position: absolute;
+      bottom: -32px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      background: rgba(3, 7, 18, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: opacity 0.2s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 20;
+    }
+
+    .wheel-icon-link:hover .wheel-item-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+    
+    /* Animation Definitions */
+    @keyframes wheel-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    @keyframes icon-counter-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+    
+    /* Pause animations when hovering the card */
+    .social-portal-card:hover .social-wheel-wrapper,
+    .social-portal-card:hover .wheel-icon-link {
+      animation-play-state: paused;
+    }
+  </style>
+</head>
+<body class="accent-purple">
+
+  <!-- UI Overlay for Toolbox -->
+  <div class="ui-overlay">
+    <div class="toolbox glass-panel collapsed" id="mainToolbox">
+      <!-- Minimized Horizontal Info-Bar -->
+      <div class="toolbox-minimized-content" id="toolboxMinimizedContent">
+        <div class="drag-dots">⋮⋮</div>
+        <div class="minimized-time">
+          <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span id="minimizedClock">00:00:00 AM</span>
+        </div>
+        <div class="minimized-divider">|</div>
+        <div class="minimized-weather">
+          <svg class="icon-weather" id="minimizedWeatherIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+          <span id="minimizedTemp">24°C</span>
+        </div>
+        <div class="minimized-divider">|</div>
+        <div style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem;">
+          <span>🎵</span>
+          <span id="musicMiniPlayState" class="mini-play-state" style="color: var(--text-secondary); font-family: var(--font-mono); font-weight: bold;">⏸</span>
+        </div>
+        <button class="toolbox-toggle-btn" id="expandBtn" onclick="toggleToolboxCollapse(event)" aria-label="Expand Toolbox">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Expanded Detailed Dashboard -->
+      <div class="toolbox-expanded-content" id="toolboxExpandedContent">
+        <!-- Header Row -->
+        <div class="toolbox-header-row" id="toolboxDragHandle">
+          <div class="header-left">
+             <span class="drag-dots-icon">⋮⋮</span>
+             <span class="header-title">CITY TOOLBOX</span>
+          </div>
+          <div class="header-right" onclick="event.stopPropagation()">
+            <!-- Sound toggle button -->
+            <button class="header-btn" id="soundToggle" onclick="toggleAmbientSound(event)" title="Toggle Sound">
+              <svg id="soundIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M3.63 3.63L2.05 5.2l4.5 4.5H3v5h3.33L11 19.33V14.2l5.73 5.73c-.7.5-1.5.87-2.38 1.07v2.06c1.43-.3 2.73-.97 3.82-1.89l2.25 2.25 1.58-1.58L3.63 3.63zM9 14.17L6.83 12H5v1h4v1.17zM19 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.96-3.87l-1.48 1.48c.33.73.52 1.54.52 2.39 0 2.25-1.28 4.2-3.17 5.16l1.49 1.49C20.52 16.92 22 14.64 22 12c0-1.45-.42-2.8-1.04-3.87zM11 4.67L8.83 6.84l1.58 1.58 1.58-1.58V4.67z"/></svg>
+            </button>
+            <!-- Auto/Manual toggle button -->
+            <button class="header-btn mode-btn active" id="btn-mode-auto" onclick="toggleControlMode(event)" title="Toggle Control Mode">
+              <svg class="icon-sparkles" viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+              <span id="controlModeText">Auto</span>
+            </button>
+            <!-- Collapse button -->
+            <button class="header-btn" id="collapseBtn" onclick="toggleToolboxCollapse(event)" title="Collapse Toolbox">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 1: Clock, Time and Date -->
+        <div class="toolbox-row-clock">
+          <div class="row-clock-left">
+            <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span class="clock-display" id="clock">00:00:00 AM</span>
+          </div>
+          <div class="row-clock-right" id="calendarDate">
+            Loading Date...
+          </div>
+        </div>
+
+        <!-- Row 2: Dropdown Selectors -->
+        <div class="toolbox-row-selectors">
+          <!-- Calendar selector -->
+          <button class="selector-btn" id="selectorCalendar" onclick="toggleDropdown('calendar')">
+            <div class="selector-btn-left">
+              <svg class="icon-calendar" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>Calendar</span>
+            </div>
+            <svg class="chevron-icon" id="chevronCalendar" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <!-- Weather selector -->
+          <button class="selector-btn" id="selectorWeather" onclick="toggleDropdown('weather')">
+            <div class="selector-btn-left">
+              <svg class="icon-weather-main" id="currentWeatherIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+              <span id="currentWeatherText">24°C</span>
+            </div>
+            <svg class="chevron-icon" id="chevronWeather" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Soundtrack selector -->
+        <div class="toolbox-row-music-selector" style="margin-top: 10px;">
+          <button class="selector-btn selector-btn-full" id="selectorMusic" onclick="toggleDropdown('music')" style="width: 100%; display: flex; justify-content: space-between;">
+            <div class="selector-btn-left">
+              <svg class="icon-music" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--accent-color);"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              <span id="musicStatusText">Soundtrack: Heat Waves</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="mini-play-state" style="font-size: 0.65rem; color: var(--text-secondary);">⏸</span>
+              <svg class="chevron-icon" id="chevronMusic" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- Content Panel (Collapsible dropdown panels) -->
+        <div class="toolbox-dropdown-panel" id="dropdownPanel" style="display: none;">
+          <!-- Calendar Dropdown -->
+          <div class="dropdown-content-item" id="contentCalendar" style="display: none;">
+            <div class="calendar-header">
+              <span class="calendar-month-year" id="calendarMonthYear">July 2026</span>
+              <span class="calendar-today-label" onclick="goToToday()">Today</span>
+            </div>
+            <div class="calendar-weekdays">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Weather Dropdown -->
+          <div class="dropdown-content-item" id="contentWeather" style="display: none;">
+            <div class="weather-header">
+              <div class="weather-location">
+                <svg class="icon-pin" viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span id="weatherLocationName">Local Area</span>
+              </div>
+              <button class="gps-btn" id="gpsBtn" onclick="syncGPS(event)">
+                <svg class="icon-sync" id="gpsIcon" viewBox="0 0 24 24" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                <span>GPS</span>
+              </button>
+            </div>
+            <div class="weather-subheader">WEATHER ATMOSPHERE</div>
+            <div class="weather-grid">
+              <button class="weather-btn active" id="weather-clear" onclick="setWeather('clear')">Clear</button>
+              <button class="weather-btn" id="weather-rain" onclick="setWeather('rain')">Rain</button>
+              <button class="weather-btn" id="weather-snow" onclick="setWeather('snow')">Snow</button>
+              <button class="weather-btn" id="weather-thunderstorm" onclick="setWeather('thunderstorm')">Thunderstorm</button>
+              <button class="weather-btn" id="weather-fog" onclick="setWeather('fog')">Fog</button>
+              <button class="weather-btn" id="weather-cloudy" onclick="setWeather('cloudy')">Cloudy</button>
+            </div>
+          </div>
+
+          <!-- Music Dropdown -->
+          <div class="dropdown-content-item" id="contentMusic" style="display: none;">
+            <div class="music-player-container">
+              <!-- Song Details Cover Row -->
+              <div class="music-cover-row">
+                <div class="vinyl-container">
+                  <div class="vinyl-record" id="vinylRecord">
+                    <div class="vinyl-center"></div>
+                  </div>
+                </div>
+                <div class="music-details">
+                  <span class="music-title" id="musicTitle">Heat Waves</span>
+                  <span class="music-artist" id="musicArtist">Glass Animals</span>
+                  <div class="music-badge-row">
+                    <span class="music-tag">Chiptune Synth</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Animated Visualizer & Scrolling Lyrics -->
+              <div class="music-visual-row">
+                <div class="lyrics-container">
+                  <div class="lyrics-text" id="lyricsText">"Sometimes all I think about is you..."</div>
+                </div>
+                <div class="audio-visualizer" id="visualizer">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+              </div>
+
+              <!-- Playback Controls -->
+              <div class="music-controls" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
+                <!-- Save Button -->
+                <button class="music-btn save-song-btn-circle" id="saveSongBtn" onclick="toggleSaveCurrentSong(event)" title="Save to Favorites">
+                  <svg class="heart-icon" id="heartIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;transition: all 0.2s; pointer-events: none;">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
+
+                <!-- Prev Button -->
+                <button class="music-btn control-prev" onclick="playPrevSong()" title="Previous Song">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                
+                <!-- Play / Pause Button -->
+                <button class="music-btn control-play" id="musicPlayBtn" onclick="toggleMusicPlayback()" title="Play / Pause">
+                  <svg id="musicPlayIcon" viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;margin-left: 2px;"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+
+                <!-- Next Button -->
+                <button class="music-btn control-next" onclick="playNextSong()" title="Next Song">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 18l8.5-6L6 6zm9-12h2v12h-2z"/></svg>
+                </button>
+
+                <!-- Download MP3 Button -->
+                <button class="music-btn control-download" onclick="downloadCurrentSong()" title="Download MP3">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+
+              <!-- Quick List of Playlist Songs -->
+              <div class="playlist-container">
+                <div class="playlist-header">SOUNDTRACK PLAYLIST</div>
+                <div class="playlist-list" id="playlistList">
+                  <!-- Generated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Time of Day Indicator and Picker -->
+        <div class="toolbox-row-bottom">
+          <div class="bottom-left" id="currentTimeOfDayDisplay">
+            <svg class="icon-timeofday" id="bottomTimeIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <span id="bottomTimeText">Night</span>
+          </div>
+          <div class="bottom-right-pill">
+            <button class="time-btn" id="btn-sunrise" onclick="selectTimeManual('sunrise')">Dawn</button>
+            <button class="time-btn" id="btn-day" onclick="selectTimeManual('day')">Day</button>
+            <button class="time-btn" id="btn-sunset" onclick="selectTimeManual('sunset')">Dusk</button>
+            <button class="time-btn" id="btn-night" onclick="selectTimeManual('night')">Night</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back button -->
+  <a href="index.html" class="back-btn glass-panel">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+    Back to Map
+  </a>
+
+  <div class="subpage-wrapper">
+    <header class="page-header">
+      <span class="page-category">Connect</span>
+      <h1 class="page-title">Port Market</h1>
+    </header>
+
+    <div class="content-grid">
+      <!-- Left Column: Contact Form -->
+      <section class="glass-panel" style="padding: 30px;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 8px;">Contact Booth</h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 24px;">
+          Send a direct transmission. The message will be routed directly to the Chief Architect's terminal.
+        </p>
+
+        <form id="contactForm" onsubmit="handleContactSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-control" required placeholder="John Doe">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control" required placeholder="john@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" rows="5" required placeholder="Type your message here..."></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" style="width: 100%;">Transmit Message</button>
+        </form>
+      </section>
+
+      <!-- Right Column: Social Sphere -->
+      <aside class="glass-panel social-portal-card">
+        <div class="social-portal-header">
+          <h3 class="social-portal-title">Social Market Sphere</h3>
+          <p class="social-portal-subtitle">Hover card to pause rotation & click links</p>
+          <div class="social-portal-badge" id="autoCycleBadge">
+            <span class="badge-dot"></span>
+            <span id="badgeText">Auto-cycle: Active</span>
+          </div>
+        </div>
+
+        <div class="social-wheel-container open" id="socialWheelContainer">
+          <div class="center-button-wrapper">
+            <button class="center-button" id="centerToggleButton" onclick="toggleWheelManual()" title="Toggle Menu">
+              <!-- Plus symbol that morphs to Cross when open -->
+              <svg viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="social-wheel-wrapper" id="socialWheelWrapper">
+            <!-- 1. GitHub -->
+            <div class="wheel-item">
+              <a href="https://github.com" target="_blank" class="wheel-icon-link" style="--brand-color: #f8fafc; --brand-glow: rgba(248, 250, 252, 0.25);" title="GitHub">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.867 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+                </svg>
+                <div class="wheel-item-tooltip">GitHub Forge</div>
+              </a>
+            </div>
+
+            <!-- 2. LinkedIn -->
+            <div class="wheel-item">
+              <a href="https://linkedin.com" target="_blank" class="wheel-icon-link" style="--brand-color: #0a66c2; --brand-glow: rgba(10, 102, 194, 0.25);" title="LinkedIn">
+                <svg viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <div class="wheel-item-tooltip">LinkedIn Plaza</div>
+              </a>
+            </div>
+
+            <!-- 3. Facebook -->
+            <div class="wheel-item">
+              <a href="https://facebook.com" target="_blank" class="wheel-icon-link" style="--brand-color: #1877f2; --brand-glow: rgba(24, 119, 242, 0.25);" title="Facebook">
+                <svg viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <div class="wheel-item-tooltip">Facebook Commons</div>
+              </a>
+            </div>
+
+            <!-- 4. Instagram -->
+            <div class="wheel-item">
+              <a href="https://instagram.com" target="_blank" class="wheel-icon-link use-stroke" style="--brand-color: #e1306c; --brand-glow: rgba(225, 48, 108, 0.25);" title="Instagram">
+                <svg viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+                <div class="wheel-item-tooltip">Instagram Gallery</div>
+              </a>
+            </div>
+
+            <!-- 5. Telegram -->
+            <div class="wheel-item">
+              <a href="https://telegram.org" target="_blank" class="wheel-icon-link" style="--brand-color: #24a1de; --brand-glow: rgba(36, 161, 222, 0.25);" title="Telegram">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.6 1.5-1.57 2.76-2.67 4.02-3.86.58-.55.24-.85-.43-.4l-5.69 3.58c-.5.31-.96.47-1.37.45-.45-.01-1.31-.26-1.95-.47-.79-.26-1.42-.4-1.36-.85.03-.23.35-.47.96-.71 3.76-1.64 6.27-2.72 7.53-3.25 3.58-1.5 4.32-1.76 4.81-1.77.11.01.35.03.5.16.13.1.17.24.19.34.02.09.04.3.02.49z"/>
+                </svg>
+                <div class="wheel-item-tooltip">Telegram Channel</div>
+              </a>
+            </div>
+
+            <!-- 6. WhatsApp -->
+            <div class="wheel-item">
+              <a href="https://wa.me/1234567890" target="_blank" class="wheel-icon-link" style="--brand-color: #25d366; --brand-glow: rgba(37, 211, 102, 0.25);" title="WhatsApp">
+                <svg viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 2.698 1.498 4.67 1.499 5.485 0 9.94-4.514 9.943-10.061.001-2.686-1.037-5.21-2.923-7.098C16.452 1.606 13.94 1.56 12.01 1.56c-5.485 0-9.941 4.515-9.945 10.063-.002 1.942.496 3.1 1.393 4.62l-.995 3.637 3.594-.926zM17.52 14.3c-.3-.15-1.77-.874-2.043-.974-.274-.1-.474-.15-.674.15-.2.3-.77.974-.944 1.174-.175.2-.35.225-.65.075-.3-.15-1.265-.467-2.41-1.485-.89-.79-1.49-1.77-1.665-2.07-.175-.3-.02-.46.13-.61.135-.135.3-.35.45-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.675-1.625-.925-2.225-.244-.589-.492-.51-.674-.51-.175-.01-.375-.01-.575-.01-.2 0-.525.075-.8 1.07-.275.3-.8 2.025-.8 2.47 0 .45.325.875.525 1.175.2.3 2.222 3.393 5.385 4.757.75.325 1.34.52 1.8.66.755.24 1.442.206 1.986.125.606-.09 1.77-.724 2.02-1.385.25-.66.25-1.226.175-1.385-.075-.16-.275-.26-.575-.41z"/>
+                </svg>
+                <div class="wheel-item-tooltip">WhatsApp Broadcast</div>
+              </a>
+            </div>
+
+            <!-- 7. Gmail -->
+            <div class="wheel-item">
+              <a href="mailto:architect@aethelgard.io" class="wheel-icon-link use-stroke" style="--brand-color: #ea4335; --brand-glow: rgba(234, 67, 53, 0.25);" title="Gmail">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <div class="wheel-item-tooltip">Gmail Portal</div>
+              </a>
+            </div>
+
+            <!-- 8. Phone Number -->
+            <div class="wheel-item">
+              <a href="tel:+1234567890" class="wheel-icon-link use-stroke" style="--brand-color: #f59e0b; --brand-glow: rgba(245, 158, 11, 0.25);" title="Phone Number">
+                <svg viewBox="0 0 24 24">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <div class="wheel-item-tooltip">Voice Terminal</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Simulated Success Dialog -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="glass-panel popup-box">
+      <div class="popup-icon">🕊️</div>
+      <h3 style="font-size: 1.4rem; color: #a855f7;">Transmission Success!</h3>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+        Your message has been encoded and dispatched. The carrier pigeon has taken flight to the Chief Architect's harbor!
+      </p>
+      <button class="submit-btn" style="padding: 10px 20px; font-size: 0.8rem; margin-top: 10px;" onclick="closePopup()">Return to Market</button>
+    </div>
+  </div>
+
+  <script>
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      document.getElementById('successOverlay').classList.add('active');
+    }
+
+    function closePopup() {
+      document.getElementById('successOverlay').classList.remove('active');
+      document.getElementById('contactForm').reset();
+    }
+
+    // --- Interactive Social Wheel Controller ---
+    let cycleTime = 0; // in milliseconds
+    let isHovered = false;
+    let isAutoMode = true;
+    let wheelTimer = null;
+
+    const container = document.getElementById('socialWheelContainer');
+    const badge = document.getElementById('autoCycleBadge');
+    const badgeText = document.getElementById('badgeText');
+    const portalCard = document.querySelector('.social-portal-card');
+
+    function startAutoCycle() {
+      if (wheelTimer) clearInterval(wheelTimer);
+      wheelTimer = setInterval(() => {
+        if (isHovered || !isAutoMode) return; // Pause countdown when hovered or manually controlled
+        
+        cycleTime += 100;
+        if (cycleTime >= 10000) {
+          cycleTime = 0;
+        }
+
+        if (cycleTime < 8500) {
+          // 8.5 seconds open phase (0ms to 8499ms)
+          if (container.classList.contains('closed')) {
+            container.classList.remove('closed');
+            container.classList.add('open');
+          }
+        } else {
+          // 1.5 seconds closed phase (8500ms to 9999ms)
+          if (container.classList.contains('open')) {
+            container.classList.remove('open');
+            container.classList.add('closed');
+          }
+        }
+      }, 100);
+    }
+
+    function toggleWheelManual() {
+      // Toggle open/closed class on container
+      if (container.classList.contains('open')) {
+        container.classList.remove('open');
+        container.classList.add('closed');
+      } else {
+        container.classList.remove('closed');
+        container.classList.add('open');
+      }
+      
+      // Pause automatic cycling
+      isAutoMode = false;
+      badge.classList.add('paused');
+      badgeText.innerHTML = `Auto-cycle: Paused <button class="resume-btn" onclick="resumeAutoCycle(event)" title="Resume auto-cycling">Resume</button>`;
+    }
+
+    function resumeAutoCycle(e) {
+      if (e) e.stopPropagation(); // Avoid triggering button toggle
+      isAutoMode = true;
+      cycleTime = 0; // Reset timer to start fresh
+      container.classList.remove('closed');
+      container.classList.add('open');
+      badge.classList.remove('paused');
+      badgeText.textContent = "Auto-cycle: Active";
+    }
+
+    // Set up hover event listeners
+    if (portalCard) {
+      portalCard.addEventListener('mouseenter', () => {
+        isHovered = true;
+      });
+      portalCard.addEventListener('mouseleave', () => {
+        isHovered = false;
+      });
+    }
+
+    // Initialize auto-cycling
+    startAutoCycle();
+  </script>
+  <script src="toolbox.js?v=2.2.0"></script>
+</body>
+</html>

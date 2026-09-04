@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diptarka Samanta - About Me</title>
+  <link rel="stylesheet" href="subpage.css">
+  <style>
+    /* Fluid Blob Profile Image with Morphing Animation */
+    @keyframes morphBlob {
+      0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    }
+
+    .profile-header-card {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .banner-image {
+      height: 180px;
+      width: 100%;
+      background: linear-gradient(to bottom, rgba(10, 15, 30, 0.05), rgba(3, 7, 18, 0.85)), 
+                  url('images/banner.png') center/cover no-repeat;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .profile-meta-row {
+      display: flex;
+      gap: 24px;
+      padding: 0 30px 24px 30px;
+      margin-top: -50px;
+      align-items: flex-end;
+    }
+
+    .fluid-img-container {
+      width: 130px;
+      height: 130px;
+      position: relative;
+      overflow: hidden;
+      animation: morphBlob 8s ease-in-out infinite;
+      border: 3px solid var(--accent-color);
+      box-shadow: 0 0 20px var(--accent-glow), 0 10px 25px rgba(0,0,0,0.5);
+      background: #0d1117;
+      z-index: 10;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .fluid-img-container:hover {
+      transform: scale(1.05);
+    }
+
+    .fluid-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-text-col {
+      flex-grow: 1;
+      padding-bottom: 4px;
+      min-width: 0;
+    }
+
+    .profile-name-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0ea5e9, #fb7185);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      display: inline-block;
+    }
+
+    .profile-subtitle {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      letter-spacing: 0.01em;
+    }
+
+    .profile-contact-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .contact-icon {
+      font-size: 0.85rem;
+      color: var(--accent-color);
+    }
+
+    /* Skills section styling */
+    .skill-group-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .skill-group-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-tag {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+      cursor: default;
+    }
+
+    .skill-tag:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 8px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    .value-card {
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .value-icon {
+      font-size: 1.5rem;
+      background: rgba(255,255,255,0.05);
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .value-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+    }
+
+    .value-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+      .profile-meta-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -65px;
+      }
+      .profile-contact-grid {
+        justify-content: center;
+      }
+    }
+    @keyframes blink {
+      from, to { color: transparent; }
+      50% { color: var(--accent-color); }
+    }
+  </style>
+</head>
+<body class="accent-amber">
+
+  <!-- UI Overlay for Toolbox -->
+  <div class="ui-overlay">
+    <div class="toolbox glass-panel collapsed" id="mainToolbox">
+      <!-- Minimized Horizontal Info-Bar -->
+      <div class="toolbox-minimized-content" id="toolboxMinimizedContent">
+        <div class="drag-dots">⋮⋮</div>
+        <div class="minimized-time">
+          <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span id="minimizedClock">00:00:00 AM</span>
+        </div>
+        <div class="minimized-divider">|</div>
+        <div class="minimized-weather">
+          <svg class="icon-weather" id="minimizedWeatherIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+          <span id="minimizedTemp">24°C</span>
+        </div>
+        <div class="minimized-divider">|</div>
+        <div style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem;">
+          <span>🎵</span>
+          <span id="musicMiniPlayState" class="mini-play-state" style="color: var(--text-secondary); font-family: var(--font-mono); font-weight: bold;">⏸</span>
+        </div>
+        <button class="toolbox-toggle-btn" id="expandBtn" onclick="toggleToolboxCollapse(event)" aria-label="Expand Toolbox">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- Expanded Detailed Dashboard -->
+      <div class="toolbox-expanded-content" id="toolboxExpandedContent">
+        <!-- Header Row -->
+        <div class="toolbox-header-row" id="toolboxDragHandle">
+          <div class="header-left">
+             <span class="drag-dots-icon">⋮⋮</span>
+             <span class="header-title">CITY TOOLBOX</span>
+          </div>
+          <div class="header-right" onclick="event.stopPropagation()">
+            <!-- Sound toggle button -->
+            <button class="header-btn" id="soundToggle" onclick="toggleAmbientSound(event)" title="Toggle Sound">
+              <svg id="soundIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M3.63 3.63L2.05 5.2l4.5 4.5H3v5h3.33L11 19.33V14.2l5.73 5.73c-.7.5-1.5.87-2.38 1.07v2.06c1.43-.3 2.73-.97 3.82-1.89l2.25 2.25 1.58-1.58L3.63 3.63zM9 14.17L6.83 12H5v1h4v1.17zM19 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.96-3.87l-1.48 1.48c.33.73.52 1.54.52 2.39 0 2.25-1.28 4.2-3.17 5.16l1.49 1.49C20.52 16.92 22 14.64 22 12c0-1.45-.42-2.8-1.04-3.87zM11 4.67L8.83 6.84l1.58 1.58 1.58-1.58V4.67z"/></svg>
+            </button>
+            <!-- Auto/Manual toggle button -->
+            <button class="header-btn mode-btn active" id="btn-mode-auto" onclick="toggleControlMode(event)" title="Toggle Control Mode">
+              <svg class="icon-sparkles" viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+              <span id="controlModeText">Auto</span>
+            </button>
+            <!-- Collapse button -->
+            <button class="header-btn" id="collapseBtn" onclick="toggleToolboxCollapse(event)" title="Collapse Toolbox">
+              <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Row 1: Clock, Time and Date -->
+        <div class="toolbox-row-clock">
+          <div class="row-clock-left">
+            <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span class="clock-display" id="clock">00:00:00 AM</span>
+          </div>
+          <div class="row-clock-right" id="calendarDate">
+            Loading Date...
+          </div>
+        </div>
+
+        <!-- Row 2: Dropdown Selectors -->
+        <div class="toolbox-row-selectors">
+          <!-- Calendar selector -->
+          <button class="selector-btn" id="selectorCalendar" onclick="toggleDropdown('calendar')">
+            <div class="selector-btn-left">
+              <svg class="icon-calendar" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <span>Calendar</span>
+            </div>
+            <svg class="chevron-icon" id="chevronCalendar" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <!-- Weather selector -->
+          <button class="selector-btn" id="selectorWeather" onclick="toggleDropdown('weather')">
+            <div class="selector-btn-left">
+              <svg class="icon-weather-main" id="currentWeatherIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path><circle cx="12" cy="12" r="4"></circle></svg>
+              <span id="currentWeatherText">24°C</span>
+            </div>
+            <svg class="chevron-icon" id="chevronWeather" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Soundtrack selector -->
+        <div class="toolbox-row-music-selector" style="margin-top: 10px;">
+          <button class="selector-btn selector-btn-full" id="selectorMusic" onclick="toggleDropdown('music')" style="width: 100%; display: flex; justify-content: space-between;">
+            <div class="selector-btn-left">
+              <svg class="icon-music" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;color:var(--accent-color);"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              <span id="musicStatusText">Soundtrack: Heat Waves</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="mini-play-state" style="font-size: 0.65rem; color: var(--text-secondary);">⏸</span>
+              <svg class="chevron-icon" id="chevronMusic" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- Content Panel (Collapsible dropdown panels) -->
+        <div class="toolbox-dropdown-panel" id="dropdownPanel" style="display: none;">
+          <!-- Calendar Dropdown -->
+          <div class="dropdown-content-item" id="contentCalendar" style="display: none;">
+            <div class="calendar-header">
+              <span class="calendar-month-year" id="calendarMonthYear">July 2026</span>
+              <span class="calendar-today-label" onclick="goToToday()">Today</span>
+            </div>
+            <div class="calendar-weekdays">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Weather Dropdown -->
+          <div class="dropdown-content-item" id="contentWeather" style="display: none;">
+            <div class="weather-header">
+              <div class="weather-location">
+                <svg class="icon-pin" viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span id="weatherLocationName">Local Area</span>
+              </div>
+              <button class="gps-btn" id="gpsBtn" onclick="syncGPS(event)">
+                <svg class="icon-sync" id="gpsIcon" viewBox="0 0 24 24" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+                <span>GPS</span>
+              </button>
+            </div>
+            <div class="weather-subheader">WEATHER ATMOSPHERE</div>
+            <div class="weather-grid">
+              <button class="weather-btn active" id="weather-clear" onclick="setWeather('clear')">Clear</button>
+              <button class="weather-btn" id="weather-rain" onclick="setWeather('rain')">Rain</button>
+              <button class="weather-btn" id="weather-snow" onclick="setWeather('snow')">Snow</button>
+              <button class="weather-btn" id="weather-thunderstorm" onclick="setWeather('thunderstorm')">Thunderstorm</button>
+              <button class="weather-btn" id="weather-fog" onclick="setWeather('fog')">Fog</button>
+              <button class="weather-btn" id="weather-cloudy" onclick="setWeather('cloudy')">Cloudy</button>
+            </div>
+          </div>
+
+          <!-- Music Dropdown -->
+          <div class="dropdown-content-item" id="contentMusic" style="display: none;">
+            <div class="music-player-container">
+              <!-- Song Details Cover Row -->
+              <div class="music-cover-row">
+                <div class="vinyl-container">
+                  <div class="vinyl-record" id="vinylRecord">
+                    <div class="vinyl-center"></div>
+                  </div>
+                </div>
+                <div class="music-details">
+                  <span class="music-title" id="musicTitle">Heat Waves</span>
+                  <span class="music-artist" id="musicArtist">Glass Animals</span>
+                  <div class="music-badge-row">
+                    <span class="music-tag">Chiptune Synth</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Animated Visualizer & Scrolling Lyrics -->
+              <div class="music-visual-row">
+                <div class="lyrics-container">
+                  <div class="lyrics-text" id="lyricsText">"Sometimes all I think about is you..."</div>
+                </div>
+                <div class="audio-visualizer" id="visualizer">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                </div>
+              </div>
+
+              <!-- Playback Controls -->
+              <div class="music-controls" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
+                <!-- Save Button -->
+                <button class="music-btn save-song-btn-circle" id="saveSongBtn" onclick="toggleSaveCurrentSong(event)" title="Save to Favorites">
+                  <svg class="heart-icon" id="heartIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;transition: all 0.2s; pointer-events: none;">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
+
+                <!-- Prev Button -->
+                <button class="music-btn control-prev" onclick="playPrevSong()" title="Previous Song">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                
+                <!-- Play / Pause Button -->
+                <button class="music-btn control-play" id="musicPlayBtn" onclick="toggleMusicPlayback()" title="Play / Pause">
+                  <svg id="musicPlayIcon" viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor;margin-left: 2px;"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+
+                <!-- Next Button -->
+                <button class="music-btn control-next" onclick="playNextSong()" title="Next Song">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;"><path d="M6 18l8.5-6L6 6zm9-12h2v12h-2z"/></svg>
+                </button>
+
+                <!-- Download MP3 Button -->
+                <button class="music-btn control-download" onclick="downloadCurrentSong()" title="Download MP3">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </button>
+              </div>
+
+              <!-- Quick List of Playlist Songs -->
+              <div class="playlist-container">
+                <div class="playlist-header">SOUNDTRACK PLAYLIST</div>
+                <div class="playlist-list" id="playlistList">
+                  <!-- Generated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Time of Day Indicator and Picker -->
+        <div class="toolbox-row-bottom">
+          <div class="bottom-left" id="currentTimeOfDayDisplay">
+            <svg class="icon-timeofday" id="bottomTimeIcon" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <span id="bottomTimeText">Night</span>
+          </div>
+          <div class="bottom-right-pill">
+            <button class="time-btn" id="btn-sunrise" onclick="selectTimeManual('sunrise')">Dawn</button>
+            <button class="time-btn" id="btn-day" onclick="selectTimeManual('day')">Day</button>
+            <button class="time-btn" id="btn-sunset" onclick="selectTimeManual('sunset')">Dusk</button>
+            <button class="time-btn" id="btn-night" onclick="selectTimeManual('night')">Night</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back button -->
+  <a href="index.html" class="back-btn glass-panel">
+    <svg viewBox="0 0 24 24">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+    Back to Map
+  </a>
+
+  <div class="subpage-wrapper">
+    <!-- Blended Profile Header Card (Idea 2) -->
+    <div class="profile-header-card glass-panel">
+      <!-- Top banner image (Map landscape sunset) -->
+      <div class="banner-image"></div>
+      
+      <!-- Profile Info Row -->
+      <div class="profile-meta-row" style="align-items: center;">
+        <!-- Wrapper for Photo & Status Pill -->
+        <div class="profile-photo-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0;">
+          <!-- Morphing Blob Profile Image -->
+          <div class="fluid-img-container" style="margin: 0;">
+            <img src="images/Diptarka.png" alt="Diptarka Samanta">
+          </div>
+          <!-- Status Badge Capsule (matching screenshot capsule) -->
+          <div class="status-pill" style="background: rgba(3,7,18,0.7); border: 1px solid rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); box-shadow: 0 4px 12px rgba(0,0,0,0.4); backdrop-filter: blur(8px); pointer-events: none;">
+            <span style="width: 6px; height: 6px; background: #22c55e; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #22c55e;"></span>
+            STATUS: ONLINE
+          </div>
+        </div>
+        
+        <!-- Name, Role & Contact Grid -->
+        <div class="profile-text-col">
+          <h1 class="profile-name-title">Diptarka Samanta</h1>
+          <div class="profile-subtitle">Artificial Intelligence and Machine Learning Engineer</div>
+          
+          <div class="typing-text-container" style="margin-top: 14px; font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent-color); min-height: 24px; display: flex; align-items: center; font-weight: 500; letter-spacing: 0.02em;">
+            <span>I love&nbsp;</span><span id="typing-text"></span><span class="typing-cursor" style="animation: blink 0.75s step-end infinite; font-weight: 700; margin-left: 2px;">|</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Left Column: Biography & Installed Modules (Skills) -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <!-- System Summary Card -->
+        <section class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color);">System Summary</h3>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
+            I am the Chief Architect of Aethelgard. I build modern, resilient software systems and user interfaces. My design philosophy balances absolute utility with visual storytelling. Just as the wind and solar grids of this island operate in perfect harmony, I believe engineering and aesthetics should cooperate to deliver world-class digital experiences.
+          </p>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+            With expertise spanning full-stack architectures, real-time UI data flows, cloud infrastructure, and low-latency databases, I build applications that scale gracefully. I am always happy to chat about systems engineering, performance optimizations, and creative interfaces.
+          </p>
+        </section>
+
+        <!-- Installed Modules (Skills) Card -->
+        <section class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color);">Installed Modules (Skills)</h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Programming Languages -->
+            <div class="skill-group-card">
+              <div class="skill-group-title">Programming Languages</div>
+              <div class="skill-tags">
+                <span class="skill-tag">HTML5 / CSS3</span>
+                <span class="skill-tag">JavaScript (ES6+)</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">C / C++</span>
+                <span class="skill-tag">SQL</span>
+              </div>
+            </div>
+
+            <!-- Frameworks -->
+            <div class="skill-group-card">
+              <div class="skill-group-title">Frameworks & Libraries</div>
+              <div class="skill-tags">
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Next.js</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Web Audio API</span>
+                <span class="skill-tag">Express.js</span>
+                <span class="skill-tag">FastAPI</span>
+              </div>
+            </div>
+
+            <!-- Databases & Caching -->
+            <div class="skill-group-card">
+              <div class="skill-group-title">Databases & Caching</div>
+              <div class="skill-tags">
+                <span class="skill-tag">PostgreSQL</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Redis</span>
+                <span class="skill-tag">SQLite</span>
+                <span class="skill-tag">H2 Database</span>
+              </div>
+            </div>
+
+            <!-- DevOps & Tools -->
+            <div class="skill-group-card">
+              <div class="skill-group-title">DevOps & Hardware</div>
+              <div class="skill-tags">
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">Git & GitHub</span>
+                <span class="skill-tag">Maven</span>
+                <span class="skill-tag">Linux / Unix</span>
+                <span class="skill-tag">Arduino IDE</span>
+                <span class="skill-tag">Raspberry Pi</span>
+                <span class="skill-tag">ESP Boards</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Values & Stats & Actions -->
+      <aside style="display: flex; flex-direction: column; gap: 24px;">
+        <!-- Core Values -->
+        <div class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color);">Core Values</h3>
+          
+          <div class="value-card glass-panel" style="background: rgba(255, 255, 255, 0.01);">
+            <div class="value-icon">⚡</div>
+            <div>
+              <div class="value-title">Efficiency First</div>
+              <div class="value-desc">Optimizing render passes, caching assets, and reducing database round-trips.</div>
+            </div>
+          </div>
+
+          <div class="value-card glass-panel" style="background: rgba(255, 255, 255, 0.01);">
+            <div class="value-icon">🎨</div>
+            <div>
+              <div class="value-title">Visual Precision</div>
+              <div class="value-desc">Every pixel counts. Implementing smooth transitions and dynamic styling systems.</div>
+            </div>
+          </div>
+
+          <div class="value-card glass-panel" style="background: rgba(255, 255, 255, 0.01);">
+            <div class="value-icon">🔒</div>
+            <div>
+              <div class="value-title">Secure & Scalable</div>
+              <div class="value-desc">Applying modern web standards and solid server isolation practices.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fast Stats -->
+        <div class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color);">Fast Statistics</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span>Years Active</span>
+              <strong style="color: var(--text-primary);">5+ Years</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span>Systems Deployed</span>
+              <strong style="color: var(--text-primary);">24 Active</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;">
+              <span>GitHub Commits</span>
+              <strong style="color: var(--text-primary);">1,450+</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between;">
+              <span>Freelance Availability</span>
+              <strong style="color: #22c55e;">Available</strong>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Actions -->
+        <div class="glass-panel" style="padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-color);">Actions</h3>
+          <a href="#" class="submit-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 12px;" onclick="alert('Resume file download will be available when provided!')">
+            <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+            Download Resume (PDF)
+          </a>
+          <a href="social_market.html" class="submit-btn" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: var(--text-primary); text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; padding: 12px;">
+            <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            Send Message
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const textPhrases = [
+      "NLP.",
+      "Machine Learning.",
+      "DBMS."
+    ];
+    let phraseIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    const typingSpeed = 120;
+    const deletingSpeed = 60;
+    const delayBetweenPhrases = 2000;
+
+    function typeEffect() {
+      const currentPhrase = textPhrases[phraseIdx];
+      const typingElement = document.getElementById('typing-text');
+      if (!typingElement) return;
+
+      if (isDeleting) {
+        typingElement.textContent = currentPhrase.substring(0, charIdx - 1);
+        charIdx--;
+      } else {
+        typingElement.textContent = currentPhrase.substring(0, charIdx + 1);
+        charIdx++;
+      }
+
+      if (!isDeleting && charIdx === currentPhrase.length) {
+        isDeleting = true;
+        setTimeout(typeEffect, delayBetweenPhrases);
+      } else if (isDeleting && charIdx === 0) {
+        isDeleting = false;
+        phraseIdx = (phraseIdx + 1) % textPhrases.length;
+        setTimeout(typeEffect, 500);
+      } else {
+        setTimeout(typeEffect, isDeleting ? deletingSpeed : typingSpeed);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(typeEffect, 1000);
+    });
+  </script>
+  <script src="toolbox.js?v=2.2.0"></script>
+</body>
+</html>
