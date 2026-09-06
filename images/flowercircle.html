@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adjustable Flower Ring</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      --t: 0.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #1e1e24;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    .instructions {
+      color: #a0a0b2;
+      font-size: 14px;
+      margin-bottom: 12px;
+      user-select: none;
+    }
+
+    /* Adjustable Box */
+    #flower-container {
+      width: 480px;
+      height: 480px;
+      min-width: 260px;
+      min-height: 260px;
+      max-width: 92vw;
+      max-height: 85vh;
+      resize: both;
+      overflow: hidden;
+      border-radius: 16px;
+      position: relative;
+      background: #c5d9fe;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45), 0 0 0 2px rgba(255, 255, 255, 0.1);
+      cursor: crosshair;
+    }
+
+    #svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      fill-opacity: 0.75;
+    }
+
+    /* Petal Transforms and Layer Animations */
+    symbol {
+      overflow: visible;
+    }
+
+    svg use {
+      transform: rotate(0deg);
+      transition: transform calc(var(--t) * 1s);
+    }
+
+    svg g.a {
+      transition: transform calc(var(--t) * 1s);
+      transform: scale(var(--scale, 1)) rotate(-90deg);
+      filter: url('#f');
+    }
+
+    ._2 { --n: 2; }
+    ._3 { --n: 3; }
+    ._4 { --n: 4; }
+    ._5 { --n: 5; }
+
+    svg .a g:nth-of-type(1) { transform: rotate(calc(-0.5 * 180deg / var(--n))); }
+    svg .a g:nth-of-type(2) { transform: rotate(calc( 0.5 * 180deg / var(--n))); }
+
+    svg .a g:nth-of-type(1) use:nth-of-type(2) { transform: rotate(calc(-1deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(1) use:nth-of-type(3) { transform: rotate(calc(-2deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(1) use:nth-of-type(4) { transform: rotate(calc(-3deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(1) use:nth-of-type(5) { transform: rotate(calc(-4deg * 180 / var(--n))); }
+
+    svg .a g:nth-of-type(2) use:nth-of-type(2) { transform: rotate(calc(1deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(2) use:nth-of-type(3) { transform: rotate(calc(2deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(2) use:nth-of-type(4) { transform: rotate(calc(3deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(2) use:nth-of-type(5) { transform: rotate(calc(4deg * 180 / var(--n))); }
+  </style>
+</head>
+<body>
+
+  <div class="instructions">Drag the bottom-right corner to resize the box &bull; Click/drag canvas to paint</div>
+
+  <!-- Resizable Box Container -->
+  <div id="flower-container">
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <defs>
+        <filter id="f" width="200" height="200" x="-100" y="-100">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"></feGaussianBlur>
+          <feFlood flood-color="rgb(60,10,60)" result="color"/>
+          <feComposite in="color" in2="blur" operator="in" result="shadow" />
+          <feOffset in="shadow" dx="3" dy="3" result="offset"></feOffset>
+          <feMerge>
+            <feMergeNode in="offset" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>  
+        </filter>
+
+        <!-- preserveAspectRatio="xMidYMid meet" locks the petal shape proportions -->
+        <symbol id="petal2" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+          <path transform="translate(0,-100)" d="M25.91,-15.12 Q0,0 25.91,15.12L94.09,54.889 Q120,70 142.58,50.24L177.42,19.76 Q200,0 177.42,-19.756L142.58,-50.24 Q120,-70 94.087,-54.88Z"></path>
+        </symbol>
+          
+        <symbol id="petal3" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+          <path transform="translate(0,-100)" d="M27.69,-11.54 Q0,0 27.69,11.54 L92.3,38.46 Q120,50 145.44,34.1 L174.56,15.9 Q200,0 174.56,-15.9 L145.44,-34.1 Q120,-50 92.3,-38.46Z"></path>
+        </symbol>
+          
+        <symbol id="petal4" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+          <path transform="translate(0,-100)" d="M28.09,-10.53 Q0,0 28.09,10.53L91.91,34.47 Q120,45 146.147,30.29L173.85,14.7 Q200,0 173.85,-14.7L146.15,-30.29 Q120,-45 91.91,-34.467Z"></path>
+        </symbol>
+
+        <symbol id="petal5" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+          <path transform="translate(0,-100)" d="M28.85,-8.24 Q0,0 28.85,8.24L111.15,31.76 Q140,40 164.96,23.36L175.04,16.64 Q200,0 175.038,-16.64L164.96,-23.36 Q140,-40 111.15,-31.76Z"></path>
+        </symbol>
+      </defs>
+    </svg>
+  </div>
+
+  <script>
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const SVG_XLINK = "http://www.w3.org/1999/xlink";
+    const svg = document.getElementById("svg");
+    const container = document.getElementById("flower-container");
+
+    let rid = null;
+    const gon = 7;
+
+    const colors = [
+      "#ba3763",
+      "#d34076",
+      "#dbb0cc",
+      "#fddafa",
+      "#fef2fe",
+      "#eec0db",
+      "#ca809a",
+      "#e9d8e8"
+    ];
+
+    let m = { x: 0, y: 0 };
+    let previous = {};
+    let bool = false;
+
+    class Flower {
+      constructor(n, pos, scale, parent) {
+        this.n = n;
+        this.scale = scale;
+        this.pos = pos;
+        this.width = 40;
+        this.height = 40;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.parent = parent;
+
+        this.markup();
+      }
+
+      markup() {
+        this.G = document.createElementNS(SVG_NS, "g");
+        this.G.setAttribute("style", `--scale:${this.scale};`);
+        const rot = Math.floor(Math.random() * 180);
+        this.G.setAttribute("transform", `translate(${this.pos.x},${this.pos.y}) rotate(${rot})`);
+        this.G.setAttribute("fill", this.color);
+
+        const ga = document.createElementNS(SVG_NS, "g");
+        ga.setAttribute("class", "a");
+
+        for (let i = 0; i < 2; i++) {
+          const g = document.createElementNS(SVG_NS, "g");
+          for (let j = 0; j < this.n; j++) {
+            const use = document.createElementNS(SVG_NS, "use");
+            use.setAttributeNS(SVG_XLINK, "href", `#petal${this.n}`);
+            use.setAttribute("href", `#petal${this.n}`);
+            use.setAttribute("width", this.width);
+            use.setAttribute("height", this.height);
+            g.appendChild(use);
+          }
+          ga.appendChild(g);
+        }
+        this.G.appendChild(ga);
+        this.parent.appendChild(this.G);
+      }
+    }
+
+    function syncViewBox() {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+      return { w, h };
+    }
+
+    function dist(p1, p2) {
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function oMousePosSVG(e) {
+      const p = svg.createSVGPoint();
+      p.x = e.clientX;
+      p.y = e.clientY;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return { x: 0, y: 0 };
+      return p.matrixTransform(ctm.inverse());
+    }
+
+    // Manual Drawing Interactions
+    svg.addEventListener("mousedown", e => {
+      // Clear previous flowers except the <defs>
+      const defs = svg.querySelector("defs");
+      while (svg.lastChild && svg.lastChild !== defs) {
+        svg.removeChild(svg.lastChild);
+      }
+      bool = true;
+      previous = {};
+    });
+
+    window.addEventListener("mouseup", () => {
+      bool = false;
+      previous = {};
+    });
+
+    svg.addEventListener("mousemove", e => {
+      if (!bool) return;
+
+      m = oMousePosSVG(e);
+      const n = 2 + Math.floor(Math.random() * 4);
+      let scale = 1;
+
+      if (previous.x !== undefined) {
+        const d = dist(m, previous);
+        scale = Math.min(Math.max(d / 25, 0.7), 2.2);
+      }
+
+      const flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
+      requestAnimationFrame(() => {
+        flower.G.setAttribute("class", `_${flower.n}`);
+      });
+
+      previous.x = m.x;
+      previous.y = m.y;
+    });
+
+    // Ring path that adapts to container dimensions
+    function generatePolyPoints(sides, w, h) {
+      const centerX = w / 2;
+      const centerY = h / 2;
+      const R = (Math.min(w, h) / 2) * 0.68;
+      const pts = [];
+
+      for (let a = 0; a < 2 * Math.PI; a += 0.08) {
+        const r = (R * Math.cos(Math.PI / sides)) /
+                  Math.cos((a % ((2 * Math.PI) / sides)) - Math.PI / sides);
+
+        const x = centerX + r * Math.cos(a);
+        const y = centerY + r * Math.sin(a);
+        pts.push({ x, y });
+      }
+      return pts;
+    }
+
+    let points = [];
+    let frameIndex = 0;
+
+    function startAnimation() {
+      if (rid) {
+        cancelAnimationFrame(rid);
+        rid = null;
+      }
+
+      // Preserve <defs> when clearing
+      const defs = svg.querySelector("defs");
+      while (svg.lastChild && svg.lastChild !== defs) {
+        svg.removeChild(svg.lastChild);
+      }
+
+      const { w, h } = syncViewBox();
+      points = generatePolyPoints(gon, w, h);
+      frameIndex = 0;
+
+      function step() {
+        if (frameIndex >= points.length) {
+          rid = null;
+          return;
+        }
+
+        const pt = points[frameIndex];
+        const n = 2 + Math.floor(Math.random() * 4);
+        const scale = (Math.random() * 0.5 + 0.9).toFixed(2);
+
+        const flower = new Flower(n, pt, scale, svg);
+        requestAnimationFrame(() => {
+          flower.G.setAttribute("class", `_${flower.n}`);
+        });
+
+        frameIndex++;
+        rid = requestAnimationFrame(step);
+      }
+
+      step();
+    }
+
+    // Debounced observer to prevent choppy restarts while actively dragging the resize handle
+    let resizeTimer = null;
+    const observer = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        startAnimation();
+      }, 150);
+    });
+
+    observer.observe(container);
+  </script>
+</body>
+</html>

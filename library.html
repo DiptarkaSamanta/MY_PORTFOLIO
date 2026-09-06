@@ -91,6 +91,56 @@
       color: var(--text-secondary);
       margin-top: 4px;
     }
+
+    /* Top 3-Section Showcase Grid */
+    .top-showcase-grid {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 500px minmax(220px, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+      margin-bottom: 40px;
+      justify-content: center;
+      align-items: stretch;
+    }
+    @media (max-width: 1050px) {
+      .top-showcase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Flower Circle Inline SVG styles - Exact copy from flowercircle.html */
+    :root, body {
+      --t: 0.5;
+    }
+    symbol {
+      overflow: visible;
+    }
+    svg use {
+      transform: rotate(0deg);
+      transition: transform calc(var(--t) * 1s);
+    }
+    svg g.a {
+      transition: transform calc(var(--t) * 1s);
+      transform: scale(var(--scale, 1)) rotate(-90deg);
+      filter: url('#f');
+    }
+    ._2 { --n: 2; }
+    ._3 { --n: 3; }
+    ._4 { --n: 4; }
+    ._5 { --n: 5; }
+
+    svg .a g:nth-of-type(1) { transform: rotate(calc(-0.5 * 180deg / var(--n))); }
+    svg .a g:nth-of-type(2) { transform: rotate(calc( 0.5 * 180deg / var(--n))); }
+
+    svg .a g:nth-of-type(1) use:nth-of-type(2) { transform: rotate(calc(-1deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(1) use:nth-of-type(3) { transform: rotate(calc(-2deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(1) use:nth-of-type(4) { transform: rotate(calc(-3deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(1) use:nth-of-type(5) { transform: rotate(calc(-4deg * 180 / var(--n))); }
+
+    svg .a g:nth-of-type(2) use:nth-of-type(2) { transform: rotate(calc(1deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(2) use:nth-of-type(3) { transform: rotate(calc(2deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(2) use:nth-of-type(4) { transform: rotate(calc(3deg * 180 / var(--n))); }
+    svg .a g:nth-of-type(2) use:nth-of-type(5) { transform: rotate(calc(4deg * 180 / var(--n))); }
   </style>
 </head>
 <body class="accent-amber">
@@ -336,10 +386,107 @@
   </a>
 
   <div class="subpage-wrapper">
-    <header class="page-header">
+    <header class="page-header" style="text-align: center; margin-bottom: 25px;">
       <span class="page-category">Publications</span>
-      <h1 class="page-title">Grand Library</h1>
+      <h1 class="page-title" style="margin: 4px 0 0 0;">Grand Library</h1>
     </header>
+
+    <!-- Top 3-Section Showcase Grid (Authors, Flower Ring, Respected Characters) -->
+    <div class="top-showcase-grid">
+      
+      <!-- Section 1: Authors Slideshow -->
+      <div class="glass-panel showcase-card" style="padding: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(14, 165, 233, 0.25); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; height: 500px;">
+        <div style="padding: 14px 16px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.1rem; filter: drop-shadow(0 0 6px rgba(14,165,233,0.6));">📖</span>
+            <h3 style="font-size: 0.95rem; margin: 0; font-weight: 600; color: #f3f4f6;">Featured Authors</h3>
+          </div>
+          <div style="background: rgba(14, 165, 233, 0.15); padding: 3px 10px; border-radius: 16px; border: 1px solid rgba(14, 165, 233, 0.3);">
+            <span id="authorCounterBadge" style="font-size: 0.72rem; font-family: var(--font-mono); color: #7dd3fc; font-weight: 600;">1 / 7</span>
+          </div>
+        </div>
+        
+        <div style="padding: 24px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center;">
+          <div style="width: 160px; height: 200px; border-radius: 16px; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.15); box-shadow: 0 12px 32px rgba(0,0,0,0.6); background: #0b1120; position: relative;">
+            <img id="authorImage" src="images/Arthur_Conan_Doyel.avif" alt="Author" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease-in-out; opacity: 1;">
+          </div>
+          <div id="authorName" style="font-size: 1.02rem; font-weight: 600; color: #f3f4f6; margin-top: 18px; min-height: 2.6em; display: flex; align-items: center; justify-content: center; width: 100%;">
+            Arthur Conan Doyle
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">5s Fade Rotation • Alphabetical</span>
+        </div>
+      </div>
+
+      <!-- Section 2: Inline 500x500 Flower Ring Showcase -->
+      <div class="glass-panel showcase-card" style="padding: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(236, 72, 153, 0.3); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(236, 72, 153, 0.15); display: flex; flex-direction: column; width: 500px; height: 500px;">
+        <div style="padding: 14px 18px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2rem; filter: drop-shadow(0 0 6px rgba(236,72,153,0.6));">🌸</span>
+            <div>
+              <h3 style="font-size: 0.95rem; margin: 0; font-weight: 600; color: #f3f4f6;">Flower Ring Animation</h3>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; background: rgba(236, 72, 153, 0.1); padding: 4px 12px; border-radius: 16px; border: 1px solid rgba(236, 72, 153, 0.25);">
+            <span style="width: 6px; height: 6px; background-color: #ec4899; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #ec4899;"></span>
+            <span id="flowerTimerBadge" style="font-size: 0.72rem; font-family: var(--font-mono); color: #f9a8d4; font-weight: 600;">Reloads in 5s</span>
+          </div>
+        </div>
+        
+        <div class="flower-container" id="flower-container" style="position: relative; width: 100%; flex: 1; background: #c5d9fe; overflow: hidden; cursor: crosshair;">
+          <svg id="flowerSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width:100%; height:100%; display:block; fill-opacity:0.75;">
+            <defs>
+              <filter id="f" width="200" height="200" x="-100" y="-100">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"></feGaussianBlur>
+                <feFlood flood-color="rgb(60,10,60)" result="color"/>
+                <feComposite in="color" in2="blur" operator="in" result="shadow"/>
+                <feOffset in="shadow" dx="3" dy="3" result="offset"></feOffset>
+                <feMerge>
+                  <feMergeNode in="offset"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>  
+              </filter>
+              <symbol id="petal2" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+                <path transform="translate(0,-100)" d="M25.91,-15.12 Q0,0 25.91,15.12L94.09,54.889 Q120,70 142.58,50.24L177.42,19.76 Q200,0 177.42,-19.756L142.58,-50.24 Q120,-70 94.087,-54.88Z"></path>
+              </symbol>
+              <symbol id="petal3" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+                <path transform="translate(0,-100)" d="M27.69,-11.54 Q0,0 27.69,11.54 L92.3,38.46 Q120,50 145.44,34.1 L174.56,15.9 Q200,0 174.56,-15.9 L145.44,-34.1 Q120,-50 92.3,-38.46Z"></path>
+              </symbol>
+              <symbol id="petal4" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+                <path transform="translate(0,-100)" d="M28.09,-10.53 Q0,0 28.09,10.53L91.91,34.47 Q120,45 146.147,30.29L173.85,14.7 Q200,0 173.85,-14.7L146.15,-30.29 Q120,-45 91.91,-34.467Z"></path>
+              </symbol>
+              <symbol id="petal5" viewBox="0 -100 200 200" preserveAspectRatio="xMidYMid meet">
+                <path transform="translate(0,-100)" d="M28.85,-8.24 Q0,0 28.85,8.24L111.15,31.76 Q140,40 164.96,23.36L175.04,16.64 Q200,0 175.038,-16.64L164.96,-23.36 Q140,-40 111.15,-31.76Z"></path>
+              </symbol>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Section 3: Respected Characters (Placeholder) -->
+      <div class="glass-panel showcase-card" style="padding: 0; overflow: hidden; border-radius: 20px; border: 1px solid rgba(168, 85, 247, 0.25); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; height: 500px;">
+        <div style="padding: 14px 16px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 1.1rem; filter: drop-shadow(0 0 6px rgba(168,85,247,0.6));">🎭</span>
+            <h3 style="font-size: 0.95rem; margin: 0; font-weight: 600; color: #f3f4f6;">Respected Characters</h3>
+          </div>
+          <div style="background: rgba(168, 85, 247, 0.15); padding: 3px 10px; border-radius: 16px; border: 1px solid rgba(168, 85, 247, 0.3);">
+            <span style="font-size: 0.72rem; font-family: var(--font-mono); color: #c084fc; font-weight: 600;">Sequence Pending</span>
+          </div>
+        </div>
+
+        <div style="padding: 24px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center;">
+          <div style="width: 160px; height: 200px; border-radius: 16px; border: 2px dashed rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #c084fc;">
+            <span style="font-size: 2.6rem;">✨</span>
+            <span style="font-size: 0.82rem; font-weight: 500;">Characters</span>
+          </div>
+          <div style="font-size: 1.02rem; font-weight: 600; color: #f3f4f6; margin-top: 18px;">
+            Respected Characters
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 4px;">Will sync with author sequence</span>
+        </div>
+      </div>
+
+    </div>
 
     <div class="content-grid">
       <!-- Left Column: Blog feed -->
@@ -392,7 +539,7 @@
         </div>
       </section>
 
-      <!-- Right Column: Sidebar (Reading Shelf) -->
+      <!-- Right Column: Sidebar -->
       <aside style="display: flex; flex-direction: column; gap: 20px;">
         <div class="glass-panel" style="padding: 24px;">
           <h3 style="font-size: 1.2rem; margin-bottom: 20px; font-weight: 600;">Currently Reading</h3>
@@ -449,16 +596,327 @@
     function searchArticles() {
       const query = document.getElementById('blogSearch').value.toLowerCase();
       document.querySelectorAll('.blog-card').forEach(card => {
-        const title = card.querySelector('.blog-title').textContent.toLowerCase();
-        const excerpt = card.querySelector('.blog-excerpt').textContent.toLowerCase();
+        const titleEl = card.querySelector('.blog-title');
+        const excerptEl = card.querySelector('.blog-excerpt');
+        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+        const excerpt = excerptEl ? excerptEl.textContent.toLowerCase() : '';
         
-        if (title.includes(query) || excerpt.includes(query)) {
+        if (title.includes(query) || excerpt.includes(query) || card.classList.contains('showcase-card')) {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
         }
       });
     }
+
+    // Authors Slideshow (5s lexicographical rotation)
+    (function initAuthorSlideshow() {
+      const authors = [
+        { name: "Arthur Conan Doyle", image: "images/Arthur_Conan_Doyel.avif" },
+        { name: "Bibhutibhushan Bandopadhyay", image: "images/Bibhutibhushan Bandopadhyay.jpg" },
+        { name: "Hergé", image: "images/Herge.webp" },
+        { name: "Sarat Chandra Chattopadhyay", image: "images/Sarat_Chandra_Chattopadhyay.jpg" },
+        { name: "Satyajit Ray", image: "images/Satyajit_Ray.jpg" },
+        { name: "Sharadindu Bandyopadhyay", image: "images/Sharadindu_Bandyopadhyay.jpg" },
+        { name: "Sunil Gangopadhyay", image: "images/Sunil_Gangopadhyay.jpg" }
+      ];
+
+      // Sort lexicographically by author name
+      authors.sort((a, b) => a.name.localeCompare(b.name));
+
+      let currentIndex = 0;
+      const imgEl = document.getElementById("authorImage");
+      const nameEl = document.getElementById("authorName");
+      const badgeEl = document.getElementById("authorCounterBadge");
+
+      if (!imgEl || !nameEl || !badgeEl) return;
+
+      // Set initial content
+      imgEl.src = authors[0].image;
+      nameEl.textContent = authors[0].name;
+      badgeEl.textContent = `1 / ${authors.length}`;
+
+      function updateAuthor() {
+        imgEl.style.opacity = "0";
+        setTimeout(() => {
+          currentIndex = (currentIndex + 1) % authors.length;
+          imgEl.src = authors[currentIndex].image;
+          nameEl.textContent = authors[currentIndex].name;
+          badgeEl.textContent = `${currentIndex + 1} / ${authors.length}`;
+          imgEl.style.opacity = "1";
+        }, 500);
+      }
+      setInterval(updateAuthor, 5000);
+    })();
+
+    // Standalone Self-Contained Flower Ring Logic (Interactive Paint + 10s Inactivity Auto-Repeat)
+    (function initInlineFlowerRing() {
+      const SVG_NS = "http://www.w3.org/2000/svg";
+      const SVG_XLINK = "http://www.w3.org/1999/xlink";
+      let svg = null;
+      let container = null;
+      let rid = null;
+      const gon = 7;
+
+      const colors = [
+        "#ba3763",
+        "#d34076",
+        "#dbb0cc",
+        "#fddafa",
+        "#fef2fe",
+        "#eec0db",
+        "#ca809a",
+        "#e9d8e8"
+      ];
+
+      let m = { x: 0, y: 0 };
+      let previous = {};
+      let isUserDrawing = false;
+      let idleCountdown = 10;
+      let mainTimerInterval = null;
+
+      const flowerBadge = document.getElementById("flowerTimerBadge");
+
+      class Flower {
+        constructor(n, pos, scale, parent) {
+          this.n = n;
+          this.scale = scale;
+          this.pos = pos;
+          this.width = 40;
+          this.height = 40;
+          this.color = colors[Math.floor(Math.random() * colors.length)];
+          this.parent = parent;
+
+          this.markup();
+        }
+
+        markup() {
+          this.G = document.createElementNS(SVG_NS, "g");
+          this.G.setAttribute("style", `--scale:${this.scale};`);
+          const rot = Math.floor(Math.random() * 180);
+          this.G.setAttribute("transform", `translate(${this.pos.x},${this.pos.y}) rotate(${rot})`);
+          this.G.setAttribute("fill", this.color);
+
+          const ga = document.createElementNS(SVG_NS, "g");
+          ga.setAttribute("class", "a");
+
+          for (let i = 0; i < 2; i++) {
+            const g = document.createElementNS(SVG_NS, "g");
+            for (let j = 0; j < this.n; j++) {
+              const use = document.createElementNS(SVG_NS, "use");
+              use.setAttributeNS(SVG_XLINK, "href", `#petal${this.n}`);
+              use.setAttribute("href", `#petal${this.n}`);
+              use.setAttribute("width", this.width);
+              use.setAttribute("height", this.height);
+              g.appendChild(use);
+            }
+            ga.appendChild(g);
+          }
+          this.G.appendChild(ga);
+          this.parent.appendChild(this.G);
+        }
+      }
+
+      function syncViewBox() {
+        if (!container || !svg) return { w: 500, h: 500 };
+        const w = container.clientWidth || 500;
+        const h = container.clientHeight || 500;
+        svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+        return { w, h };
+      }
+
+      function dist(p1, p2) {
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+
+      function oMousePosSVG(e) {
+        if (!svg) return { x: 0, y: 0 };
+        const p = svg.createSVGPoint();
+        p.x = e.clientX;
+        p.y = e.clientY;
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return { x: 0, y: 0 };
+        return p.matrixTransform(ctm.inverse());
+      }
+
+      function generatePolyPoints(sides, w, h) {
+        const centerX = w / 2;
+        const centerY = h / 2;
+        const R = (Math.min(w, h) / 2) * 0.68;
+        const pts = [];
+
+        for (let a = 0; a < 2 * Math.PI; a += 0.08) {
+          const r = (R * Math.cos(Math.PI / sides)) /
+                    Math.cos((a % ((2 * Math.PI) / sides)) - Math.PI / sides);
+
+          const x = centerX + r * Math.cos(a);
+          const y = centerY + r * Math.sin(a);
+          pts.push({ x, y });
+        }
+        return pts;
+      }
+
+      let points = [];
+      let frameIndex = 0;
+
+      function startAnimation() {
+        if (!svg) return;
+        if (rid) {
+          cancelAnimationFrame(rid);
+          rid = null;
+        }
+
+        const defs = svg.querySelector("defs");
+        while (svg.lastChild && svg.lastChild !== defs) {
+          svg.removeChild(svg.lastChild);
+        }
+
+        const { w, h } = syncViewBox();
+        points = generatePolyPoints(gon, w, h);
+        frameIndex = 0;
+
+        function step() {
+          if (frameIndex >= points.length) {
+            rid = null;
+            return;
+          }
+
+          const pt = points[frameIndex];
+          const n = 2 + Math.floor(Math.random() * 4);
+          const scale = (Math.random() * 0.5 + 0.9).toFixed(2);
+
+          const flower = new Flower(n, pt, scale, svg);
+          requestAnimationFrame(() => {
+            if (flower && flower.G) flower.G.setAttribute("class", `_${flower.n}`);
+          });
+
+          frameIndex++;
+          rid = requestAnimationFrame(step);
+        }
+
+        step();
+      }
+
+      function resetIdleTimer() {
+        idleCountdown = 10;
+        if (flowerBadge && !isUserDrawing) {
+          flowerBadge.textContent = `Auto in ${idleCountdown}s`;
+        }
+      }
+
+      function startLoop() {
+        svg = document.getElementById("flowerSvg");
+        container = document.getElementById("flower-container");
+        if (!svg || !container) return;
+
+        // User clicks canvas to start drawing
+        svg.addEventListener("mousedown", e => {
+          // Stop any active auto ring animation immediately
+          if (rid) {
+            cancelAnimationFrame(rid);
+            rid = null;
+          }
+
+          // Clear previous artwork on click
+          const defs = svg.querySelector("defs");
+          while (svg.lastChild && svg.lastChild !== defs) {
+            svg.removeChild(svg.lastChild);
+          }
+
+          isUserDrawing = true;
+          previous = {};
+          resetIdleTimer();
+
+          if (flowerBadge) {
+            flowerBadge.textContent = "🎨 Drawing Mode";
+          }
+
+          // Draw initial flower at click location
+          m = oMousePosSVG(e);
+          const n = 2 + Math.floor(Math.random() * 4);
+          const flower = new Flower(n, { x: m.x, y: m.y }, 1, svg);
+          requestAnimationFrame(() => {
+            if (flower && flower.G) flower.G.setAttribute("class", `_${flower.n}`);
+          });
+          previous.x = m.x;
+          previous.y = m.y;
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (isUserDrawing) {
+            isUserDrawing = false;
+            resetIdleTimer();
+          }
+        });
+
+        svg.addEventListener("mousemove", e => {
+          if (!isUserDrawing) return;
+
+          resetIdleTimer();
+          if (flowerBadge) {
+            flowerBadge.textContent = "🎨 Drawing Mode";
+          }
+
+          m = oMousePosSVG(e);
+          const n = 2 + Math.floor(Math.random() * 4);
+          let scale = 1;
+          if (previous.x !== undefined) {
+            const d = dist(m, previous);
+            scale = Math.min(Math.max(d / 25, 0.7), 2.2);
+          }
+          const flower = new Flower(n, { x: m.x, y: m.y }, scale, svg);
+          requestAnimationFrame(() => {
+            if (flower && flower.G) flower.G.setAttribute("class", `_${flower.n}`);
+          });
+          previous.x = m.x;
+          previous.y = m.y;
+        });
+
+        // Start initial ring animation on load
+        startAnimation();
+        resetIdleTimer();
+
+        // 1-second interval checking for user inactivity
+        if (mainTimerInterval) clearInterval(mainTimerInterval);
+        mainTimerInterval = setInterval(() => {
+          // If user is actively drawing with mouse, don't count down
+          if (isUserDrawing) {
+            if (flowerBadge) flowerBadge.textContent = "🎨 Drawing Mode";
+            return;
+          }
+
+          idleCountdown--;
+          if (idleCountdown <= 0) {
+            // 10 seconds of no user drawing passed -> restart ring animation!
+            startAnimation();
+            idleCountdown = 10;
+          }
+
+          if (flowerBadge) {
+            flowerBadge.textContent = idleCountdown <= 0 ? "Restarting..." : `Auto in ${idleCountdown}s`;
+          }
+        }, 1000);
+
+        let resizeTimer = null;
+        if (typeof ResizeObserver !== "undefined") {
+          const observer = new ResizeObserver(() => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+              if (!isUserDrawing) startAnimation();
+            }, 150);
+          });
+          observer.observe(container);
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", startLoop);
+      } else {
+        startLoop();
+      }
+    })();
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
 </body>
