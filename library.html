@@ -6,91 +6,367 @@
   <title>Grand Library - Blog & Notes</title>
   <link rel="stylesheet" href="subpage.css">
   <style>
+    /* Search & Filter Pills */
     .search-box {
-      margin-bottom: 24px;
-    }
-    .blog-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .blog-card {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .blog-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-    .blog-date {
-      font-family: var(--font-mono);
-    }
-    .blog-readtime {
-      background: rgba(255,255,255,0.04);
-      padding: 2px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-    .blog-title {
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .blog-excerpt {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-    .blog-link {
-      color: var(--accent-color);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      align-self: flex-start;
-      margin-top: 6px;
-    }
-    .blog-link:hover {
-      text-decoration: underline;
-    }
-
-    /* Reading Progress list */
-    .book-item {
       margin-bottom: 16px;
     }
-    .book-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 6px;
+    .book-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
     }
-    .progress-bar-bg {
-      height: 6px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 3px;
-      overflow: hidden;
-      position: relative;
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .progress-bar-fill {
-      height: 100%;
+    .filter-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .filter-pill.active {
       background: var(--accent-color);
-      border-radius: 3px;
-      box-shadow: 0 0 8px var(--accent-glow);
+      color: #030712;
+      border-color: var(--accent-color);
+      font-weight: 600;
+      box-shadow: 0 0 12px var(--accent-glow);
     }
-    .book-percent {
+
+    /* 3D Bookshelf Grid Layout */
+    .bookshelf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px;
+      margin-bottom: 30px;
+      perspective: 1200px;
+    }
+
+    /* 3D Book Box Container & Transforms */
+    .book-card-wrap {
+      perspective: 1000px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .book-box-3d {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      border-radius: 12px 14px 14px 12px;
+      transform-style: preserve-3d;
+      transform: rotateY(-10deg) rotateX(4deg);
+      transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+      box-shadow: -14px 18px 28px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .book-card-wrap:hover .book-box-3d {
+      transform: rotateY(-22deg) rotateX(8deg) translateY(-10px) scale(1.02);
+      box-shadow: -22px 28px 42px rgba(0, 0, 0, 0.85), 0 0 25px var(--accent-glow);
+    }
+
+    /* 3D Book Spine Effect (Left Side) */
+    .book-box-3d::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 22px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      transform: rotateY(-90deg) translateZ(0px);
+      transform-origin: left;
+      border-radius: 12px 0 0 12px;
+      box-shadow: inset -3px 0 8px rgba(0, 0, 0, 0.6);
+    }
+
+    /* 3D Book Pages Edge Effect (Right Side) */
+    .book-box-3d::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      right: -14px;
+      width: 14px;
+      height: calc(100% - 8px);
+      background: repeating-linear-gradient(90deg, #e2e8f0, #cbd5e1 2px, #f8fafc 4px);
+      transform: rotateY(90deg) translateZ(0);
+      transform-origin: right;
+      border-radius: 0 3px 3px 0;
+      opacity: 0.85;
+    }
+
+    /* Cover Styling & Color Themes */
+    .book-cover {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px 14px 14px 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-left: 4px solid rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+
+    .theme-amber { background: linear-gradient(135deg, #b45309 0%, #1c1917 100%); }
+    .theme-blue { background: linear-gradient(135deg, #0284c7 0%, #0f172a 100%); }
+    .theme-purple { background: linear-gradient(135deg, #7e22ce 0%, #1e1b4b 100%); }
+    .theme-emerald { background: linear-gradient(135deg, #047857 0%, #022c22 100%); }
+    .theme-rose { background: linear-gradient(135deg, #be123c 0%, #310413 100%); }
+    .theme-indigo { background: linear-gradient(135deg, #4338ca 0%, #09090b 100%); }
+    .theme-teal { background: linear-gradient(135deg, #0f766e 0%, #042f2e 100%); }
+
+    /* Bookmark Ribbon */
+    .book-ribbon {
+      position: absolute;
+      top: 0;
+      right: 18px;
+      width: 16px;
+      height: 44px;
+      background: #ef4444;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      z-index: 2;
+    }
+
+    .book-category-tag {
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      align-self: flex-start;
+    }
+
+    .book-cover-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+      margin-top: 10px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .book-cover-author {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .book-stars {
+      color: #fbbf24;
+      font-size: 0.78rem;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    .book-cover-footer {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .book-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      align-self: flex-start;
+    }
+
+    .book-progress-wrapper {
+      width: 100%;
+    }
+
+    .book-progress-info {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      margin-top: 4px;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 4px;
+      font-family: var(--font-mono);
     }
+
+    .book-progress-track {
+      height: 6px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .book-progress-fill {
+      height: 100%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+      border-radius: 3px;
+    }
+
+    /* Sidebar Mini 3D Book Cards */
+    .sidebar-mini-book {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .sidebar-mini-book:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--accent-color);
+      transform: translateX(4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .mini-book-thumb-3d {
+      width: 48px;
+      height: 68px;
+      perspective: 300px;
+      flex-shrink: 0;
+    }
+
+    .mini-book-thumb-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: -4px 6px 12px rgba(0, 0, 0, 0.6);
+      transform: rotateY(-12deg);
+      border-left: 2px solid rgba(255,255,255,0.4);
+    }
+
+    .mini-book-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .mini-book-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mini-book-author {
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .mini-book-progress-bg {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .mini-book-progress-bar {
+      height: 100%;
+      background: var(--accent-color);
+      border-radius: 2px;
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+
+    /* Book Details Glassmorphic Modal */
+    .book-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(14px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .book-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .book-modal-box {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      max-width: 760px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 36px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px var(--accent-glow);
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .book-modal-overlay.active .book-modal-box {
+      transform: scale(1);
+    }
+
+    .modal-close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg);
+    }
+
 
     /* Top 3-Section Showcase Grid */
     .top-showcase-grid {
@@ -489,125 +765,431 @@
     </div>
 
     <div class="content-grid">
-      <!-- Left Column: Blog feed -->
+      <!-- Left Column: 3D Bookshelf Feed -->
       <section style="display: flex; flex-direction: column;">
+        <!-- Search Input -->
         <div class="search-box">
-          <input type="text" id="blogSearch" class="form-control" placeholder="Search articles or notes..." oninput="searchArticles()">
+          <input type="text" id="blogSearch" class="form-control" placeholder="Search books, authors, or topics..." oninput="filterBooks()">
         </div>
 
-        <div class="blog-feed" id="blogFeed">
-          
-          <!-- Article 1 -->
-          <article class="blog-card glass-panel">
-            <div class="blog-meta">
-              <span class="blog-date">July 18, 2026</span>
-              <span class="blog-readtime">6 min read</span>
-            </div>
-            <h3 class="blog-title">Optimizing Web Audio Synth Nodes</h3>
-            <p class="blog-excerpt">
-              A deep dive into building procedurally generated noise buffers and LFO gain sweeps to produce nature ambient sounds without heavy media assets.
-            </p>
-            <a href="#" class="blog-link">Read Full Text →</a>
-          </article>
+        <!-- Interactive Category Filter Pills -->
+        <div class="book-filters">
+          <button class="filter-pill active" onclick="setBookFilter('all', this)">📚 All Books</button>
+          <button class="filter-pill" onclick="setBookFilter('reading', this)">📖 Reading</button>
+          <button class="filter-pill" onclick="setBookFilter('completed', this)">✅ Completed</button>
+          <button class="filter-pill" onclick="setBookFilter('system', this)">⚙️ System Design</button>
+          <button class="filter-pill" onclick="setBookFilter('software', this)">💻 Software Eng</button>
+          <button class="filter-pill" onclick="setBookFilter('classics', this)">✨ Classics</button>
+        </div>
 
-          <!-- Article 2 -->
-          <article class="blog-card glass-panel">
-            <div class="blog-meta">
-              <span class="blog-date">June 24, 2026</span>
-              <span class="blog-readtime">4 min read</span>
-            </div>
-            <h3 class="blog-title">An Aspect-Ratio Bound CSS Grid Guide</h3>
-            <p class="blog-excerpt">
-              How to create fully responsive percentage-mapped hotspots over fixed-proportions background images that remain anchored under viewport scales.
-            </p>
-            <a href="#" class="blog-link">Read Full Text →</a>
-          </article>
-
-          <!-- Article 3 -->
-          <article class="blog-card glass-panel">
-            <div class="blog-meta">
-              <span class="blog-date">May 12, 2026</span>
-              <span class="blog-readtime">8 min read</span>
-            </div>
-            <h3 class="blog-title">Understanding Redis Cache Locks</h3>
-            <p class="blog-excerpt">
-              Applying distributed locks in Node/Express databases to prevent race conditions during high concurrent write sequences.
-            </p>
-            <a href="#" class="blog-link">Read Full Text →</a>
-          </article>
-
+        <!-- 3D Bookshelf Grid Container -->
+        <div class="bookshelf-grid" id="bookshelfGrid">
+          <!-- Populated dynamically via JS -->
         </div>
       </section>
 
       <!-- Right Column: Sidebar -->
       <aside style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- Currently Reading 3D Mini-Widgets -->
         <div class="glass-panel" style="padding: 24px;">
-          <h3 style="font-size: 1.2rem; margin-bottom: 20px; font-weight: 600;">Currently Reading</h3>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+            <h3 style="font-size: 1.15rem; margin: 0; font-weight: 600;">Currently Reading</h3>
+            <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-color); font-weight: 600;">3 Active</span>
+          </div>
           
-          <div class="book-item">
-            <div class="book-title">Designing Data-Intensive Applications</div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width: 82%;"></div>
-            </div>
-            <div class="book-percent">
-              <span>Martin Kleppmann</span>
-              <span>82%</span>
-            </div>
-          </div>
-
-          <div class="book-item">
-            <div class="book-title">Clean Code: Handbook of Software Craft</div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width: 100%;"></div>
-            </div>
-            <div class="book-percent">
-              <span>Robert C. Martin</span>
-              <span>100%</span>
-            </div>
-          </div>
-
-          <div class="book-item">
-            <div class="book-title">Eloquent JavaScript (3rd Ed)</div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width: 95%;"></div>
-            </div>
-            <div class="book-percent">
-              <span>Marijn Haverbeke</span>
-              <span>95%</span>
-            </div>
+          <div id="sidebarMiniBooks">
+            <!-- Dynamic 3D Mini Cards Populated via JS -->
           </div>
         </div>
 
+        <!-- Topics Covered -->
         <div class="glass-panel" style="padding: 24px;">
-          <h3 style="font-size: 1.2rem; margin-bottom: 12px; font-weight: 600;">Topics Covered</h3>
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px; font-weight: 600;">Topics Covered</h3>
           <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">
-            <span class="tag" style="background:rgba(255,255,255,0.03)">#React</span>
-            <span class="tag" style="background:rgba(255,255,255,0.03)">#WebAudio</span>
-            <span class="tag" style="background:rgba(255,255,255,0.03)">#Database</span>
-            <span class="tag" style="background:rgba(255,255,255,0.03)">#CSSGrid</span>
-            <span class="tag" style="background:rgba(255,255,255,0.03)">#Cache</span>
+            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#SystemDesign</span>
+            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#CleanCode</span>
+            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#DistributedSystems</span>
+            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#Refactoring</span>
+            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#Algorithms</span>
+            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#Literature</span>
           </div>
         </div>
       </aside>
     </div>
   </div>
 
+  <!-- Book Details Interactive Glassmorphic Modal -->
+  <div class="book-modal-overlay" id="bookModalOverlay" onclick="handleModalBackdropClick(event)">
+    <div class="book-modal-box">
+      <button class="modal-close-button" onclick="closeBookModal()" aria-label="Close Modal">✕</button>
+      <div id="bookModalBody">
+        <!-- Rendered dynamically by openBookModal() -->
+      </div>
+    </div>
+  </div>
+
   <script>
-    function searchArticles() {
-      const query = document.getElementById('blogSearch').value.toLowerCase();
-      document.querySelectorAll('.blog-card').forEach(card => {
-        const titleEl = card.querySelector('.blog-title');
-        const excerptEl = card.querySelector('.blog-excerpt');
-        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
-        const excerpt = excerptEl ? excerptEl.textContent.toLowerCase() : '';
+    // Rich Catalog Dataset of 3D Books
+    const bookCatalog = [
+      {
+        id: "ddia",
+        title: "Designing Data-Intensive Applications",
+        author: "Martin Kleppmann",
+        category: "system",
+        categoryLabel: "System Design",
+        progress: 82,
+        status: "reading",
+        statusLabel: "📖 Reading (p. 492)",
+        theme: "theme-amber",
+        rating: "★★★★★",
+        pages: 616,
+        synopsis: "The definitive guide to data system architecture, distributed consensus, transactions, replication, partitioning, and stream processing.",
+        takeaways: [
+          "Reliability: Systems must function correctly under adversity.",
+          "Scalability: Measure performance degradation under load increases.",
+          "Maintainability: Operate, understand, and evolve large systems easily."
+        ],
+        icon: "⚙️"
+      },
+      {
+        id: "cleancode",
+        title: "Clean Code: Software Craftsmanship",
+        author: "Robert C. Martin",
+        category: "software",
+        categoryLabel: "Software Eng",
+        progress: 100,
+        status: "completed",
+        statusLabel: "✅ Completed",
+        theme: "theme-blue",
+        rating: "★★★★★",
+        pages: 464,
+        synopsis: "Practical rules and principles for writing clean, readable, refactorable code and building robust test suites.",
+        takeaways: [
+          "Boy Scout Rule: Leave the code cleaner than you found it.",
+          "Functions should do one thing, do it well, and do it only.",
+          "Meaningful names: Intention-revealing variables and functions."
+        ],
+        icon: "💻"
+      },
+      {
+        id: "eloquentjs",
+        title: "Eloquent JavaScript (3rd Ed)",
+        author: "Marijn Haverbeke",
+        category: "software",
+        categoryLabel: "Software Eng",
+        progress: 95,
+        status: "reading",
+        statusLabel: "📖 Reading (p. 420)",
+        theme: "theme-purple",
+        rating: "★★★★★",
+        pages: 472,
+        synopsis: "A deep dive into programming with JavaScript, functional patterns, asynchronous control flow, DOM manipulation, and Node.js.",
+        takeaways: [
+          "Mastering lexical scoping and closures.",
+          "Asynchronous iteration and event loops.",
+          "Building efficient procedural and OOP abstractions."
+        ],
+        icon: "⚡"
+      },
+      {
+        id: "pragmatic",
+        title: "The Pragmatic Programmer",
+        author: "Andrew Hunt & David Thomas",
+        category: "software",
+        categoryLabel: "Software Eng",
+        progress: 100,
+        status: "completed",
+        statusLabel: "✅ Completed",
+        theme: "theme-emerald",
+        rating: "★★★★★",
+        pages: 352,
+        synopsis: "Essential career wisdom, orthogonality, DRY principle, tracer bullets, prototyping, and pragmatic mindset for developers.",
+        takeaways: [
+          "Care about your craft.",
+          "DRY: Don't Repeat Yourself.",
+          "Orthogonality: Eliminate effects between unrelated things."
+        ],
+        icon: "🛠️"
+      },
+      {
+        id: "sicp",
+        title: "Structure and Interpretation of Computer Programs",
+        author: "Abelson & Sussman",
+        category: "system",
+        categoryLabel: "Computer Science",
+        progress: 65,
+        status: "reading",
+        statusLabel: "📖 Reading (p. 410)",
+        theme: "theme-indigo",
+        rating: "★★★★★",
+        pages: 657,
+        synopsis: "The legendary Lisp/Scheme wizard book on procedural abstraction, data abstraction, metalinguistic abstraction, and virtual machine design.",
+        takeaways: [
+          "Programs must be written for people to read.",
+          "Metalinguistic abstraction as the ultimate design tool.",
+          "Streams and delayed evaluation."
+        ],
+        icon: "🔮"
+      },
+      {
+        id: "refactoring",
+        title: "Refactoring: Improving Code Design",
+        author: "Martin Fowler",
+        category: "software",
+        categoryLabel: "Software Eng",
+        progress: 100,
+        status: "completed",
+        statusLabel: "✅ Completed",
+        theme: "theme-teal",
+        rating: "★★★★★",
+        pages: 448,
+        synopsis: "Systematic catalogue of refactoring transformations, code smells, test-driven design, and improving code clarity step-by-step.",
+        takeaways: [
+          "Refactoring without tests is guessing.",
+          "Recognize code smells like Long Function and Feature Envy.",
+          "Small, verifiable steps preserve working software."
+        ],
+        icon: "♻️"
+      },
+      {
+        id: "geb",
+        title: "Gödel, Escher, Bach",
+        author: "Douglas Hofstadter",
+        category: "classics",
+        categoryLabel: "Classics",
+        progress: 40,
+        status: "reading",
+        statusLabel: "📖 Reading (p. 310)",
+        theme: "theme-rose",
+        rating: "★★★★★",
+        pages: 777,
+        synopsis: "A Pulitzer Prize-winning masterpiece exploring formal systems, recursion, consciousness, self-reference, logic, and intelligence.",
+        takeaways: [
+          "Strange Loops and self-referential structures.",
+          "Isomorphism between mathematics, art, and music.",
+          "Formal systems and incompleteness."
+        ],
+        icon: "🎨"
+      },
+      {
+        id: "sherlock",
+        title: "Sherlock Holmes: Complete Novels",
+        author: "Arthur Conan Doyle",
+        category: "classics",
+        categoryLabel: "Classics",
+        progress: 100,
+        status: "completed",
+        statusLabel: "✅ Completed",
+        theme: "theme-amber",
+        rating: "★★★★★",
+        pages: 1080,
+        synopsis: "Classic detective mysteries featuring Sherlock Holmes and Dr. Watson, solving intricate cases with deductive reasoning in Victorian London.",
+        takeaways: [
+          "It is a capital mistake to theorize before one has data.",
+          "When you have eliminated the impossible, whatever remains must be the truth.",
+          "Observation vs simple seeing."
+        ],
+        icon: "🔍"
+      },
+      {
+        id: "pather",
+        title: "Pather Panchali (Song of the Road)",
+        author: "Bibhutibhushan Bandopadhyay",
+        category: "classics",
+        categoryLabel: "Classics",
+        progress: 100,
+        status: "completed",
+        statusLabel: "✅ Completed",
+        theme: "theme-emerald",
+        rating: "★★★★★",
+        pages: 312,
+        synopsis: "An evocative Bengali literary masterpiece capturing rural childhood, nature, family warmth, and life's timeless journey.",
+        takeaways: [
+          "Poetic celebration of rural Bengal landscape.",
+          "Deep human emotional resilience.",
+          "Childhood wonder and discovery."
+        ],
+        icon: "🌿"
+      }
+    ];
+
+    let currentFilter = 'all';
+
+    function renderBooks() {
+      const grid = document.getElementById('bookshelfGrid');
+      const searchQuery = (document.getElementById('blogSearch').value || '').toLowerCase();
+      if (!grid) return;
+
+      const filtered = bookCatalog.filter(book => {
+        const matchesFilter = (currentFilter === 'all') ||
+                              (currentFilter === 'reading' && book.status === 'reading') ||
+                              (currentFilter === 'completed' && book.status === 'completed') ||
+                              (currentFilter === book.category);
         
-        if (title.includes(query) || excerpt.includes(query) || card.classList.contains('showcase-card')) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
+        const matchesSearch = book.title.toLowerCase().includes(searchQuery) ||
+                              book.author.toLowerCase().includes(searchQuery) ||
+                              book.categoryLabel.toLowerCase().includes(searchQuery);
+
+        return matchesFilter && matchesSearch;
       });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No 3D books found matching your criteria.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(book => `
+        <div class="book-card-wrap" tabindex="0" onclick="openBookModal('${book.id}')" onmousemove="handleCardTilt(event, this)" onmouseleave="resetCardTilt(this)">
+          <div class="book-box-3d">
+            <div class="book-cover ${book.theme}">
+              <div class="book-ribbon"></div>
+              <div>
+                <span class="book-category-tag">${book.categoryLabel}</span>
+                <div class="book-cover-title">${book.title}</div>
+                <div class="book-cover-author">${book.author}</div>
+                <div class="book-stars">${book.rating}</div>
+              </div>
+              <div class="book-cover-footer">
+                <div class="book-status-badge">${book.statusLabel}</div>
+                <div class="book-progress-wrapper">
+                  <div class="book-progress-info">
+                    <span>Progress</span>
+                    <span>${book.progress}%</span>
+                  </div>
+                  <div class="book-progress-track">
+                    <div class="book-progress-fill" style="width: ${book.progress}%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
+
+    function renderSidebarMiniBooks() {
+      const container = document.getElementById('sidebarMiniBooks');
+      if (!container) return;
+
+      const readingBooks = bookCatalog.filter(b => b.status === 'reading');
+      container.innerHTML = readingBooks.map(book => `
+        <div class="sidebar-mini-book" onclick="openBookModal('${book.id}')">
+          <div class="mini-book-thumb-3d">
+            <div class="mini-book-thumb-inner ${book.theme}">
+              ${book.icon}
+            </div>
+          </div>
+          <div class="mini-book-details">
+            <div class="mini-book-title">${book.title}</div>
+            <div class="mini-book-author">${book.author}</div>
+            <div class="mini-book-progress-bg">
+              <div class="mini-book-progress-bar" style="width: ${book.progress}%;"></div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setBookFilter(filterKey, el) {
+      currentFilter = filterKey;
+      document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+      if (el) el.classList.add('active');
+      renderBooks();
+    }
+
+    function filterBooks() {
+      renderBooks();
+    }
+
+    /* 3D Tilt Effect on Mouse Move */
+    function handleCardTilt(e, cardWrap) {
+      const box = cardWrap.querySelector('.book-box-3d');
+      if (!box) return;
+      const rect = cardWrap.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      const rotX = (-y / rect.height) * 20;
+      const rotY = (x / rect.width) * 25 - 10;
+      
+      box.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg) translateY(-8px) scale(1.02)`;
+    }
+
+    function resetCardTilt(cardWrap) {
+      const box = cardWrap.querySelector('.book-box-3d');
+      if (!box) return;
+      box.style.transform = 'rotateY(-10deg) rotateX(4deg)';
+    }
+
+    /* Modal Logic */
+    function openBookModal(bookId) {
+      const book = bookCatalog.find(b => b.id === bookId);
+      if (!book) return;
+
+      const modalBody = document.getElementById('bookModalBody');
+      const overlay = document.getElementById('bookModalOverlay');
+
+      modalBody.innerHTML = `
+        <div style="display: flex; gap: 28px; flex-wrap: wrap;">
+          <div style="width: 180px; height: 260px; perspective: 600px; flex-shrink: 0; margin: 0 auto;">
+            <div class="book-box-3d" style="width:100%; height:100%; transform: rotateY(-18deg) rotateX(8deg);">
+              <div class="book-cover ${book.theme}">
+                <div class="book-ribbon"></div>
+                <span class="book-category-tag">${book.categoryLabel}</span>
+                <div class="book-cover-title" style="font-size: 1rem;">${book.title}</div>
+                <div class="book-cover-author">${book.author}</div>
+                <div class="book-stars">${book.rating}</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex: 1; min-width: 260px;">
+            <span class="book-status-badge" style="margin-bottom: 10px;">${book.statusLabel}</span>
+            <h2 style="font-size: 1.6rem; font-weight: 700; color: #fff; margin: 0 0 4px 0;">${book.title}</h2>
+            <div style="font-size: 0.95rem; color: var(--accent-color); font-weight: 600; margin-bottom: 16px;">By ${book.author} • ${book.pages} Pages</div>
+            
+            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">
+              ${book.synopsis}
+            </p>
+
+            <h4 style="font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 8px;">Key Takeaways & Notes:</h4>
+            <ul style="padding-left: 20px; color: var(--text-secondary); font-size: 0.86rem; line-height: 1.6; margin-bottom: 20px;">
+              ${book.takeaways.map(t => `<li>${t}</li>`).join('')}
+            </ul>
+
+            <div style="background: rgba(255,255,255,0.04); padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 0.8rem; color: var(--text-secondary);">Reading Progress</span>
+              <span style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--accent-color); font-weight: bold;">${book.progress}%</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      overlay.classList.add('active');
+    }
+
+    function closeBookModal() {
+      const overlay = document.getElementById('bookModalOverlay');
+      if (overlay) overlay.classList.remove('active');
+    }
+
+    function handleModalBackdropClick(e) {
+      if (e.target.id === 'bookModalOverlay') {
+        closeBookModal();
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeBookModal();
+    });
+
+    // Initialize 3D Bookshelf on load
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBooks();
+      renderSidebarMiniBooks();
+    });
+    // Fallback if DOM already loaded
+    renderBooks();
+    renderSidebarMiniBooks();
 
     // Authors Slideshow (5s lexicographical rotation)
     (function initAuthorSlideshow() {
