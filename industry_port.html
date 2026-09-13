@@ -75,6 +75,134 @@
       .pkg-grid {
         grid-template-columns: 1fr;
       }
+      .microclog-spec-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    /* MicroCLog Box Styles */
+    .microclog-card {
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: linear-gradient(145deg, rgba(10, 25, 20, 0.75), rgba(3, 15, 12, 0.85));
+      position: relative;
+      overflow: hidden;
+    }
+    .microclog-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #22c55e, #06b6d4, #10b981);
+    }
+    .microclog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .microclog-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .microclog-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #22c55e;
+    }
+    .microclog-badge-disconnected {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .microclog-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f87171;
+      box-shadow: 0 0 8px #f87171;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .microclog-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .microclog-spec-item {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .microclog-spec-label {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .microclog-spec-val {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #22c55e;
+      font-weight: 600;
+    }
+    .microclog-code-block {
+      background: #020b08;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #a7f3d0;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+    .microclog-action-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .microclog-action-btn:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: #f87171;
     }
   </style>
 </head>
@@ -359,6 +487,72 @@
           </div>
         </div>
 
+        <!-- MicroCLog Industrial Project Box -->
+        <div class="glass-panel microclog-card">
+          <div class="microclog-header">
+            <div class="microclog-title-group">
+              <div class="microclog-icon-box">
+                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                  <polyline points="4 17 10 11 14 15 20 9"></polyline>
+                  <line x1="20" y1="9" x2="20" y2="14"></line>
+                  <line x1="20" y1="9" x2="15" y2="9"></line>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size: 0.72rem; font-weight: 700; color: #22c55e; letter-spacing: 0.1em; text-transform: uppercase;">Embedded C Micro-Project</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">MicroCLog Engine</h3>
+              </div>
+            </div>
+            <div class="microclog-badge-disconnected" id="microclogStatusBadge" title="Standalone Prototype - Pipeline Unconnected">
+              <span class="microclog-status-dot"></span>
+              <span>Pipeline Disconnected</span>
+            </div>
+          </div>
+
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+            A high-throughput, zero-allocation micro-logging framework engineered for resource-constrained microcontrollers &amp; real-time embedded system diagnostics. Built with lock-free atomic ring buffers and compile-time verbosity filtering.
+          </p>
+
+          <div class="microclog-spec-grid">
+            <div class="microclog-spec-item">
+              <div class="microclog-spec-label">Overhead</div>
+              <div class="microclog-spec-val">&lt; 1.2 µs</div>
+            </div>
+            <div class="microclog-spec-item">
+              <div class="microclog-spec-label">Heap Allocation</div>
+              <div class="microclog-spec-val">0 Bytes</div>
+            </div>
+            <div class="microclog-spec-item">
+              <div class="microclog-spec-label">Buffer Type</div>
+              <div class="microclog-spec-val">Atomic Ring</div>
+            </div>
+            <div class="microclog-spec-item">
+              <div class="microclog-spec-label">Target OS</div>
+              <div class="microclog-spec-val">Bare-Metal / RTOS</div>
+            </div>
+          </div>
+
+          <!-- C Code Preview -->
+          <div class="microclog-code-block">
+<span style="color:#6ee7b7;">// MicroCLog Engine Execution Example</span>
+<span style="color:#93c5fd;">#include</span> <span style="color:#fde047;">"microclog.h"</span>
+
+<span style="color:#f472b6;">void</span> <span style="color:#60a5fa;">app_main</span>(<span style="color:#f472b6;">void</span>) {
+    <span style="color:#34d399;">MCLOG_INIT</span>(&amp;ring_buf, <span style="color:#fbbf24;">MCLOG_LEVEL_DEBUG</span>);
+    <span style="color:#34d399;">MCLOG_INFO</span>(<span style="color:#fde047;">"SYS"</span>, <span style="color:#fde047;">"MicroCLog online. Ring-buffer telemetry ready."</span>);
+    <span style="color:#34d399;">MCLOG_WARN</span>(<span style="color:#fde047;">"PWR"</span>, <span style="color:#fde047;">"Voltage anomaly: %d mV"</span>, 3210);
+}
+          </div>
+
+          <button class="microclog-action-btn" onclick="handleMicroCLogClick(event)">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Live Pipeline Link Disconnected (Standalone Mode)</span>
+          </button>
+        </div>
+
         <!-- Review card -->
         <div class="glass-panel" style="padding: 24px; margin-bottom: 20px;">
           <h3 style="font-size: 1.1rem; margin-bottom: 12px;">Client Feedback</h3>
@@ -460,6 +654,11 @@
       // Display results
       document.getElementById('totalEstimate').textContent = `$${basePrice.toLocaleString()}`;
       document.getElementById('timeEstimate').textContent = `Delivery: ~${timeWeeks} weeks`;
+    }
+
+    function handleMicroCLogClick(e) {
+      if (e) e.preventDefault();
+      alert("⚡ MicroCLog Module Status:\n\nMicroCLog micro-logging engine card implemented in Industry section.\nLive pipeline link is currently DISCONNECTED (standalone mode).");
     }
 
     // Run initial calculation
