@@ -43,6 +43,89 @@
       box-shadow: 0 0 12px var(--accent-glow);
     }
 
+    /* New Category Cards Grid */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .category-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+    }
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .category-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: var(--accent-color);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 20px var(--accent-glow);
+    }
+    .category-card:hover::before {
+      opacity: 1;
+    }
+    .cat-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cat-card-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+    }
+    .cat-card-arrow {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      transition: all 0.25s ease;
+    }
+    .category-card:hover .cat-card-arrow {
+      background: var(--accent-color);
+      color: #030712;
+      transform: translateX(3px);
+    }
+    .cat-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 10px;
+    }
+    .cat-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+
     /* 3D Bookshelf Grid Layout */
     .bookshelf-grid {
       display: grid;
@@ -764,58 +847,111 @@
 
     </div>
 
-    <div class="content-grid">
-      <!-- Left Column: 3D Bookshelf Feed -->
-      <section style="display: flex; flex-direction: column;">
-        <!-- Search Input -->
-        <div class="search-box">
-          <input type="text" id="blogSearch" class="form-control" placeholder="Search books, authors, or topics..." oninput="filterBooks()">
+    <!-- Full-Width Category Cards Section -->
+    <section class="glass-panel" style="padding: 30px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 15px 40px rgba(0,0,0,0.5);">
+      <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-color); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Categories</span>
+          <h2 style="font-size: 1.6rem; font-weight: 700; margin: 4px 0 0 0; color: #fff;">Story Book Categories</h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 4px 0 0 0;">Select any category to open the dedicated story books gallery</p>
         </div>
+        <a href="story_books.html?category=all" style="font-size: 0.85rem; font-weight: 600; color: var(--accent-color); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; transition: all 0.25s ease;">
+          <span>View All Story Books</span>
+          <span style="font-size: 1rem;">→</span>
+        </a>
+      </div>
 
-        <!-- Interactive Category Filter Pills -->
-        <div class="book-filters">
-          <button class="filter-pill active" onclick="setBookFilter('all', this)">📚 All Books</button>
-          <button class="filter-pill" onclick="setBookFilter('reading', this)">📖 Reading</button>
-          <button class="filter-pill" onclick="setBookFilter('completed', this)">✅ Completed</button>
-          <button class="filter-pill" onclick="setBookFilter('system', this)">⚙️ System Design</button>
-          <button class="filter-pill" onclick="setBookFilter('software', this)">💻 Software Eng</button>
-          <button class="filter-pill" onclick="setBookFilter('classics', this)">✨ Classics</button>
-        </div>
-
-        <!-- 3D Bookshelf Grid Container -->
-        <div class="bookshelf-grid" id="bookshelfGrid">
-          <!-- Populated dynamically via JS -->
-        </div>
-      </section>
-
-      <!-- Right Column: Sidebar -->
-      <aside style="display: flex; flex-direction: column; gap: 20px;">
-        <!-- Currently Reading 3D Mini-Widgets -->
-        <div class="glass-panel" style="padding: 24px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
-            <h3 style="font-size: 1.15rem; margin: 0; font-weight: 600;">Currently Reading</h3>
-            <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-color); font-weight: 600;">3 Active</span>
+      <div class="category-grid" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+        <a href="story_books.html?category=horror" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">👻</span>
+            <span class="cat-card-arrow">→</span>
           </div>
-          
-          <div id="sidebarMiniBooks">
-            <!-- Dynamic 3D Mini Cards Populated via JS -->
+          <div>
+            <div class="cat-card-title">Horror</div>
+            <div class="cat-card-desc">Gothic, supernatural & terrifying tales</div>
           </div>
-        </div>
+        </a>
 
-        <!-- Topics Covered -->
-        <div class="glass-panel" style="padding: 24px;">
-          <h3 style="font-size: 1.15rem; margin-bottom: 12px; font-weight: 600;">Topics Covered</h3>
-          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">
-            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#SystemDesign</span>
-            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#CleanCode</span>
-            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#DistributedSystems</span>
-            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#Refactoring</span>
-            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#Algorithms</span>
-            <span class="tag" style="background:rgba(255,255,255,0.04); padding: 5px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem;">#Literature</span>
+        <a href="story_books.html?category=detective" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">🔎</span>
+            <span class="cat-card-arrow">→</span>
           </div>
-        </div>
-      </aside>
-    </div>
+          <div>
+            <div class="cat-card-title">Detective</div>
+            <div class="cat-card-desc">Mystery, crime & investigation</div>
+          </div>
+        </a>
+
+        <a href="story_books.html?category=romance" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">❤️</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+          <div>
+            <div class="cat-card-title">Romance</div>
+            <div class="cat-card-desc">Love stories & relationships</div>
+          </div>
+        </a>
+
+        <a href="story_books.html?category=novels" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">📖</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+          <div>
+            <div class="cat-card-title">Novels</div>
+            <div class="cat-card-desc">General fiction & classic novels</div>
+          </div>
+        </a>
+
+        <a href="story_books.html?category=fantasy" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">🧙</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+          <div>
+            <div class="cat-card-title">Fantasy</div>
+            <div class="cat-card-desc">Magic, mythical worlds & adventures</div>
+          </div>
+        </a>
+
+        <a href="story_books.html?category=scifi" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">🚀</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+          <div>
+            <div class="cat-card-title">Science Fiction</div>
+            <div class="cat-card-desc">Future, space & technology</div>
+          </div>
+        </a>
+
+        <a href="story_books.html?category=adventure" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">🗺️</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+          <div>
+            <div class="cat-card-title">Adventure</div>
+            <div class="cat-card-desc">Exploration, journeys & action</div>
+          </div>
+        </a>
+
+        <a href="story_books.html?category=short-stories" class="category-card">
+          <div class="cat-card-header">
+            <span class="cat-card-icon">✨</span>
+            <span class="cat-card-arrow">→</span>
+          </div>
+          <div>
+            <div class="cat-card-title">Short Stories</div>
+            <div class="cat-card-desc">Collections of shorter tales</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
   </div>
 
   <!-- Book Details Interactive Glassmorphic Modal -->
@@ -829,157 +965,37 @@
   </div>
 
   <script>
-    // Rich Catalog Dataset of 3D Books
+    // Rich Catalog Dataset of Story Books matching the 8 new categories
     const bookCatalog = [
       {
-        id: "ddia",
-        title: "Designing Data-Intensive Applications",
-        author: "Martin Kleppmann",
-        category: "system",
-        categoryLabel: "System Design",
-        progress: 82,
-        status: "reading",
-        statusLabel: "📖 Reading (p. 492)",
-        theme: "theme-amber",
-        rating: "★★★★★",
-        pages: 616,
-        synopsis: "The definitive guide to data system architecture, distributed consensus, transactions, replication, partitioning, and stream processing.",
-        takeaways: [
-          "Reliability: Systems must function correctly under adversity.",
-          "Scalability: Measure performance degradation under load increases.",
-          "Maintainability: Operate, understand, and evolve large systems easily."
-        ],
-        icon: "⚙️"
-      },
-      {
-        id: "cleancode",
-        title: "Clean Code: Software Craftsmanship",
-        author: "Robert C. Martin",
-        category: "software",
-        categoryLabel: "Software Eng",
+        id: "dracula",
+        title: "Dracula & Gothic Tales",
+        author: "Bram Stoker",
+        category: "horror",
+        categoryLabel: "Horror",
         progress: 100,
         status: "completed",
-        statusLabel: "✅ Completed",
-        theme: "theme-blue",
-        rating: "★★★★★",
-        pages: 464,
-        synopsis: "Practical rules and principles for writing clean, readable, refactorable code and building robust test suites.",
-        takeaways: [
-          "Boy Scout Rule: Leave the code cleaner than you found it.",
-          "Functions should do one thing, do it well, and do it only.",
-          "Meaningful names: Intention-revealing variables and functions."
-        ],
-        icon: "💻"
-      },
-      {
-        id: "eloquentjs",
-        title: "Eloquent JavaScript (3rd Ed)",
-        author: "Marijn Haverbeke",
-        category: "software",
-        categoryLabel: "Software Eng",
-        progress: 95,
-        status: "reading",
-        statusLabel: "📖 Reading (p. 420)",
-        theme: "theme-purple",
-        rating: "★★★★★",
-        pages: 472,
-        synopsis: "A deep dive into programming with JavaScript, functional patterns, asynchronous control flow, DOM manipulation, and Node.js.",
-        takeaways: [
-          "Mastering lexical scoping and closures.",
-          "Asynchronous iteration and event loops.",
-          "Building efficient procedural and OOP abstractions."
-        ],
-        icon: "⚡"
-      },
-      {
-        id: "pragmatic",
-        title: "The Pragmatic Programmer",
-        author: "Andrew Hunt & David Thomas",
-        category: "software",
-        categoryLabel: "Software Eng",
-        progress: 100,
-        status: "completed",
-        statusLabel: "✅ Completed",
-        theme: "theme-emerald",
-        rating: "★★★★★",
-        pages: 352,
-        synopsis: "Essential career wisdom, orthogonality, DRY principle, tracer bullets, prototyping, and pragmatic mindset for developers.",
-        takeaways: [
-          "Care about your craft.",
-          "DRY: Don't Repeat Yourself.",
-          "Orthogonality: Eliminate effects between unrelated things."
-        ],
-        icon: "🛠️"
-      },
-      {
-        id: "sicp",
-        title: "Structure and Interpretation of Computer Programs",
-        author: "Abelson & Sussman",
-        category: "system",
-        categoryLabel: "Computer Science",
-        progress: 65,
-        status: "reading",
-        statusLabel: "📖 Reading (p. 410)",
-        theme: "theme-indigo",
-        rating: "★★★★★",
-        pages: 657,
-        synopsis: "The legendary Lisp/Scheme wizard book on procedural abstraction, data abstraction, metalinguistic abstraction, and virtual machine design.",
-        takeaways: [
-          "Programs must be written for people to read.",
-          "Metalinguistic abstraction as the ultimate design tool.",
-          "Streams and delayed evaluation."
-        ],
-        icon: "🔮"
-      },
-      {
-        id: "refactoring",
-        title: "Refactoring: Improving Code Design",
-        author: "Martin Fowler",
-        category: "software",
-        categoryLabel: "Software Eng",
-        progress: 100,
-        status: "completed",
-        statusLabel: "✅ Completed",
-        theme: "theme-teal",
-        rating: "★★★★★",
-        pages: 448,
-        synopsis: "Systematic catalogue of refactoring transformations, code smells, test-driven design, and improving code clarity step-by-step.",
-        takeaways: [
-          "Refactoring without tests is guessing.",
-          "Recognize code smells like Long Function and Feature Envy.",
-          "Small, verifiable steps preserve working software."
-        ],
-        icon: "♻️"
-      },
-      {
-        id: "geb",
-        title: "Gödel, Escher, Bach",
-        author: "Douglas Hofstadter",
-        category: "classics",
-        categoryLabel: "Classics",
-        progress: 40,
-        status: "reading",
-        statusLabel: "📖 Reading (p. 310)",
+        statusLabel: "👻 Gothic Classic",
         theme: "theme-rose",
         rating: "★★★★★",
-        pages: 777,
-        synopsis: "A Pulitzer Prize-winning masterpiece exploring formal systems, recursion, consciousness, self-reference, logic, and intelligence.",
+        pages: 418,
+        synopsis: "The definitive gothic horror novel following Count Dracula's attempt to move from Transylvania to England to spread the undead curse.",
         takeaways: [
-          "Strange Loops and self-referential structures.",
-          "Isomorphism between mathematics, art, and music.",
-          "Formal systems and incompleteness."
+          "Gothic atmosphere and epistolary storytelling style.",
+          "Conflict between Victorian modernity and ancient evil.",
+          "Timeless horror tropes of vampires and dark curses."
         ],
-        icon: "🎨"
+        icon: "👻"
       },
       {
         id: "sherlock",
-        title: "Sherlock Holmes: Complete Novels",
+        title: "Sherlock Holmes: Complete Mystery",
         author: "Arthur Conan Doyle",
-        category: "classics",
-        categoryLabel: "Classics",
+        category: "detective",
+        categoryLabel: "Detective",
         progress: 100,
         status: "completed",
-        statusLabel: "✅ Completed",
+        statusLabel: "🔎 Detective Classic",
         theme: "theme-amber",
         rating: "★★★★★",
         pages: 1080,
@@ -989,17 +1005,37 @@
           "When you have eliminated the impossible, whatever remains must be the truth.",
           "Observation vs simple seeing."
         ],
-        icon: "🔍"
+        icon: "🔎"
+      },
+      {
+        id: "pride_prejudice",
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        category: "romance",
+        categoryLabel: "Romance",
+        progress: 90,
+        status: "reading",
+        statusLabel: "❤️ Romantic Novel",
+        theme: "theme-purple",
+        rating: "★★★★★",
+        pages: 432,
+        synopsis: "The unforgettable romantic tale of Elizabeth Bennet and Mr. Darcy as they overcome personal pride, societal expectations, and misunderstandings.",
+        takeaways: [
+          "Character growth through self-awareness and humility.",
+          "Sharp wit and critique of Regency-era marital economics.",
+          "Unmatched dialogue and character chemistry."
+        ],
+        icon: "❤️"
       },
       {
         id: "pather",
         title: "Pather Panchali (Song of the Road)",
         author: "Bibhutibhushan Bandopadhyay",
-        category: "classics",
-        categoryLabel: "Classics",
+        category: "novels",
+        categoryLabel: "Novels",
         progress: 100,
         status: "completed",
-        statusLabel: "✅ Completed",
+        statusLabel: "📖 Literary Classic",
         theme: "theme-emerald",
         rating: "★★★★★",
         pages: 312,
@@ -1009,97 +1045,95 @@
           "Deep human emotional resilience.",
           "Childhood wonder and discovery."
         ],
-        icon: "🌿"
+        icon: "📖"
+      },
+      {
+        id: "hobbit",
+        title: "The Hobbit & Middle-Earth Legend",
+        author: "J.R.R. Tolkien",
+        category: "fantasy",
+        categoryLabel: "Fantasy",
+        progress: 85,
+        status: "reading",
+        statusLabel: "🧙 Epic Fantasy",
+        theme: "theme-indigo",
+        rating: "★★★★★",
+        pages: 310,
+        synopsis: "Bilbo Baggins' magical quest across Middle-earth to reclaim the dwarf kingdom of Erebor from the terrifying dragon Smaug.",
+        takeaways: [
+          "Courage found in the unlikeliest of ordinary individuals.",
+          "Immersive world-building and mythic lore.",
+          "Themes of friendship, greed, and heroism."
+        ],
+        icon: "🧙"
+      },
+      {
+        id: "dune",
+        title: "Dune: Imperial Chronicles",
+        author: "Frank Herbert",
+        category: "scifi",
+        categoryLabel: "Science Fiction",
+        progress: 78,
+        status: "reading",
+        statusLabel: "🚀 Sci-Fi Masterpiece",
+        theme: "theme-blue",
+        rating: "★★★★★",
+        pages: 688,
+        synopsis: "Set on the desert planet Arrakis, Paul Atreides navigates political intrigue, spice melange, ecology, and futuristic destiny.",
+        takeaways: [
+          "Deep ecological and resource geopolitics.",
+          "Feudal power dynamics in a far-future space empire.",
+          "Messianic tropes and human adaptability."
+        ],
+        icon: "🚀"
+      },
+      {
+        id: "treasure_island",
+        title: "Treasure Island & Sea Voyages",
+        author: "Robert Louis Stevenson",
+        category: "adventure",
+        categoryLabel: "Adventure",
+        progress: 100,
+        status: "completed",
+        statusLabel: "🗺️ Pirate Adventure",
+        theme: "theme-teal",
+        rating: "★★★★★",
+        pages: 292,
+        synopsis: "Jim Hawkins sets sail on the Hispaniola in search of buried pirate gold while facing off against the cunning Long John Silver.",
+        takeaways: [
+          "High-seas adventure and coming-of-age voyage.",
+          "Morally complex anti-hero Long John Silver.",
+          "The thrill of secret treasure maps and sea voyages."
+        ],
+        icon: "🗺️"
+      },
+      {
+        id: "poe_stories",
+        title: "The Tell-Tale Heart & Macabre Tales",
+        author: "Edgar Allan Poe",
+        category: "short-stories",
+        categoryLabel: "Short Stories",
+        progress: 100,
+        status: "completed",
+        statusLabel: "✨ Short Tales",
+        theme: "theme-rose",
+        rating: "★★★★★",
+        pages: 250,
+        synopsis: "A masterclass collection of psychological tension, gothic terror, mystery, and iconic short story craftsmanship.",
+        takeaways: [
+          "Unreliable narrators and intense psychological suspense.",
+          "Pioneering early detective and terror short stories.",
+          "Poetic brevity and unmatched narrative punch."
+        ],
+        icon: "✨"
       }
     ];
 
-    let currentFilter = 'all';
-
-    function renderBooks() {
-      const grid = document.getElementById('bookshelfGrid');
-      const searchQuery = (document.getElementById('blogSearch').value || '').toLowerCase();
-      if (!grid) return;
-
-      const filtered = bookCatalog.filter(book => {
-        const matchesFilter = (currentFilter === 'all') ||
-                              (currentFilter === 'reading' && book.status === 'reading') ||
-                              (currentFilter === 'completed' && book.status === 'completed') ||
-                              (currentFilter === book.category);
-        
-        const matchesSearch = book.title.toLowerCase().includes(searchQuery) ||
-                              book.author.toLowerCase().includes(searchQuery) ||
-                              book.categoryLabel.toLowerCase().includes(searchQuery);
-
-        return matchesFilter && matchesSearch;
-      });
-
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No 3D books found matching your criteria.</div>`;
-        return;
-      }
-
-      grid.innerHTML = filtered.map(book => `
-        <div class="book-card-wrap" tabindex="0" onclick="openBookModal('${book.id}')" onmousemove="handleCardTilt(event, this)" onmouseleave="resetCardTilt(this)">
-          <div class="book-box-3d">
-            <div class="book-cover ${book.theme}">
-              <div class="book-ribbon"></div>
-              <div>
-                <span class="book-category-tag">${book.categoryLabel}</span>
-                <div class="book-cover-title">${book.title}</div>
-                <div class="book-cover-author">${book.author}</div>
-                <div class="book-stars">${book.rating}</div>
-              </div>
-              <div class="book-cover-footer">
-                <div class="book-status-badge">${book.statusLabel}</div>
-                <div class="book-progress-wrapper">
-                  <div class="book-progress-info">
-                    <span>Progress</span>
-                    <span>${book.progress}%</span>
-                  </div>
-                  <div class="book-progress-track">
-                    <div class="book-progress-fill" style="width: ${book.progress}%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `).join('');
+    // Category Selection Handler (Redirects to story_books.html)
+    function goToCategory(categoryKey) {
+      window.location.href = `story_books.html?category=${categoryKey}`;
     }
 
-    function renderSidebarMiniBooks() {
-      const container = document.getElementById('sidebarMiniBooks');
-      if (!container) return;
-
-      const readingBooks = bookCatalog.filter(b => b.status === 'reading');
-      container.innerHTML = readingBooks.map(book => `
-        <div class="sidebar-mini-book" onclick="openBookModal('${book.id}')">
-          <div class="mini-book-thumb-3d">
-            <div class="mini-book-thumb-inner ${book.theme}">
-              ${book.icon}
-            </div>
-          </div>
-          <div class="mini-book-details">
-            <div class="mini-book-title">${book.title}</div>
-            <div class="mini-book-author">${book.author}</div>
-            <div class="mini-book-progress-bg">
-              <div class="mini-book-progress-bar" style="width: ${book.progress}%;"></div>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function setBookFilter(filterKey, el) {
-      currentFilter = filterKey;
-      document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
-      if (el) el.classList.add('active');
-      renderBooks();
-    }
-
-    function filterBooks() {
-      renderBooks();
-    }
 
     /* 3D Tilt Effect on Mouse Move */
     function handleCardTilt(e, cardWrap) {
@@ -1182,14 +1216,7 @@
       if (e.key === 'Escape') closeBookModal();
     });
 
-    // Initialize 3D Bookshelf on load
-    document.addEventListener('DOMContentLoaded', () => {
-      renderBooks();
-      renderSidebarMiniBooks();
-    });
-    // Fallback if DOM already loaded
-    renderBooks();
-    renderSidebarMiniBooks();
+
 
     // Authors Slideshow (5s lexicographical rotation)
     (function initAuthorSlideshow() {
