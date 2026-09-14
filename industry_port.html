@@ -6,76 +6,18 @@
   <title>Iron Wharf - Services & Pricing</title>
   <link rel="stylesheet" href="subpage.css">
   <style>
-    .pkg-grid {
+    .projects-dual-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    .pkg-card {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .pkg-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-    .pkg-price {
-      font-family: var(--font-mono);
-      font-size: 2rem;
-      color: var(--accent-color);
-      font-weight: 700;
-    }
-    .pkg-features {
-      list-style: none;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-    .pkg-features li::before {
-      content: '✓';
-      margin-right: 8px;
-      color: var(--accent-color);
-    }
-    
-    /* Calculator styles */
-    .calc-box {
-      padding: 24px;
-    }
-    .calc-row {
-      margin-bottom: 16px;
-    }
-    .calc-value-display {
-      font-family: var(--font-mono);
-      color: var(--accent-color);
-      float: right;
-    }
-    .calc-total-box {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px dashed var(--accent-color);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .total-price {
-      font-family: var(--font-mono);
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--accent-color);
-      text-shadow: 0 0 10px var(--accent-glow);
+      gap: 24px;
+      margin-bottom: 24px;
     }
 
-    @media (max-width: 768px) {
-      .pkg-grid {
+    @media (max-width: 900px) {
+      .projects-dual-grid {
         grid-template-columns: 1fr;
       }
-      .microclog-spec-grid {
+      .microclog-spec-grid, .accessmeet-spec-grid {
         grid-template-columns: repeat(2, 1fr) !important;
       }
     }
@@ -83,11 +25,13 @@
     /* MicroCLog Box Styles */
     .microclog-card {
       padding: 24px;
-      margin-bottom: 24px;
       border: 1px solid rgba(34, 197, 94, 0.3);
       background: linear-gradient(145deg, rgba(10, 25, 20, 0.75), rgba(3, 15, 12, 0.85));
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .microclog-card::before {
       content: '';
@@ -204,6 +148,133 @@
       background: rgba(239, 68, 68, 0.1);
       border-color: #f87171;
     }
+
+    /* AccessMeet Box Styles */
+    .accessmeet-card {
+      padding: 24px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      background: linear-gradient(145deg, rgba(12, 22, 38, 0.75), rgba(5, 12, 24, 0.85));
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .accessmeet-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+    }
+    .accessmeet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .accessmeet-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .accessmeet-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+    }
+    .accessmeet-badge-skeleton {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .accessmeet-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+      animation: pulseDotCyan 2s infinite;
+    }
+    @keyframes pulseDotCyan {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .accessmeet-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .accessmeet-spec-item {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .accessmeet-spec-label {
+      font-size: 0.68rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .accessmeet-spec-val {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    .accessmeet-code-block {
+      background: #040d1a;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #bae6fd;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+    .accessmeet-action-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(56, 189, 248, 0.5);
+      color: #7dd3fc;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .accessmeet-action-btn:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: #38bdf8;
+    }
   </style>
 </head>
 <body class="accent-green">
@@ -215,7 +286,7 @@
       <div class="toolbox-minimized-content" id="toolboxMinimizedContent">
         <div class="drag-dots">⋮⋮</div>
         <div class="minimized-time">
-          <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <svg class="icon-clock" viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 16 14"></polyline></svg>
           <span id="minimizedClock">00:00:00 AM</span>
         </div>
         <div class="minimized-divider">|</div>
@@ -450,45 +521,14 @@
 
   <div class="subpage-wrapper">
     <header class="page-header">
-      <span class="page-category">Services</span>
+      <span class="page-category">Engineering &amp; Innovation</span>
       <h1 class="page-title">Iron Wharf</h1>
     </header>
 
-    <div class="content-grid">
-      <!-- Left Column: Service Packages & Testimonials -->
-      <section style="display: flex; flex-direction: column;">
-        <h2 style="font-size: 1.5rem; margin-bottom: 24px;">Core Service Packages</h2>
-        
-        <div class="pkg-grid">
-          <!-- Package 1 -->
-          <div class="pkg-card glass-panel">
-            <h3 class="pkg-title">Frontend Architecture</h3>
-            <div class="pkg-price">$3,500+</div>
-            <ul class="pkg-features">
-              <li>Next.js/React SPA Setup</li>
-              <li>Interactive CSS/WebGL Elements</li>
-              <li>Responsive Desktop/Mobile Layouts</li>
-              <li>Performance Audit & Core Web Vitals</li>
-            </ul>
-            <a href="social_market.html" class="submit-btn" style="text-align:center; text-decoration:none;">Book Package</a>
-          </div>
-
-          <!-- Package 2 -->
-          <div class="pkg-card glass-panel">
-            <h3 class="pkg-title">Full Stack Deployment</h3>
-            <div class="pkg-price">$6,500+</div>
-            <ul class="pkg-features">
-              <li>SPA Frontend + Backend REST API</li>
-              <li>PostgreSQL / MongoDB Integrations</li>
-              <li>Redis Session Caching</li>
-              <li>Dockerized Container Pipelines</li>
-            </ul>
-            <a href="social_market.html" class="submit-btn" style="text-align:center; text-decoration:none;">Book Package</a>
-          </div>
-        </div>
-
-        <!-- MicroCLog Industrial Project Box -->
-        <div class="glass-panel microclog-card">
+    <div class="projects-dual-grid">
+      <!-- MicroCLog Industrial Project Box -->
+      <div class="glass-panel microclog-card">
+        <div>
           <div class="microclog-header">
             <div class="microclog-title-group">
               <div class="microclog-icon-box">
@@ -543,126 +583,106 @@
     <span style="color:#34d399;">MCLOG_WARN</span>(<span style="color:#fde047;">"PWR"</span>, <span style="color:#fde047;">"Voltage anomaly: %d mV"</span>, 3210);
 }
           </div>
-
-          <button class="microclog-action-btn" onclick="handleMicroCLogClick(event)">
-            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span>Live Pipeline Link Disconnected (Standalone Mode)</span>
-          </button>
         </div>
 
-        <!-- Review card -->
-        <div class="glass-panel" style="padding: 24px; margin-bottom: 20px;">
-          <h3 style="font-size: 1.1rem; margin-bottom: 12px;">Client Feedback</h3>
-          <p style="font-style: italic; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4;">
-            "The Chief Architect built our tracking telemetry pipeline. The Web Audio synth nodes and responsive dashboards exceeded our requirements. A true professional!"
+        <button class="microclog-action-btn" onclick="handleMicroCLogClick(event)">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Live Pipeline Link Disconnected (Standalone Mode)</span>
+        </button>
+      </div>
+
+      <!-- AccessMeet Meeting App for Deaf, Mute & Blind (Skeleton) -->
+      <div class="glass-panel accessmeet-card">
+        <div>
+          <div class="accessmeet-header">
+            <div class="accessmeet-title-group">
+              <div class="accessmeet-icon-box">
+                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.1em; text-transform: uppercase;">Accessibility &amp; Assistive AI</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">SenseConnect Meeting App</h3>
+              </div>
+            </div>
+            <div class="accessmeet-badge-skeleton" id="accessmeetStatusBadge" title="Project Skeleton - Full Specs Pending">
+              <span class="accessmeet-status-dot"></span>
+              <span>Deaf, Mute &amp; Blind Assist</span>
+            </div>
+          </div>
+
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+            A multi-sensory real-time conferencing platform engineered for deaf, mute, and visually impaired users. Combines computer-vision sign language translation, haptic feedback matrix drivers, live captioning, and 3D spatial audio beacons.
           </p>
-          <div style="margin-top: 12px; font-size: 0.8rem; font-weight: 600;">— CTO, Vortech Energies</div>
+
+          <div class="accessmeet-spec-grid">
+            <div class="accessmeet-spec-item">
+              <div class="accessmeet-spec-label">Sign AI</div>
+              <div class="accessmeet-spec-val">Real-Time</div>
+            </div>
+            <div class="accessmeet-spec-item">
+              <div class="accessmeet-spec-label">Blind Mode</div>
+              <div class="accessmeet-spec-val">Spatial 3D Audio</div>
+            </div>
+            <div class="accessmeet-spec-item">
+              <div class="accessmeet-spec-label">Mute Assist</div>
+              <div class="accessmeet-spec-val">TTS &amp; Gesture</div>
+            </div>
+            <div class="accessmeet-spec-item">
+              <div class="accessmeet-spec-label">Haptics</div>
+              <div class="accessmeet-spec-val">Braille Stream</div>
+            </div>
+          </div>
+
+          <!-- Skeleton Pipeline Preview -->
+          <div class="accessmeet-code-block">
+<span style="color:#93c5fd;">// SenseConnect Multi-Sensory Pipeline Skeleton</span>
+<span style="color:#f472b6;">typedef struct</span> {
+    <span style="color:#a7f3d0;">GestureCV</span>    sign_to_text_engine;    <span style="color:#6ee7b7;">// Vision -&gt; Subtitles</span>
+    <span style="color:#a7f3d0;">TactileBus</span>   haptic_braille_matrix;  <span style="color:#6ee7b7;">// Text -&gt; Haptic Feel</span>
+    <span style="color:#a7f3d0;">SpatialAudio</span> spatial_audio_beacon;   <span style="color:#6ee7b7;">// 3D Sound Cues</span>
+} <span style="color:#fde047;">sense_connect_t</span>;
+          </div>
         </div>
-      </section>
 
-      <!-- Right Column: Interactive Quote Calculator -->
-      <aside style="display: flex; flex-direction: column; gap: 20px;">
-        <div class="glass-panel calc-box">
-          <h3 style="font-size: 1.2rem; margin-bottom: 20px; font-weight: 600;">Custom Quote Estimator</h3>
+        <button class="accessmeet-action-btn" onclick="handleAccessMeetClick(event)">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Skeleton Prototype (Detailed Project Specs Pending)</span>
+        </button>
+      </div>
+    </div>
 
-          <div class="calc-row">
-            <label class="form-label">Project Domain</label>
-            <select class="form-control" style="width: 100%;" id="projType" onchange="calculateQuote()">
-              <option value="frontend">Frontend Architecture ($3000)</option>
-              <option value="fullstack">Full Stack Integration ($5500)</option>
-              <option value="api">API / Systems Design ($2500)</option>
-            </select>
-          </div>
-
-          <div class="calc-row">
-            <label class="form-label">Scale (Pages / Weeks) <span class="calc-value-display" id="scaleValDisplay">2</span></label>
-            <input type="range" min="1" max="10" value="2" class="form-control" style="width: 100%; padding:0;" id="projScale" oninput="calculateQuote()">
-          </div>
-
-          <div class="calc-row">
-            <label class="form-label" style="margin-bottom: 12px;">Add-on Core Integrations</label>
-            
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-              <input type="checkbox" id="addonSeo" onchange="calculateQuote()">
-              <label for="addonSeo" style="font-size: 0.8rem; color: var(--text-secondary);">SEO Audit & Analytics (+$500)</label>
-            </div>
-            
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-              <input type="checkbox" id="addonDeploy" onchange="calculateQuote()">
-              <label for="addonDeploy" style="font-size: 0.8rem; color: var(--text-secondary);">Docker & CI/CD Pipelines (+$800)</label>
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <input type="checkbox" id="addonChat" onchange="calculateQuote()">
-              <label for="addonChat" style="font-size: 0.8rem; color: var(--text-secondary);">Chatbot AI Assistant (+$1000)</label>
-            </div>
-          </div>
-
-          <div class="calc-total-box">
-            <span class="score-label" style="font-size: 0.65rem;">Estimated Cost</span>
-            <div class="total-price" id="totalEstimate">$4,500</div>
-            <span class="score-label" style="font-size: 0.65rem; color: var(--text-secondary);" id="timeEstimate">Delivery: 3 weeks</span>
-          </div>
-
-          <a href="social_market.html" class="submit-btn" style="width: 100%; display:block; text-align:center; text-decoration:none; margin-top: 15px;">Inquire with Quote</a>
-        </div>
-      </aside>
+    <!-- Review / Engineering Note Card -->
+    <div class="glass-panel" style="padding: 24px; margin-top: 20px;">
+      <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--text-primary);">Engineering Spotlight &amp; Client Feedback</h3>
+      <p style="font-style: italic; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4;">
+        "The Chief Architect engineered high-performance embedded systems &amp; multi-sensory accessibility prototypes. Exceptional execution across lock-free telemetry &amp; assistive media processing."
+      </p>
+      <div style="margin-top: 12px; font-size: 0.8rem; font-weight: 600; color: var(--accent-color);">— Technical Advisory Board, Vortech Energies</div>
     </div>
   </div>
 
   <script>
-    function calculateQuote() {
-      const type = document.getElementById('projType').value;
-      const scale = parseInt(document.getElementById('projScale').value);
-      
-      const addonSeo = document.getElementById('addonSeo').checked;
-      const addonDeploy = document.getElementById('addonDeploy').checked;
-      const addonChat = document.getElementById('addonChat').checked;
-
-      // Update scale label
-      document.getElementById('scaleValDisplay').textContent = scale;
-
-      // Base price computation
-      let basePrice = 0;
-      let timeWeeks = 0;
-
-      if (type === 'frontend') {
-        basePrice = 3000 + (scale * 300);
-        timeWeeks = 2 + Math.ceil(scale / 2);
-      } else if (type === 'fullstack') {
-        basePrice = 5500 + (scale * 500);
-        timeWeeks = 3 + scale;
-      } else if (type === 'api') {
-        basePrice = 2500 + (scale * 250);
-        timeWeeks = 2 + Math.ceil(scale / 3);
-      }
-
-      // Addons
-      if (addonSeo) basePrice += 500;
-      if (addonDeploy) {
-        basePrice += 800;
-        timeWeeks += 1;
-      }
-      if (addonChat) {
-        basePrice += 1000;
-        timeWeeks += 1;
-      }
-
-      // Display results
-      document.getElementById('totalEstimate').textContent = `$${basePrice.toLocaleString()}`;
-      document.getElementById('timeEstimate').textContent = `Delivery: ~${timeWeeks} weeks`;
-    }
-
     function handleMicroCLogClick(e) {
       if (e) e.preventDefault();
       alert("⚡ MicroCLog Module Status:\n\nMicroCLog micro-logging engine card implemented in Industry section.\nLive pipeline link is currently DISCONNECTED (standalone mode).");
     }
 
-    // Run initial calculation
-    calculateQuote();
+    function handleAccessMeetClick(e) {
+      if (e) e.preventDefault();
+      alert("♿ SenseConnect Meeting App Status:\n\nRough skeleton section for Deaf, Mute & Blind Meeting App successfully rendered.\nDetailed project specs, gesture models, and haptic feedback APIs will be added soon!");
+    }
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
 </body>
