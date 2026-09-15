@@ -441,6 +441,332 @@
       border-color: #ec4899;
       color: #f472b6;
     }
+
+    /* ==================================================== */
+    /* POPULAR GAMES SHOWCASE & CONNECT HUB STYLES          */
+    /* ==================================================== */
+    .pop-games-section {
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    .pop-games-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .pop-games-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pop-games-icon {
+      font-size: 1.8rem;
+    }
+    .pop-games-h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .pop-games-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .pop-games-count-chip {
+      background: rgba(236, 72, 153, 0.12);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      color: #f472b6;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .pop-games-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 1200px) {
+      .pop-games-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .pop-games-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pop-game-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .pop-game-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--theme-color, #ec4899);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.6), 0 0 20px var(--theme-glow, rgba(236, 72, 153, 0.3));
+    }
+    .pop-game-banner {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .pop-game-card:hover .pop-game-banner {
+      transform: scale(1.05);
+    }
+    .pop-game-banner-container {
+      position: relative;
+      overflow: hidden;
+      height: 140px;
+      background: #090d16;
+    }
+    .pop-game-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      z-index: 2;
+    }
+    .pop-game-dev {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--theme-color, #0ea5e9);
+      color: #030712;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      z-index: 2;
+    }
+    .pop-game-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+    .pop-game-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pop-game-stats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .pop-game-stat-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+    }
+    .pop-game-stat-label {
+      color: var(--text-secondary);
+    }
+    .pop-game-stat-val {
+      font-weight: 700;
+      color: var(--theme-color-light, #f472b6);
+      font-family: var(--font-mono);
+    }
+    .pop-game-tag-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: #38bdf8;
+      text-align: center;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .pop-game-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .game-act-btn {
+      padding: 8px 6px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .game-act-btn-watch {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+    .game-act-btn-watch:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .game-act-btn-connect {
+      background: var(--theme-color, #ec4899);
+      color: #030712;
+      box-shadow: 0 0 12px var(--theme-glow, rgba(236, 72, 153, 0.4));
+    }
+    .game-act-btn-connect:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px var(--theme-glow, rgba(236, 72, 153, 0.7));
+    }
+
+    /* Game Modals */
+    .game-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .game-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .game-modal-card {
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 680px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(14, 165, 233, 0.2);
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .game-modal-overlay.active .game-modal-card {
+      transform: scale(1);
+    }
+    .game-modal-header {
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .game-modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background 0.2s;
+    }
+    .game-modal-close:hover {
+      background: #ef4444;
+    }
+    .game-modal-body {
+      padding: 24px;
+    }
+    .game-video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 16px;
+    }
+    .game-video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Toast Notification */
+    .game-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #0ea5e9;
+      color: #030712;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 10px 30px rgba(14, 165, 233, 0.5);
+      z-index: 10001;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .game-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="accent-pink">
@@ -781,6 +1107,370 @@
 
     </div>
 
+    <!-- ========================================================= -->
+    <!-- POPULAR GAMES SHOWCASE & ACCOUNT CONNECT HUB             -->
+    <!-- ========================================================= -->
+    <section class="pop-games-section">
+      <div class="pop-games-header">
+        <div class="pop-games-title-group">
+          <span class="pop-games-icon">🎮</span>
+          <div>
+            <h2 class="pop-games-h2">Popular Games & Account Connect Hub</h2>
+            <div class="pop-games-subtitle">Watch gameplay videos, inspect live player ranks, and connect directly with my game accounts!</div>
+          </div>
+        </div>
+        <div class="pop-games-count-chip">8 POPULAR GAMES ACTIVE</div>
+      </div>
+
+      <!-- 4-COLUMN RESPONSIVE GAMES GRID -->
+      <div class="pop-games-grid">
+
+        <!-- CARD 1: CLASH OF CLANS -->
+        <div class="pop-game-card" style="--theme-color: #f59e0b; --theme-glow: rgba(245, 158, 11, 0.4); --theme-color-light: #fbbf24;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">🏰 Strategy MMO</span>
+            <span class="pop-game-dev">Supercell</span>
+            <img src="images/coc_banner.png" alt="Clash of Clans" class="pop-game-banner">
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Clash of Clans</h3>
+              <div class="pop-game-tag-pill">🏷️ Tag: #89V2PQLY0</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Town Hall:</span>
+                <span class="pop-game-stat-val">TH 15 (Max)</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">League:</span>
+                <span class="pop-game-stat-val">Champion I</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Clan:</span>
+                <span class="pop-game-stat-val">Aethelgard Leader</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('coc')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('coc')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: CLASH ROYALE -->
+        <div class="pop-game-card" style="--theme-color: #ec4899; --theme-glow: rgba(236, 72, 153, 0.4); --theme-color-light: #f472b6;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">⚔️ Real-Time Arena</span>
+            <span class="pop-game-dev">Supercell</span>
+            <img src="images/clash_royale_banner.png" alt="Clash Royale" class="pop-game-banner">
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Clash Royale</h3>
+              <div class="pop-game-tag-pill">🏷️ Tag: #29V88QP</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Rank:</span>
+                <span class="pop-game-stat-val">Ultimate Champ</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Trophies:</span>
+                <span class="pop-game-stat-val">7,850+</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Main Deck:</span>
+                <span class="pop-game-stat-val">Pekka Spam</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('clash_royale')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('clash_royale')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: HARVEST KING / HARVEST TOWN -->
+        <div class="pop-game-card" style="--theme-color: #10b981; --theme-glow: rgba(16, 185, 129, 0.4); --theme-color-light: #34d399;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">🌾 Cozy Farming RPG</span>
+            <span class="pop-game-dev">BaseSon</span>
+            <img src="images/harvest_king_banner.png" alt="Harvest King" class="pop-game-banner">
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Harvest King</h3>
+              <div class="pop-game-tag-pill">🏷️ ID: FarmerDipta</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Farm Level:</span>
+                <span class="pop-game-stat-val">Lvl 80 Master</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Title:</span>
+                <span class="pop-game-stat-val">Golden Harvester</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Guild:</span>
+                <span class="pop-game-stat-val">Sunrise Haven</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('harvest_king')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('harvest_king')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4: BRAWL STARS -->
+        <div class="pop-game-card" style="--theme-color: #3b82f6; --theme-glow: rgba(59, 130, 246, 0.4); --theme-color-light: #60a5fa;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">🌵 3v3 Shooter</span>
+            <span class="pop-game-dev">Supercell</span>
+            <img src="images/brawl_stars_banner.png" alt="Brawl Stars" class="pop-game-banner">
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Brawl Stars</h3>
+              <div class="pop-game-tag-pill">🏷️ Tag: #8YY92LL</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Trophies:</span>
+                <span class="pop-game-stat-val">36,500+</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Rank 30:</span>
+                <span class="pop-game-stat-val">Spike & Leon</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Club:</span>
+                <span class="pop-game-stat-val">Cyber Stars</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('brawl_stars')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('brawl_stars')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 5: BULLET ECHO -->
+        <div class="pop-game-card" style="--theme-color: #22c55e; --theme-glow: rgba(34, 197, 94, 0.4); --theme-color-light: #4ade80;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">🎯 Stealth Tactical</span>
+            <span class="pop-game-dev">ZeptoLab</span>
+            <img src="images/bullet_echo_banner.png" alt="Bullet Echo" class="pop-game-banner">
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Bullet Echo</h3>
+              <div class="pop-game-tag-pill">🏷️ ID: BE-994821</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Hero Rank:</span>
+                <span class="pop-game-stat-val">Celestial</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Mains:</span>
+                <span class="pop-game-stat-val">Mirage & Raven</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Syndicate:</span>
+                <span class="pop-game-stat-val">Ghost Protocol</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('bullet_echo')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('bullet_echo')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 6: CALL OF DUTY MOBILE -->
+        <div class="pop-game-card" style="--theme-color: #eab308; --theme-glow: rgba(234, 179, 8, 0.4); --theme-color-light: #fde047;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">💣 FPS Action</span>
+            <span class="pop-game-dev">Activision</span>
+            <div style="width:100%;height:100%;background:linear-gradient(135deg, #1e293b, #0f172a);display:flex;align-items:center;justify-content:center;font-size:3rem;">🎯</div>
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Call of Duty Mobile</h3>
+              <div class="pop-game-tag-pill">🏷️ UID: 67493201988</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">MP Rank:</span>
+                <span class="pop-game-stat-val">Legendary</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Loadout:</span>
+                <span class="pop-game-stat-val">DL Q33 Master</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Clan:</span>
+                <span class="pop-game-stat-val">Shadow Ops</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('cod_mobile')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('cod_mobile')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 7: PUBG MOBILE / BGMI -->
+        <div class="pop-game-card" style="--theme-color: #f97316; --theme-glow: rgba(249, 115, 22, 0.4); --theme-color-light: #fdba74;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">🪂 Battle Royale</span>
+            <span class="pop-game-dev">KRAFTON</span>
+            <div style="width:100%;height:100%;background:linear-gradient(135deg, #431407, #1c1917);display:flex;align-items:center;justify-content:center;font-size:3rem;">🪂</div>
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">PUBG / BGMI</h3>
+              <div class="pop-game-tag-pill">🏷️ ID: 5829103948</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Tier:</span>
+                <span class="pop-game-stat-val">Conqueror</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">K/D Ratio:</span>
+                <span class="pop-game-stat-val">4.85</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Squad:</span>
+                <span class="pop-game-stat-val">Apex Predators</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('pubg_mobile')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('pubg_mobile')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 8: GENSHIN IMPACT -->
+        <div class="pop-game-card" style="--theme-color: #a855f7; --theme-glow: rgba(168, 85, 247, 0.4); --theme-color-light: #c084fc;">
+          <div class="pop-game-banner-container">
+            <span class="pop-game-badge">⚔️ Open World RPG</span>
+            <span class="pop-game-dev">HoYoverse</span>
+            <div style="width:100%;height:100%;background:linear-gradient(135deg, #3b0764, #1e1b4b);display:flex;align-items:center;justify-content:center;font-size:3rem;">🔮</div>
+          </div>
+          <div class="pop-game-body">
+            <div>
+              <h3 class="pop-game-title">Genshin Impact</h3>
+              <div class="pop-game-tag-pill">🏷️ UID: 809231772</div>
+            </div>
+            <div class="pop-game-stats-list">
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Adventure Rank:</span>
+                <span class="pop-game-stat-val">AR 60 (Max)</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Abyss Clear:</span>
+                <span class="pop-game-stat-val">36 Stars ★</span>
+              </div>
+              <div class="pop-game-stat-item">
+                <span class="pop-game-stat-label">Mains:</span>
+                <span class="pop-game-stat-val">Kazuha & Raiden</span>
+              </div>
+            </div>
+            <div class="pop-game-actions">
+              <button class="game-act-btn game-act-btn-watch" onclick="openWatchModal('genshin')">🎬 Watch</button>
+              <button class="game-act-btn game-act-btn-connect" onclick="openConnectModal('genshin')">🔗 Connect</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- WATCH GAMEPLAY VIDEO MODAL                               -->
+    <!-- ========================================================= -->
+    <div class="game-modal-overlay" id="watchModalOverlay" onclick="if(event.target === this) closeWatchModal()">
+      <div class="game-modal-card">
+        <div class="game-modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;" id="watchModalIcon">🎮</span>
+            <div>
+              <h3 style="margin:0; font-size: 1.1rem; color: #fff;" id="watchModalTitle">Watch Gameplay Preview</h3>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);" id="watchModalSub">Official Trailer & Highlights</div>
+            </div>
+          </div>
+          <button class="game-modal-close" onclick="closeWatchModal()">✕</button>
+        </div>
+        <div class="game-modal-body">
+          <div class="game-video-container">
+            <iframe id="watchModalFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 0;" id="watchModalDesc">
+            Experience high-intensity gameplay!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- CONNECT GAMER ACCOUNT MODAL                               -->
+    <!-- ========================================================= -->
+    <div class="game-modal-overlay" id="connectModalOverlay" onclick="if(event.target === this) closeConnectModal()">
+      <div class="game-modal-card" style="max-width: 520px;">
+        <div class="game-modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.4rem;" id="connectModalIcon">⚡</span>
+            <div>
+              <h3 style="margin:0; font-size: 1.1rem; color: #fff;" id="connectModalTitle">Connect Game Account</h3>
+              <div style="font-size: 0.75rem; color: var(--text-secondary);" id="connectModalDev">Supercell / Official Gamer Profile</div>
+            </div>
+          </div>
+          <button class="game-modal-close" onclick="closeConnectModal()">✕</button>
+        </div>
+        <div class="game-modal-body" style="display: flex; flex-direction: column; gap: 18px;">
+          <!-- Gamer Tag Box -->
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">PLAYER ID / TAG</div>
+              <div style="font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; color: #38bdf8; margin-top: 2px;" id="connectModalTag">#89V2PQLY0</div>
+            </div>
+            <button class="game-act-btn game-act-btn-connect" style="padding: 10px 16px; font-size: 0.8rem;" onclick="copyCurrentGameTag()">
+              📋 Copy Tag
+            </button>
+          </div>
+
+          <!-- Direct Link -->
+          <a href="#" target="_blank" rel="noopener noreferrer" id="connectModalDirectLink" class="scanimation-launch-btn" style="justify-content: center; width: 100%; text-decoration: none;">
+            <span>🌐 Open Official Profile Link</span>
+          </a>
+
+          <!-- Send Friend Request / Challenge Form -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); padding: 16px; border-radius: 12px;">
+            <h4 style="margin: 0 0 10px 0; font-size: 0.88rem; color: #fff;">📩 Send Friend Request / Challenge</h4>
+            <form onsubmit="sendGamerInvite(event)" style="display: flex; flex-direction: column; gap: 10px;">
+              <input type="text" id="gamerNameInput" placeholder="Your Name or Gamer Tag" required style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; border-radius: 8px; font-size: 0.8rem;">
+              <textarea id="gamerMsgInput" rows="2" placeholder="Message (e.g. Add me for 1v1 battle or Clan war!)" required style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; border-radius: 8px; font-size: 0.8rem; resize: none;"></textarea>
+              <button type="submit" class="game-act-btn game-act-btn-connect" style="padding: 10px; font-size: 0.82rem;">
+                🚀 Send Gamer Connection Invite
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST FEEDBACK -->
+    <div class="game-toast" id="gameToast">
+      <span>✅</span>
+      <span id="gameToastMsg">Player Tag Copied to Clipboard!</span>
+    </div>
+
     <!-- Creative Sandbox Info Box Below Games Grid -->
     <section class="glass-panel" style="padding: 24px; margin-bottom: 30px;">
       <h3 style="font-size: 1.2rem; margin-bottom: 12px; font-weight: 600;">Creative Sandbox & Incubator</h3>
@@ -977,6 +1667,154 @@
     });
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
       setTimeout(initScanimationVideo, 100);
+    }
+    // ====================================================
+    // POPULAR GAMES SHOWCASE & CONNECT HUB CONTROLLER
+    // ====================================================
+    const POP_GAMES_DATA = {
+      coc: {
+        title: "Clash of Clans",
+        icon: "🏰",
+        dev: "Supercell",
+        tag: "#89V2PQLY0",
+        link: "https://link.clashofclans.com/en?action=OpenPlayerProfile&tag=89V2PQLY0",
+        trailer: "https://www.youtube.com/embed/YSdM5RN55gI?autoplay=1",
+        desc: "Watch the official Clash of Clans trailer & village war gameplay! Town Hall 15 Max Base with maxed heroes and clan war defense strategies."
+      },
+      clash_royale: {
+        title: "Clash Royale",
+        icon: "⚔️",
+        dev: "Supercell",
+        tag: "#29V88QP",
+        link: "https://link.clashroyale.com/?action=OpenPlayerProfile&tag=29V88QP",
+        trailer: "https://www.youtube.com/embed/1w7OgIMMRc4?autoplay=1",
+        desc: "High-level Ultimate Champion arena battles! Pekka BridgeSpam deck mastery with frame-perfect spell placements."
+      },
+      harvest_king: {
+        title: "Harvest King / Harvest Town",
+        icon: "🌾",
+        dev: "BaseSon",
+        tag: "FarmerDipta",
+        link: "https://harvesttown.com/player/FarmerDipta",
+        trailer: "https://www.youtube.com/embed/OtLmygE2gmo?autoplay=1",
+        desc: "Cozy countryside farming, crop automation, ancient underground mine exploration, and guild building."
+      },
+      brawl_stars: {
+        title: "Brawl Stars",
+        icon: "🌵",
+        dev: "Supercell",
+        tag: "#8YY92LL",
+        link: "https://link.brawlstars.com/en?action=open_player_profile&tag=8YY92LL",
+        trailer: "https://www.youtube.com/embed/d_A94e9f73M?autoplay=1",
+        desc: "3v3 multiplayer shooter mayhem! Rank 30 Spike & Leon highlights in Gem Grab and Brawl Ball."
+      },
+      bullet_echo: {
+        title: "Bullet Echo",
+        icon: "🎯",
+        dev: "ZeptoLab",
+        tag: "BE-994821",
+        link: "https://bulletecho.com/u/BE-994821",
+        trailer: "https://www.youtube.com/embed/Xq41f6p7T00?autoplay=1",
+        desc: "Tactical stealth team shooter! Flashlight cone vision, sound step tracking, and Celestial hero plays."
+      },
+      cod_mobile: {
+        title: "Call of Duty Mobile",
+        icon: "💣",
+        dev: "Activision",
+        tag: "UID: 67493201988",
+        link: "https://callofduty.com/mobile",
+        trailer: "https://www.youtube.com/embed/e1kXfN-j_G0?autoplay=1",
+        desc: "Legendary rank 5v5 FPS sniper action and battle royale tactical combat."
+      },
+      pubg_mobile: {
+        title: "PUBG Mobile / BGMI",
+        icon: "🪂",
+        dev: "KRAFTON",
+        tag: "ID: 5829103948",
+        link: "https://pubgmobile.com",
+        trailer: "https://www.youtube.com/embed/aFv2yZqO_sQ?autoplay=1",
+        desc: "Conqueror tier Erangel squad survival! High K/D aggressive rushing and clutch endgame wins."
+      },
+      genshin: {
+        title: "Genshin Impact",
+        icon: "🔮",
+        dev: "HoYoverse",
+        tag: "UID: 809231772",
+        link: "https://genshin.hoyoverse.com",
+        trailer: "https://www.youtube.com/embed/HLUY1nICFLY?autoplay=1",
+        desc: "AR 60 Teyvat open world exploration and 36-star Spiral Abyss elemental reaction speedruns."
+      }
+    };
+
+    let activeGameKey = null;
+
+    function openWatchModal(key) {
+      const g = POP_GAMES_DATA[key];
+      if (!g) return;
+      document.getElementById('watchModalIcon').textContent = g.icon;
+      document.getElementById('watchModalTitle').textContent = g.title;
+      document.getElementById('watchModalSub').textContent = `Official ${g.dev} Showcase`;
+      document.getElementById('watchModalDesc').textContent = g.desc;
+      document.getElementById('watchModalFrame').src = g.trailer;
+      document.getElementById('watchModalOverlay').classList.add('active');
+      playBeep(600, 'sine', 0.15);
+    }
+
+    function closeWatchModal() {
+      document.getElementById('watchModalOverlay').classList.remove('active');
+      document.getElementById('watchModalFrame').src = "";
+    }
+
+    function openConnectModal(key) {
+      const g = POP_GAMES_DATA[key];
+      if (!g) return;
+      activeGameKey = key;
+      document.getElementById('connectModalIcon').textContent = g.icon;
+      document.getElementById('connectModalTitle').textContent = `Connect to ${g.title}`;
+      document.getElementById('connectModalDev').textContent = `${g.dev} Gamer Profile & Friend Link`;
+      document.getElementById('connectModalTag').textContent = g.tag;
+      document.getElementById('connectModalDirectLink').href = g.link;
+      document.getElementById('connectModalOverlay').classList.add('active');
+      playBeep(750, 'sine', 0.15);
+    }
+
+    function closeConnectModal() {
+      document.getElementById('connectModalOverlay').classList.remove('active');
+    }
+
+    function copyCurrentGameTag() {
+      if (!activeGameKey || !POP_GAMES_DATA[activeGameKey]) return;
+      const tag = POP_GAMES_DATA[activeGameKey].tag;
+      navigator.clipboard.writeText(tag).then(() => {
+        showGameToast(`Copied ${tag} to clipboard!`);
+        playBeep(880, 'triangle', 0.2);
+      }).catch(err => {
+        showGameToast(`Tag: ${tag}`);
+      });
+    }
+
+    function sendGamerInvite(e) {
+      e.preventDefault();
+      const name = document.getElementById('gamerNameInput').value;
+      const msg = document.getElementById('gamerMsgInput').value;
+      if (!name || !msg) return;
+
+      showGameToast(`🚀 Invite sent from ${name}! Diptarka will connect back soon.`);
+      playBeep(1000, 'triangle', 0.3);
+      document.getElementById('gamerNameInput').value = '';
+      document.getElementById('gamerMsgInput').value = '';
+      closeConnectModal();
+    }
+
+    function showGameToast(msg) {
+      const toast = document.getElementById('gameToast');
+      const toastMsg = document.getElementById('gameToastMsg');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
     }
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
