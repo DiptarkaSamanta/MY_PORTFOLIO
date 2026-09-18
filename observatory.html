@@ -5,7 +5,210 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stellar Observatory - Projects & Works</title>
   <link rel="stylesheet" href="subpage.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
+    .solar-hero-card {
+      grid-column: span 2;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      box-shadow: 0 0 25px rgba(14, 165, 233, 0.2);
+      background: radial-gradient(circle at 50% 30%, rgba(14, 165, 233, 0.08), rgba(3, 7, 18, 0.9)) !important;
+    }
+    .solar-3d-wrapper {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #0B1021 0%, #030712 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+      --progress-bar-color: #38bdf8;
+    }
+
+    /* Planet Selector Ribbon */
+    .planet-ribbon {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px;
+      background: rgba(3, 7, 18, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      z-index: 10;
+      scrollbar-width: none;
+    }
+    .planet-ribbon::-webkit-scrollbar {
+      display: none;
+    }
+    .planet-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 0.72rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .planet-btn:hover {
+      background: rgba(14, 165, 233, 0.2);
+      border-color: #38bdf8;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .planet-btn.active {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+      font-weight: 600;
+    }
+
+    /* Stellar HUD Card */
+    .planet-hud {
+      position: absolute;
+      bottom: 50px;
+      left: 12px;
+      width: 290px;
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #f8fafc;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      z-index: 10;
+      display: none;
+      animation: hudFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes hudFadeIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .planet-hud-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .planet-hud-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .planet-hud-badge {
+      font-size: 0.62rem;
+      background: rgba(14, 165, 233, 0.2);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      color: #7dd3fc;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+    .planet-hud-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 0.72rem;
+      margin-bottom: 8px;
+    }
+    .hud-label {
+      color: var(--text-secondary);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hud-val {
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+    .hud-fact {
+      font-size: 0.72rem;
+      line-height: 1.4;
+      color: #cbd5e1;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 8px;
+    }
+    .hud-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+    }
+    .hud-close-btn:hover {
+      color: #fff;
+    }
+
+    .model-control-bar {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+    .model-ctrl-btn {
+      background: rgba(3, 7, 18, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .model-ctrl-btn:hover {
+      background: rgba(14, 165, 233, 0.25);
+      border-color: #38bdf8;
+      color: #fff;
+    }
+    @keyframes modelSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .model-spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: modelSpin 1s linear infinite;
+    }
+    @media (max-width: 768px) {
+      .solar-hero-card {
+        grid-column: span 1;
+      }
+      .solar-3d-wrapper {
+        height: 300px;
+      }
+      .planet-hud {
+        max-width: 250px;
+        bottom: 55px;
+      }
+    }
+
+
     .filter-tabs {
       display: flex;
       gap: 12px;
@@ -376,6 +579,121 @@
 
     <div class="project-grid" id="projectGrid">
       
+      <!-- Featured 3D Solar System Orrery -->
+      <article class="project-card glass-panel solar-hero-card" data-cat="visual">
+        <div class="solar-3d-wrapper">
+          <!-- Interactive Clickable Planet Selector Ribbon -->
+          <div class="planet-ribbon">
+            <button class="planet-btn active" id="btn-planet-all" onclick="focusPlanet('all')">🌌 System</button>
+            <button class="planet-btn" id="btn-planet-sun" onclick="focusPlanet('sun')">☀️ Sun</button>
+            <button class="planet-btn" id="btn-planet-mercury" onclick="focusPlanet('mercury')">☿ Mercury</button>
+            <button class="planet-btn" id="btn-planet-venus" onclick="focusPlanet('venus')">♀ Venus</button>
+            <button class="planet-btn" id="btn-planet-earth" onclick="focusPlanet('earth')">🌍 Earth</button>
+            <button class="planet-btn" id="btn-planet-mars" onclick="focusPlanet('mars')">🔴 Mars</button>
+            <button class="planet-btn" id="btn-planet-jupiter" onclick="focusPlanet('jupiter')">♃ Jupiter</button>
+            <button class="planet-btn" id="btn-planet-saturn" onclick="focusPlanet('saturn')">🪐 Saturn</button>
+            <button class="planet-btn" id="btn-planet-uranus" onclick="focusPlanet('uranus')">♅ Uranus</button>
+            <button class="planet-btn" id="btn-planet-neptune" onclick="focusPlanet('neptune')">♆ Neptune</button>
+            <button class="planet-btn" id="btn-planet-pluto" onclick="focusPlanet('pluto')">🖤 Pluto</button>
+          </div>
+
+          <!-- 3D Model Viewer with Ultra-Smooth Dampening -->
+          <model-viewer 
+            id="solarViewer"
+            src="images/solar_system_animation.glb" 
+            alt="Interactive 3D Solar System Animation" 
+            autoplay 
+            animation-name="*"
+            auto-rotate 
+            rotation-per-second="4deg"
+            camera-controls 
+            interpolation-decay="200"
+            field-of-view="30deg"
+            min-field-of-view="10deg"
+            max-field-of-view="60deg"
+            shadow-intensity="1.5"
+            exposure="1.15"
+            environment-image="neutral"
+            interaction-prompt="auto"
+            loading="lazy">
+            <div slot="poster" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #38bdf8; font-family: var(--font-mono); font-size: 0.85rem; gap: 12px;">
+              <div class="model-spinner"></div>
+              <span>Initializing 3D Solar System Orrery...</span>
+            </div>
+          </model-viewer>
+
+          <!-- Floating Celestial Telemetry HUD Popup -->
+          <div class="planet-hud" id="planetHud">
+            <div class="planet-hud-header">
+              <span class="planet-hud-title" id="hudTitle">☀️ The Sun</span>
+              <button class="hud-close-btn" onclick="closePlanetHud()" title="Close Telemetry">×</button>
+            </div>
+            <div class="planet-hud-badge" id="hudType">Yellow Dwarf Star (G2V)</div>
+            <div class="planet-hud-grid">
+              <div>
+                <div class="hud-label">Diameter</div>
+                <div class="hud-val" id="hudDiameter">1,392,700 km</div>
+              </div>
+              <div>
+                <div class="hud-label">Orbital Period</div>
+                <div class="hud-val" id="hudOrbit">Galactic Orbit</div>
+              </div>
+              <div>
+                <div class="hud-label">Distance</div>
+                <div class="hud-val" id="hudDistance">0 AU</div>
+              </div>
+              <div>
+                <div class="hud-label">Status</div>
+                <div class="hud-val" style="color: #34d399;">Active ☀️</div>
+              </div>
+            </div>
+            <div class="hud-fact" id="hudFact">Contains 99.86% of all the mass in the entire Solar System.</div>
+          </div>
+
+          <!-- Bottom Right Controls -->
+          <div class="model-control-bar">
+            <button class="model-ctrl-btn" onclick="toggleSolarRotation()" id="btnSolarRotate" title="Toggle Auto Rotation">
+              🔄 Pause Rotation
+            </button>
+            <button class="model-ctrl-btn" onclick="resetSolarCamera()" title="Reset Solar View">
+              🎯 Recenter System
+            </button>
+            <button class="model-ctrl-btn" onclick="toggleSolarFullscreen()" title="Fullscreen View">
+              ⛶ Fullscreen
+            </button>
+          </div>
+        </div>
+
+        <div class="project-tags">
+          <span class="tag" style="border-color: rgba(14, 165, 233, 0.4); color: #38bdf8;">WebGL 3D</span>
+          <span class="tag" style="border-color: rgba(234, 179, 8, 0.4); color: #fde047;">GLB Animation</span>
+          <span class="tag" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">Orbital Orrery</span>
+          <span class="tag">Three.js / ModelViewer</span>
+          <span class="tag">Stellar Physics</span>
+        </div>
+
+        <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+          <span>Solar System 3D Orbital Orrery</span>
+          <span style="font-size: 0.65rem; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); color: #fff; padding: 3px 10px; border-radius: 12px; font-weight: 700; letter-spacing: 0.5px;">FEATURED 3D</span>
+        </h3>
+        
+        <p class="project-desc">
+          An interactive real-time 3D orbital animation of our Solar System featuring the Sun, Earth, Moon, and celestial planetary orbits. Drag to rotate 360°, scroll to zoom in/out, or inspect the planetary motions in real-time space.
+        </p>
+
+        <div class="project-actions">
+          <button onclick="document.getElementById('solarViewer').requestFullscreen()" class="action-link link-primary" style="background: linear-gradient(135deg, #0ea5e9, #6366f1); font-weight: 700; color: #fff; border: none;">
+            🪐 Explore 3D Space (Fullscreen)
+          </button>
+          <a href="https://theskylive.com/3dsolarsystem" target="_blank" rel="noopener noreferrer" class="action-link link-secondary" style="border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+            🔭 Live Sky Tracker (TheSkyLive)
+          </a>
+          <a href="images/solar_system_animation.glb" download="solar_system_animation.glb" class="action-link link-secondary">
+            📥 Download .GLB Asset
+          </a>
+        </div>
+      </article>
+
       <!-- Project 0: Scanimation Studio -->
       <article class="project-card glass-panel" data-cat="app" style="border: 1px solid rgba(14, 165, 233, 0.35); box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);">
         <div class="project-thumbnail" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.15)); font-size: 3rem;">🎞️</div>
@@ -475,6 +793,187 @@
   </div>
 
   <script>
+    const PLANET_DATA = {
+      all: {
+        name: "Solar System Overview",
+        symbol: "🌌",
+        type: "Planetary System",
+        diameter: "287.46 Billion km",
+        orbit: "Galactic Orbit ~230M yrs",
+        distance: "Milky Way Galaxy",
+        fact: "The Solar System orbits the center of the Milky Way galaxy at an average speed of 828,000 km/h.",
+        cameraOrbit: "0deg 70deg 105%",
+        cameraTarget: "0m 0m 0m"
+      },
+      sun: {
+        name: "The Sun",
+        symbol: "☀️",
+        type: "Yellow Dwarf Star (G2V)",
+        diameter: "1,392,700 km",
+        orbit: "Galactic Center",
+        distance: "0 AU (Center)",
+        fact: "The Sun contains 99.86% of all the mass in the entire Solar System.",
+        cameraOrbit: "0deg 75deg 35%",
+        cameraTarget: "0m 0m 0m"
+      },
+      mercury: {
+        name: "Mercury",
+        symbol: "☿",
+        type: "Terrestrial Planet",
+        diameter: "4,879 km",
+        orbit: "88 Earth Days",
+        distance: "0.39 AU",
+        fact: "The smallest planet in our solar system with surface temps swinging from -180°C to 430°C.",
+        cameraOrbit: "35deg 75deg 25%",
+        cameraTarget: "-1.2m 0.1m 0.4m"
+      },
+      venus: {
+        name: "Venus",
+        symbol: "♀",
+        type: "Terrestrial Planet",
+        diameter: "12,104 km",
+        orbit: "225 Earth Days",
+        distance: "0.72 AU",
+        fact: "Hottest planet in the solar system due to a dense runaway greenhouse atmosphere reaching 465°C.",
+        cameraOrbit: "70deg 75deg 28%",
+        cameraTarget: "-2.4m 0.2m -0.8m"
+      },
+      earth: {
+        name: "Earth & Moon",
+        symbol: "🌍",
+        type: "Terrestrial World",
+        diameter: "12,742 km",
+        orbit: "365.25 Days",
+        distance: "1.00 AU (149.6M km)",
+        fact: "The only known planet with abundant liquid ocean waters and thriving biological ecosystems.",
+        cameraOrbit: "110deg 72deg 30%",
+        cameraTarget: "-3.6m 0.3m 1.4m"
+      },
+      mars: {
+        name: "Mars",
+        symbol: "🔴",
+        type: "Terrestrial Planet",
+        diameter: "6,779 km",
+        orbit: "687 Earth Days",
+        distance: "1.52 AU",
+        fact: "Home to Olympus Mons, the largest volcano in the Solar System (3x taller than Mt. Everest).",
+        cameraOrbit: "155deg 75deg 32%",
+        cameraTarget: "-5.2m 0.4m -1.8m"
+      },
+      jupiter: {
+        name: "Jupiter",
+        symbol: "♃",
+        type: "Gas Giant",
+        diameter: "139,820 km",
+        orbit: "11.86 Earth Years",
+        distance: "5.20 AU",
+        fact: "Largest planet in the solar system. Its iconic Great Red Spot is a giant storm larger than Earth.",
+        cameraOrbit: "200deg 68deg 40%",
+        cameraTarget: "-8.0m 0.6m 2.8m"
+      },
+      saturn: {
+        name: "Saturn",
+        symbol: "🪐",
+        type: "Gas Giant with Rings",
+        diameter: "116,460 km",
+        orbit: "29.45 Earth Years",
+        distance: "9.58 AU",
+        fact: "Famous for its majestic ring system made of billions of ice chunks, dust, and rock particles.",
+        cameraOrbit: "245deg 65deg 45%",
+        cameraTarget: "-11.5m 0.8m -3.6m"
+      },
+      uranus: {
+        name: "Uranus",
+        symbol: "♅",
+        type: "Ice Giant",
+        diameter: "50,724 km",
+        orbit: "84 Earth Years",
+        distance: "19.22 AU",
+        fact: "Rotates on its side with an axial tilt of 98°, likely caused by an ancient cosmic collision.",
+        cameraOrbit: "290deg 70deg 50%",
+        cameraTarget: "-15.5m 1.0m 4.8m"
+      },
+      neptune: {
+        name: "Neptune",
+        symbol: "♆",
+        type: "Ice Giant",
+        diameter: "49,244 km",
+        orbit: "164.8 Earth Years",
+        distance: "30.05 AU",
+        fact: "Features supersonic atmospheric winds reaching 2,100 km/h—the fastest in the Solar System.",
+        cameraOrbit: "330deg 72deg 55%",
+        cameraTarget: "-19.5m 1.2m -6.2m"
+      },
+      pluto: {
+        name: "Pluto",
+        symbol: "🖤",
+        type: "Dwarf Planet (Kuiper Belt)",
+        diameter: "2,376 km",
+        orbit: "248 Earth Years",
+        distance: "39.48 AU",
+        fact: "Reclassified as a dwarf planet in 2006. Features a famous heart-shaped nitrogen ice glacier named Tombaugh Regio.",
+        cameraOrbit: "370deg 75deg 60%",
+        cameraTarget: "-23.5m 1.4m 7.5m"
+      }
+    };
+
+    function focusPlanet(key) {
+      const data = PLANET_DATA[key];
+      if (!data) return;
+
+      const viewer = document.getElementById('solarViewer');
+      
+      // Smooth camera interpolation
+      viewer.cameraOrbit = data.cameraOrbit;
+      viewer.cameraTarget = data.cameraTarget;
+
+      // Update active planet pill ribbon state
+      document.querySelectorAll('.planet-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById('btn-planet-' + key);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Update HUD telemetry
+      const hud = document.getElementById('planetHud');
+      document.getElementById('hudTitle').innerHTML = `${data.symbol} ${data.name}`;
+      document.getElementById('hudType').innerText = data.type;
+      document.getElementById('hudDiameter').innerText = data.diameter;
+      document.getElementById('hudOrbit').innerText = data.orbit;
+      document.getElementById('hudDistance').innerText = data.distance;
+      document.getElementById('hudFact').innerText = data.fact;
+      hud.style.display = 'block';
+    }
+
+    function closePlanetHud() {
+      document.getElementById('planetHud').style.display = 'none';
+    }
+
+    function toggleSolarRotation() {
+      const viewer = document.getElementById('solarViewer');
+      const btn = document.getElementById('btnSolarRotate');
+      if (viewer.hasAttribute('auto-rotate')) {
+        viewer.removeAttribute('auto-rotate');
+        btn.innerHTML = '🔄 Start Rotation';
+      } else {
+        viewer.setAttribute('auto-rotate', '');
+        btn.innerHTML = '🔄 Pause Rotation';
+      }
+    }
+
+    function resetSolarCamera() {
+      focusPlanet('all');
+    }
+
+    function toggleSolarFullscreen() {
+      const viewer = document.getElementById('solarViewer');
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        viewer.requestFullscreen();
+      }
+    }
+
     function filterProjects(category) {
       // Toggle active buttons
       document.querySelectorAll('.filter-btn').forEach(btn => {
