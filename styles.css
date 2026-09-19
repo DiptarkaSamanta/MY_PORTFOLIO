@@ -1774,3 +1774,106 @@ body {
   color: var(--clock-text);
   transition: color 0.5s ease;
 }
+
+/* ----------------------------------------------------
+   Illuminated 4-Blade Spinning Swirl Clock Mechanism
+   ---------------------------------------------------- */
+.clock-swirl-wrapper {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+.dish-housing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #f8f5f0 0%, #ebe3db 55%, #d4c7bc 85%, #bcaea2 100%);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(255, 175, 55, 0.3),
+    inset 0 4px 14px rgba(255, 255, 255, 0.95),
+    inset 0 -10px 25px rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.dish-housing:hover {
+  transform: scale(1.03);
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.75),
+    0 0 55px rgba(255, 185, 65, 0.45),
+    inset 0 4px 16px rgba(255, 255, 255, 0.95),
+    inset 0 -10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.dish-housing:active {
+  transform: scale(0.97);
+}
+
+.warm-backlight-halo {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 185, 65, 0.95) 0%, rgba(255, 140, 30, 0.6) 45%, rgba(255, 90, 10, 0.18) 70%, transparent 85%);
+  filter: blur(14px);
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.swirl-rotor-container {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  animation: spinSwirlRotor 10s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes spinSwirlRotor {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinSwirlReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.dish-housing.pulsing .warm-backlight-halo {
+  animation: pulseGlow 0.6s ease-out;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.4); opacity: 1; filter: blur(22px); }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Mini Clock Swirl View Toggle Styling */
+.mini-swirl-clock-view {
+  display: none;
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.mini-clock-section.clock-style-swirl .mini-swirl-clock-view {
+  display: flex;
+}
+
+.mini-clock-section.clock-style-swirl .circle,
+.mini-clock-section.clock-style-swirl .mini-clk {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}

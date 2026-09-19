@@ -1598,7 +1598,17 @@ function fetchSunriseSunset(lat, lng) {
     });
 }
 
-// Clock Interactive Actions (Independent Theme Toggle)
+// Clock Interactive Actions (Independent Theme Toggle & Style Toggle)
+function toggleClockStyle(e) {
+  if (e) e.stopPropagation();
+  const section = document.querySelector('.mini-clock-section');
+  if (section) {
+    section.classList.toggle('clock-style-swirl');
+    const isSwirl = section.classList.contains('clock-style-swirl');
+    localStorage.setItem('clockStyleSwirl', isSwirl ? 'true' : 'false');
+  }
+}
+
 function toggleClockTheme(e) {
   if (e) e.stopPropagation();
   const wrapper = document.getElementById('miniClockWrapper');

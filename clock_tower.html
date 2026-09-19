@@ -6,6 +6,258 @@
   <title>Chronos Clock Tower - Work Experience</title>
   <link class="sheet" rel="stylesheet" href="subpage.css">
   <style>
+    /* Hero Swirl Clock Engine Card */
+    .hero-clock-card {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 36px;
+      align-items: center;
+      padding: 32px;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (max-width: 850px) {
+      .hero-clock-card {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+        padding: 24px;
+      }
+    }
+
+    /* Outer illuminated dish container matching the reference design */
+    .clock-swirl-wrapper {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .dish-housing {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #f8f5f0 0%, #ebe3db 55%, #d4c7bc 85%, #bcaea2 100%);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.65),
+        0 0 45px rgba(255, 175, 55, 0.3),
+        inset 0 4px 14px rgba(255, 255, 255, 0.95),
+        inset 0 -10px 25px rgba(0, 0, 0, 0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    }
+    .dish-housing:hover {
+      transform: scale(1.03);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.75),
+        0 0 55px rgba(255, 185, 65, 0.45),
+        inset 0 4px 16px rgba(255, 255, 255, 0.95),
+        inset 0 -10px 25px rgba(0, 0, 0, 0.4);
+    }
+    .dish-housing:active {
+      transform: scale(0.97);
+    }
+
+    /* Ambient Warm Backlight Glow inside dish */
+    .warm-backlight-halo {
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 185, 65, 0.95) 0%, rgba(255, 140, 30, 0.6) 45%, rgba(255, 90, 10, 0.18) 70%, transparent 85%);
+      filter: blur(14px);
+      z-index: 1;
+      pointer-events: none;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    /* The Spinning Swirl Rotor */
+    .swirl-rotor-container {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      animation: spinSwirlRotor 10s linear infinite;
+      transform-origin: center center;
+      transition: animation-duration 0.3s ease;
+    }
+
+    @keyframes spinSwirlRotor {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinSwirlReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    /* Pulse effect on click */
+    .dish-housing.pulsing .warm-backlight-halo {
+      animation: pulseGlow 0.6s ease-out;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.4); opacity: 1; filter: blur(22px); }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
+
+    /* Live Clock Hands Layer */
+    .clock-hands-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      display: none;
+    }
+    .clock-hands-overlay.active {
+      display: block;
+    }
+
+    .hand-line {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      border-radius: 4px;
+    }
+    .hand-line.hour {
+      width: 6px;
+      height: 55px;
+      margin-left: -3px;
+      background: #1e293b;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      z-index: 3;
+    }
+    .hand-line.minute {
+      width: 4px;
+      height: 80px;
+      margin-left: -2px;
+      background: #334155;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      z-index: 4;
+    }
+    .hand-line.second {
+      width: 2px;
+      height: 94px;
+      margin-left: -1px;
+      background: #ef4444;
+      z-index: 5;
+    }
+    .hand-cap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      margin-top: -7px;
+      margin-left: -7px;
+      background: #ef4444;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      z-index: 6;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    /* Hero Text & Controls Panel */
+    .hero-clock-info {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: var(--accent-color);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .hero-clock-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-clock-desc {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Controls Bar */
+    .clock-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .control-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .control-pill:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .control-pill.active {
+      background: var(--accent-color);
+      color: #030712;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .live-time-display {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin-top: 2px;
+    }
+
+    /* Timeline styles */
     .timeline {
       position: relative;
       padding-left: 40px;
@@ -38,6 +290,13 @@
       align-items: center;
       font-size: 0.95rem;
       z-index: 2;
+      transition: all 0.3s ease;
+    }
+    .experience-card:hover + .timeline-dot,
+    .experience-card.active ~ .timeline-dot {
+      transform: scale(1.15);
+      border-color: #fbbc05;
+      box-shadow: 0 0 18px rgba(251, 188, 5, 0.6);
     }
     .experience-card {
       padding: 24px;
@@ -83,7 +342,7 @@
       padding-top: 0;
     }
     .experience-card.active .drawer-content {
-      max-height: 200px;
+      max-height: 220px;
       margin-top: 16px;
       border-top-color: rgba(255,255,255,0.06);
       padding-top: 16px;
@@ -95,6 +354,8 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      padding-left: 0;
+      margin: 0;
     }
     .drawer-list li::before {
       content: '⚡';
@@ -369,6 +630,52 @@
       <h1 class="page-title">Chronos Clock Tower</h1>
     </header>
 
+    <!-- Hero Showcase Section featuring the 4-Blade Spinning Swirl Clock -->
+    <div class="hero-clock-card glass-panel">
+      <!-- 4-Blade Swirl Clock Display Dish -->
+      <div class="clock-swirl-wrapper">
+        <div class="dish-housing" id="dishHousing" title="Click to pulse Chronos Energy" onclick="triggerClockPulse()">
+          <div class="warm-backlight-halo"></div>
+          
+          <div class="swirl-rotor-container" id="swirlRotor">
+            <img src="images/spin.png" alt="Chronos Swirl Emblem" class="swirl-spin-image" style="width:100%; height:100%; object-fit:contain; border-radius:50%; filter:drop-shadow(0 8px 25px rgba(0,0,0,0.45)); display:block; user-select:none; pointer-events:none;">
+          </div>
+
+          <!-- Live Clock Hands Overlay Layer -->
+          <div class="clock-hands-overlay" id="clockHandsOverlay">
+            <div class="hand-line hour" id="chronosHourHand"></div>
+            <div class="hand-line minute" id="chronosMinHand"></div>
+            <div class="hand-line second" id="chronosSecHand"></div>
+            <div class="hand-cap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Details & Controls Panel -->
+      <div class="hero-clock-info">
+        <div class="hero-badge">⚡ CHRONOS ENGINE ACTIVE</div>
+        <h2 class="hero-clock-title">Illuminated Swirl Rotor Clock</h2>
+        <p class="hero-clock-desc">
+          Powered by the 4-quadrant chromatic rotor emblem (Red, Green, Yellow, Blue). Click the clock face to release a pulse wave, or use the controls below to adjust spin speed, direction, and live clock hands.
+        </p>
+
+        <div class="live-time-display">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span id="heroLiveTime">--:--:-- --</span>
+        </div>
+
+        <div class="clock-controls-bar">
+          <button class="control-pill" onclick="setRotorSpeed(0.5, this)">0.5x Slow</button>
+          <button class="control-pill active" onclick="setRotorSpeed(1, this)">1x Normal</button>
+          <button class="control-pill" onclick="setRotorSpeed(2.5, this)">2.5x Fast</button>
+          <button class="control-pill" onclick="setRotorSpeed(6, this)">6x Warp</button>
+          <button class="control-pill" onclick="toggleRotorPause(this)">⏸ Pause</button>
+          <button class="control-pill" onclick="toggleRotorDirection(this)">🔄 Reverse</button>
+          <button class="control-pill" onclick="toggleClockHands(this)">🕒 Toggle Hands</button>
+        </div>
+      </div>
+    </div>
+
     <div class="content-grid" style="grid-template-columns: 1fr;">
       <section class="glass-panel" style="padding: 30px;">
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.5;">
@@ -380,7 +687,7 @@
           <!-- Job 1 -->
           <div class="timeline-item">
             <div class="timeline-dot">⚙️</div>
-            <div class="experience-card glass-panel" onclick="toggleDrawer(this)">
+            <div class="experience-card glass-panel" onclick="toggleDrawer(this, 'red')">
               <div class="card-meta">
                 <div>
                   <h3 class="role-title">Lead Frontend Architect</h3>
@@ -408,7 +715,7 @@
           <!-- Job 2 -->
           <div class="timeline-item">
             <div class="timeline-dot">⚙️</div>
-            <div class="experience-card glass-panel" onclick="toggleDrawer(this)">
+            <div class="experience-card glass-panel" onclick="toggleDrawer(this, 'green')">
               <div class="card-meta">
                 <div>
                   <h3 class="role-title">Senior Full Stack Engineer</h3>
@@ -436,7 +743,7 @@
           <!-- Job 3 -->
           <div class="timeline-item">
             <div class="timeline-dot">⚙️</div>
-            <div class="experience-card glass-panel" onclick="toggleDrawer(this)">
+            <div class="experience-card glass-panel" onclick="toggleDrawer(this, 'yellow')">
               <div class="card-meta">
                 <div>
                   <h3 class="role-title">Software Developer</h3>
@@ -467,7 +774,71 @@
   </div>
 
   <script>
-    function toggleDrawer(card) {
+    let isRotorPaused = false;
+    let isRotorReversed = false;
+    let baseSpeedDuration = 10; // seconds per rev
+
+    function setRotorSpeed(factor, btn) {
+      document.querySelectorAll('.clock-controls-bar .control-pill').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const rotor = document.getElementById('swirlRotor');
+      if (rotor) {
+        rotor.style.animationPlayState = 'running';
+        baseSpeedDuration = 10 / factor;
+        rotor.style.animationDuration = baseSpeedDuration + 's';
+      }
+      isRotorPaused = false;
+    }
+
+    function toggleRotorPause(btn) {
+      const rotor = document.getElementById('swirlRotor');
+      if (!rotor) return;
+
+      isRotorPaused = !isRotorPaused;
+      if (isRotorPaused) {
+        rotor.style.animationPlayState = 'paused';
+        btn.textContent = '▶ Spin';
+        btn.classList.add('active');
+      } else {
+        rotor.style.animationPlayState = 'running';
+        btn.textContent = '⏸ Pause';
+        btn.classList.remove('active');
+      }
+    }
+
+    function toggleRotorDirection(btn) {
+      const rotor = document.getElementById('swirlRotor');
+      if (!rotor) return;
+
+      isRotorReversed = !isRotorReversed;
+      if (isRotorReversed) {
+        rotor.style.animationName = 'spinSwirlReverse';
+        btn.classList.add('active');
+      } else {
+        rotor.style.animationName = 'spinSwirlRotor';
+        btn.classList.remove('active');
+      }
+    }
+
+    function toggleClockHands(btn) {
+      const hands = document.getElementById('clockHandsOverlay');
+      if (!hands) return;
+
+      hands.classList.toggle('active');
+      btn.classList.toggle('active');
+    }
+
+    function triggerClockPulse() {
+      const dish = document.getElementById('dishHousing');
+      if (!dish) return;
+
+      dish.classList.remove('pulsing');
+      void dish.offsetWidth; // trigger reflow
+      dish.classList.add('pulsing');
+    }
+
+    function toggleDrawer(card, colorTheme) {
       const isActive = card.classList.contains('active');
       
       // Close all drawers
@@ -478,8 +849,51 @@
       // Toggle clicked
       if (!isActive) {
         card.classList.add('active');
+        triggerClockPulse();
+
+        // Speed up spin temporarily when interacting with timeline
+        const rotor = document.getElementById('swirlRotor');
+        if (rotor && !isRotorPaused) {
+          rotor.style.animationDuration = '2s';
+          setTimeout(() => {
+            if (rotor) rotor.style.animationDuration = baseSpeedDuration + 's';
+          }, 2000);
+        }
       }
     }
+
+    // Live clock update loop for Chronos Hands & Digital Badge
+    function updateChronosLiveTime() {
+      const now = new Date();
+      const heroTime = document.getElementById('heroLiveTime');
+      if (heroTime) {
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        const hStr = hours < 10 ? '0' + hours : hours;
+        const mStr = minutes < 10 ? '0' + minutes : minutes;
+        const sStr = seconds < 10 ? '0' + seconds : seconds;
+        heroTime.textContent = `${hStr}:${mStr}:${sStr} ${ampm}`;
+      }
+
+      // Hands angles
+      const sec = now.getSeconds() + now.getMilliseconds() / 1000;
+      const min = now.getMinutes() + sec / 60;
+      const hr = (now.getHours() % 12) + min / 60;
+
+      const secHand = document.getElementById('chronosSecHand');
+      const minHand = document.getElementById('chronosMinHand');
+      const hourHand = document.getElementById('chronosHourHand');
+
+      if (secHand) secHand.style.transform = `rotate(${sec * 6}deg)`;
+      if (minHand) minHand.style.transform = `rotate(${min * 6}deg)`;
+      if (hourHand) hourHand.style.transform = `rotate(${hr * 30}deg)`;
+
+      requestAnimationFrame(updateChronosLiveTime);
+    }
+    updateChronosLiveTime();
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
 </body>

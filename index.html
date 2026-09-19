@@ -195,11 +195,65 @@
       <div class="compass-pointer" id="compassPointer"></div>
     </div>
 
-    <!-- Neumorphic Analog Clock -->
+    <!-- Neumorphic & Swirl Emblem Clock -->
     <div class="mini-clock-box-wrapper" id="miniClockWrapper">
-      <section class="mini-clock-section">
+      <section class="mini-clock-section clock-style-swirl">
+        <!-- SVG Definitions for Glossy 3D Swirl Emblem -->
+        <svg style="display: none;">
+          <defs>
+            <filter id="swirlBladeShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.4"/>
+            </filter>
+            <linearGradient id="glossHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75"/>
+              <stop offset="45%" stop-color="#ffffff" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="swirlRedGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ff3b30"/>
+              <stop offset="45%" stop-color="#e00000"/>
+              <stop offset="85%" stop-color="#a60000"/>
+              <stop offset="100%" stop-color="#6e0000"/>
+            </radialGradient>
+            <radialGradient id="swirlGreenGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#28cd41"/>
+              <stop offset="45%" stop-color="#00a313"/>
+              <stop offset="85%" stop-color="#00750c"/>
+              <stop offset="100%" stop-color="#004d07"/>
+            </radialGradient>
+            <radialGradient id="swirlYellowGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ffcc00"/>
+              <stop offset="45%" stop-color="#ff9500"/>
+              <stop offset="85%" stop-color="#e67e00"/>
+              <stop offset="100%" stop-color="#b35900"/>
+            </radialGradient>
+            <radialGradient id="swirlBlueGrad" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#007aff"/>
+              <stop offset="45%" stop-color="#0056d6"/>
+              <stop offset="85%" stop-color="#003db3"/>
+              <stop offset="100%" stop-color="#002880"/>
+            </radialGradient>
+            <g id="masterSwirlBlade">
+              <path d="M 200 200
+                       C 188 152, 148 108, 108 112
+                       C 60 116, 58 178, 114 198
+                       C 152 212, 186 206, 200 200 Z"
+                    filter="url(#swirlBladeShadow)"/>
+              <path d="M 194 196
+                       C 183 154, 146 114, 112 116
+                       C 80 118, 72 150, 105 165
+                       C 142 178, 180 188, 194 196 Z"
+                    fill="url(#glossHighlight)"/>
+              <circle cx="108" cy="154" r="7.5" fill="#ffffff" filter="drop-shadow(0 1px 3px rgba(0,0,0,0.35))"/>
+            </g>
+          </defs>
+        </svg>
+
         <!-- Action buttons row -->
-        <div class="clock-action-row" style="display: flex; justify-content: flex-end; align-items: center; width: 100%; margin-bottom: 6px; padding-right: 4px;">
+        <div class="clock-action-row" style="display: flex; justify-content: flex-end; align-items: center; width: 100%; margin-bottom: 6px; padding-right: 4px; gap: 6px;">
+          <button class="clock-action-btn style-toggle" onclick="toggleClockStyle(event)" title="Toggle 4-Color Swirl Emblem / Ring Mode">
+            <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+          </button>
           <button class="clock-action-btn theme-toggle" onclick="toggleClockTheme(event)" title="Toggle Day/Night Theme">
             <svg class="sun-icon" viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
             <svg class="moon-icon" viewBox="0 0 24 24" style="width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
@@ -207,6 +261,17 @@
         </div>
 
         <div id="time">
+            <!-- 4-Color Swirl Rotor View -->
+            <div class="mini-swirl-clock-view">
+              <div class="dish-housing" style="width: 195px; height: 195px;">
+                <div class="warm-backlight-halo" style="width: 140px; height: 140px;"></div>
+                <div class="swirl-rotor-container">
+                  <img src="images/spin.png" alt="Chronos Swirl Emblem" style="width:100%; height:100%; object-fit:contain; border-radius:50%; filter:drop-shadow(0 6px 18px rgba(0,0,0,0.45)); display:block; user-select:none; pointer-events:none;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Neumorphic Ring View -->
             <div class="circle circle_s" style="width: 190px; height: 190px;">
                 <div class="dots sec_dot"></div>
                 <svg width="190" height="190">
