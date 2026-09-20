@@ -1401,6 +1401,13 @@ function initToolbox() {
   const savedClockTheme = localStorage.getItem('clockTheme') || 'light';
   setClockTheme(savedClockTheme);
 
+  // Ensure clockStyleSwirl legacy state is cleared so mini clock stays in original mode
+  localStorage.removeItem('clockStyleSwirl');
+  const miniSection = document.querySelector('.mini-clock-section');
+  if (miniSection) {
+    miniSection.classList.remove('clock-style-swirl');
+  }
+
   // Staggered alignments to center compass and clock after animations/loader fade out
   if (typeof alignClockAndCompass === 'function') {
     alignClockAndCompass();
@@ -1598,17 +1605,7 @@ function fetchSunriseSunset(lat, lng) {
     });
 }
 
-// Clock Interactive Actions (Independent Theme Toggle & Style Toggle)
-function toggleClockStyle(e) {
-  if (e) e.stopPropagation();
-  const section = document.querySelector('.mini-clock-section');
-  if (section) {
-    section.classList.toggle('clock-style-swirl');
-    const isSwirl = section.classList.contains('clock-style-swirl');
-    localStorage.setItem('clockStyleSwirl', isSwirl ? 'true' : 'false');
-  }
-}
-
+// Clock Interactive Actions (Independent Theme Toggle)
 function toggleClockTheme(e) {
   if (e) e.stopPropagation();
   const wrapper = document.getElementById('miniClockWrapper');
