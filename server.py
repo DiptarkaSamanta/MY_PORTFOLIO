@@ -15,6 +15,103 @@ class CustomHTTPRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
+    def do_GET(self):
+        if self.path.startswith('/api/leetcode'):
+            try:
+                from urllib.parse import urlparse, parse_qs
+                import urllib.request
+                import json
+
+                parsed_url = urlparse(self.path)
+                params = parse_qs(parsed_url.query)
+                username = params.get('username', ['DiptarkaSamanta'])[0]
+
+                # Fetch directly from LeetCode GraphQL for authentic real-time calendar data
+                graphql_url = "https://leetcode.com/graphql"
+                query = """
+                query getUserProfile($username: String!) {
+                  matchedUser(username: $username) {
+                    username
+                    submitStats: submitStatsGlobal {
+                      acSubmissionNum {
+                        difficulty
+                        count
+                      }
+                    }
+                    userCalendar {
+                      streak
+                      totalActiveDays
+                      submissionCalendar
+                    }
+                    profile {
+                      ranking
+                      reputation
+                    }
+                  }
+                  userContestRanking(username: $username) {
+                    rating
+                    globalRanking
+                  }
+                }
+                """
+                req_data = json.dumps({
+                    "query": query,
+                    "variables": {"username": username}
+                }).encode('utf-8')
+
+                req = urllib.request.Request(
+                    graphql_url,
+                    data=req_data,
+                    headers={
+                        "Content-Type": "application/json",
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                    },
+                    method="POST"
+                )
+
+                response = urllib.request.urlopen(req, timeout=8)
+                data = json.loads(response.read().decode('utf-8'))
+
+                # Enrich data with calculated total submissions
+                if data and "data" in data and data["data"].get("matchedUser"):
+                    user_cal = data["data"]["matchedUser"].get("userCalendar", {})
+                    cal_str = user_cal.get("submissionCalendar", "{}")
+                    try:
+                        cal_dict = json.loads(cal_str)
+                        total_subs = sum(cal_dict.values())
+                        data["data"]["matchedUser"]["userCalendar"]["totalSubmissions"] = total_subs
+                    except Exception:
+                        pass
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps(data).encode('utf-8'))
+                return
+            except Exception as e:
+                # Fallback to public API if GraphQL fails
+                try:
+                    fallback_url = f"https://leetcode-stats-api.herokuapp.com/{username}"
+                    req = urllib.request.Request(fallback_url, headers={"User-Agent": "Mozilla/5.0"})
+                    resp = urllib.request.urlopen(req, timeout=5)
+                    data_bytes = resp.read()
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    self.wfile.write(data_bytes)
+                    return
+                except Exception:
+                    self.send_response(500)
+                    self.send_header('Content-Type', 'application/json')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.end_headers()
+                    import json
+                    self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
+        else:
+            super().do_GET()
+
     def do_POST(self):
         print(f"do_POST received path: {self.path}", flush=True)
         if self.path == '/upload':
