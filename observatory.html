@@ -237,7 +237,7 @@
     }
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
       gap: 24px;
     }
     .project-card {
@@ -248,7 +248,7 @@
       transition: all 0.3s;
     }
     .project-thumbnail {
-      height: 140px;
+      height: 120px;
       border-radius: 10px;
       background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08));
       display: flex;
@@ -259,38 +259,38 @@
     }
     .project-tags {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
     .tag {
       font-family: var(--font-mono);
       font-size: 0.65rem;
-      padding: 4px 8px;
+      padding: 3px 7px;
       border-radius: 4px;
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.08);
       color: var(--text-secondary);
     }
     .project-title {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--text-primary);
     }
     .project-desc {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.45;
       flex: 1;
     }
     .project-actions {
       display: flex;
-      gap: 12px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 6px;
     }
     .action-link {
       flex: 1;
-      padding: 8px;
-      font-size: 0.75rem;
+      padding: 8px 6px;
+      font-size: 0.73rem;
       font-weight: 600;
       text-align: center;
       text-decoration: none;
@@ -315,9 +315,137 @@
       background: rgba(255,255,255,0.12);
     }
 
+    /* Horizontal Scroll & 3D Card Flip System */
+    .planet-scroll-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .planet-scroll-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .scroll-nav-btns {
+      display: flex;
+      gap: 8px;
+    }
+    .scroll-nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .scroll-nav-btn:hover {
+      background: rgba(14, 165, 233, 0.25);
+      border-color: #38bdf8;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .planet-scroll-container {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 12px 6px 28px 6px;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(56, 189, 248, 0.4) rgba(3, 7, 18, 0.4);
+    }
+    .planet-scroll-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .planet-scroll-container::-webkit-scrollbar-track {
+      background: rgba(3, 7, 18, 0.5);
+      border-radius: 10px;
+    }
+    .planet-scroll-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
+      border-radius: 10px;
+    }
+
+    /* 3D Flip Card Container */
+    .flip-card-wrapper {
+      perspective: 1000px;
+      flex: 0 0 350px;
+      height: 520px;
+      scroll-snap-align: start;
+      user-select: none;
+      cursor: pointer;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: 16px;
+    }
+    .flip-card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      background: rgba(3, 7, 18, 0.95) !important;
+    }
+
+    .flip-hint-badge {
+      font-size: 0.68rem;
+      color: #38bdf8;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px dashed rgba(56, 189, 248, 0.35);
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-top: 4px;
+      transition: all 0.2s;
+    }
+    .flip-card-wrapper:hover .flip-hint-badge {
+      background: rgba(14, 165, 233, 0.25);
+      border-color: #38bdf8;
+      color: #fff;
+    }
+
     @media (max-width: 768px) {
-      .project-grid {
-        grid-template-columns: 1fr;
+      .flip-card-wrapper {
+        flex: 0 0 310px;
+        height: 540px;
       }
     }
   </style>
@@ -571,16 +699,16 @@
     </header>
 
     <div class="filter-tabs">
-      <button class="filter-btn active" onclick="filterProjects('all')">All Works</button>
-      <button class="filter-btn" onclick="filterProjects('app')">Web Apps</button>
-      <button class="filter-btn" onclick="filterProjects('visual')">Visual & Synth</button>
-      <button class="filter-btn" onclick="filterProjects('system')">Systems & DB</button>
+      <button class="filter-btn active" onclick="filterProjects('all')">🌌 All Celestial Worlds</button>
+      <button class="filter-btn" onclick="filterProjects('inner')">🪨 Inner Terrestrial Planets</button>
+      <button class="filter-btn" onclick="filterProjects('outer')">🪐 Outer Giants</button>
+      <button class="filter-btn" onclick="filterProjects('star')">☀️ Star & Kuiper Belt</button>
     </div>
 
     <div class="project-grid" id="projectGrid">
       
       <!-- Featured 3D Solar System Orrery -->
-      <article class="project-card glass-panel solar-hero-card" data-cat="visual">
+      <article class="project-card glass-panel solar-hero-card" data-cat="visual inner outer star all">
         <div class="solar-3d-wrapper">
           <!-- Interactive Clickable Planet Selector Ribbon -->
           <div class="planet-ribbon">
@@ -693,101 +821,532 @@
           </a>
         </div>
       </article>
+    </div>
 
-      <!-- Project 0: Scanimation Studio -->
-      <article class="project-card glass-panel" data-cat="app" style="border: 1px solid rgba(14, 165, 233, 0.35); box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);">
-        <div class="project-thumbnail" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.15)); font-size: 3rem;">🎞️</div>
-        <div class="project-tags">
-          <span class="tag" style="border-color: rgba(14, 165, 233, 0.4); color: #38bdf8;">React 19</span>
-          <span class="tag" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">Google Gemini AI</span>
-          <span class="tag">TypeScript</span>
-          <span class="tag">Vite</span>
-          <span class="tag">Express</span>
-        </div>
-        <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
-          <span>Scanimation Studio</span>
-          <span style="font-size: 0.65rem; background: #0ea5e9; color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 700;">LIVE APP</span>
-        </h3>
-        <p class="project-desc">
-          Bring static prints to life! An AI-powered, full-featured web application for creating, simulating, decoding, and printing physical Barrier-Grid (Kinegram) optical illusion animations.
-        </p>
-        <div class="project-actions">
-          <a href="https://scanimation.onrender.com" target="_blank" rel="noopener noreferrer" class="action-link link-primary" style="background: linear-gradient(135deg, #0ea5e9, #2563eb); font-weight: 700; color: #fff;">🚀 Launch App</a>
-          <a href="playground.html#scanimationBox" class="action-link link-secondary">🎮 Play Live Sandbox</a>
-        </div>
-      </article>
+    <!-- Horizontal Planet Cards Carousel Header -->
+    <div class="planet-scroll-header">
+      <div class="planet-scroll-title">
+        <span>🪐 Planetary Catalogue & Telemetry</span>
+        <span style="font-size: 0.72rem; color: #38bdf8; background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.3); padding: 3px 10px; border-radius: 12px; font-family: var(--font-mono);">Side-by-Side Scroll • 3D Click-to-Flip Cards</span>
+      </div>
+      <div class="scroll-nav-btns">
+        <button class="scroll-nav-btn" onclick="scrollPlanets('left')">◄ Scroll Left</button>
+        <button class="scroll-nav-btn" onclick="scrollPlanets('right')">Scroll Right ►</button>
+      </div>
+    </div>
 
-      <!-- Project 1 -->
-      <article class="project-card glass-panel" data-cat="app">
-        <div class="project-thumbnail">🖥️</div>
-        <div class="project-tags">
-          <span class="tag">React.js</span>
-          <span class="tag">Redux Toolkit</span>
-          <span class="tag">MongoDB</span>
+    <!-- Side-by-Side Horizontal Scroll Container -->
+    <div class="planet-scroll-container" id="planetScrollTrack">
+      
+      <!-- Card 1: The Sun -->
+      <div class="flip-card-wrapper project-card" data-cat="star visual" onclick="toggleCardFlip('cardInner-sun')">
+        <div class="flip-card-inner" id="cardInner-sun">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.35); box-shadow: 0 0 20px rgba(234, 179, 8, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, rgba(239, 68, 68, 0.1) 100%); font-size: 3.2rem; border: 1px solid rgba(234, 179, 8, 0.3);">☀️</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(234, 179, 8, 0.4); color: #fde047;">Yellow Dwarf (G2V)</span>
+              <span class="tag" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">Core: 15,000,000°C</span>
+              <span class="tag">Nuclear Fusion</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>The Sun (Sol)</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #eab308, #ef4444); color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 800;">SOLAR STAR</span>
+            </h3>
+            <p class="project-desc">
+              The central thermonuclear heart of our solar system converting 600 million tons of hydrogen into helium every second.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#fde047;">1.39M km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">0.00 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">~230M Yr</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.5); box-shadow: 0 0 25px rgba(234, 179, 8, 0.2);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #fde047;">☀️ Sol Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MASS</span><strong style="color:#eff2f6;">1.989 × 10³⁰ kg</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">SURFACE TEMP</span><strong style="color:#fde047;">5,500°C</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">CORE TEMP</span><strong style="color:#fca5a5;">15,000,000°C</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MASS SHARE</span><strong style="color:#38bdf8;">99.86% System</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Contains 99.86% of all solar mass. Drives cosmic magnetospheres and solar winds across space.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('sun');" class="action-link link-primary" style="background: linear-gradient(135deg, #eab308, #ca8a04); color: #030712; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/sun-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(234, 179, 8, 0.3); color: #fde047;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
         </div>
-        <h3 class="project-title">Helios Dashboard</h3>
-        <p class="project-desc">
-          A high-performance telemetry dashboard for managing smart grids, displaying real-time data flows, charge logs, and efficiency alerts.
-        </p>
-        <div class="project-actions">
-          <a href="#" class="action-link link-primary">Live Demo</a>
-          <a href="#" class="action-link link-secondary">View Repo</a>
-        </div>
-      </article>
+      </div>
 
-      <!-- Project 2 -->
-      <article class="project-card glass-panel" data-cat="visual">
-        <div class="project-thumbnail">🔊</div>
-        <div class="project-tags">
-          <span class="tag">Web Audio API</span>
-          <span class="tag">HTML5 Canvas</span>
-          <span class="tag">WebSockets</span>
+      <!-- Card 2: Mercury -->
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-mercury')">
+        <div class="flip-card-inner" id="cardInner-mercury">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(148, 163, 184, 0.25);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(148, 163, 184, 0.2) 0%, rgba(30, 41, 59, 0.3) 100%); font-size: 3.2rem; border: 1px solid rgba(148, 163, 184, 0.2);">☿️</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(148, 163, 184, 0.4); color: #cbd5e1;">Terrestrial World</span>
+              <span class="tag" style="border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">-180°C to 430°C</span>
+              <span class="tag">Iron Core: 85%</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Mercury</span>
+              <span style="font-size: 0.65rem; background: rgba(148, 163, 184, 0.2); border: 1px solid rgba(148, 163, 184, 0.4); color: #e2e8f0; padding: 3px 8px; border-radius: 12px; font-weight: 700;">INNER PLANET</span>
+            </h3>
+            <p class="project-desc">
+              Smallest planet and closest to the Sun. Features cratered iron-rich crust and extreme day/night temperature swings.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#e2e8f0;">4,879 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">0.39 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">88 Days</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(148, 163, 184, 0.4);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #cbd5e1;">☿ Mercury Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ORBITAL SPEED</span><strong style="color:#eff2f6;">47.4 km/s</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">IRON CORE</span><strong style="color:#cbd5e1;">85% Radius</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">SURFACE GRAVITY</span><strong style="color:#eff2f6;">3.7 m/s²</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ATMOSPHERE</span><strong style="color:#38bdf8;">Thin Exosphere</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Fastest orbiting world in the solar system. Home to Caloris Basin—an impact crater 1,550 km wide.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('mercury');" class="action-link link-primary" style="background: linear-gradient(135deg, #64748b, #475569); color: #fff; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/mercury-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
         </div>
-        <h3 class="project-title">Soundwave Synthesis</h3>
-        <p class="project-desc">
-          An interactive procedural sound synthesizer that transforms user mouse coordinates and velocity into ambient nature soundscapes and particle bursts.
-        </p>
-        <div class="project-actions">
-          <a href="#" class="action-link link-primary">Live Demo</a>
-          <a href="#" class="action-link link-secondary">View Repo</a>
-        </div>
-      </article>
+      </div>
 
-      <!-- Project 3 -->
-      <article class="project-card glass-panel" data-cat="system">
-        <div class="project-thumbnail">🗄️</div>
-        <div class="project-tags">
-          <span class="tag">Python</span>
-          <span class="tag">Redis Cache</span>
-          <span class="tag">Docker</span>
+      <!-- Card 3: Venus -->
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-venus')">
+        <div class="flip-card-inner" id="cardInner-venus">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(251, 146, 60, 0.35); box-shadow: 0 0 15px rgba(251, 146, 60, 0.1);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(251, 146, 60, 0.25) 0%, rgba(180, 83, 9, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(251, 146, 60, 0.3);">♀️</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(251, 146, 60, 0.4); color: #fdba74;">Terrestrial World</span>
+              <span class="tag" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">465°C Surface</span>
+              <span class="tag">Sulfuric Acid</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Venus</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #fb923c, #d97706); color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 800;">HOTTEST PLANET</span>
+            </h3>
+            <p class="project-desc">
+              Enveloped in dense toxic clouds of CO₂. Driven by runaway greenhouse effects hot enough to melt lead.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#fdba74;">12,104 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">0.72 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">225 Days</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(251, 146, 60, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #fdba74;">♀ Venus Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ATMOSPHERE PRESS</span><strong style="color:#fca5a5;">92 Bar (90x Earth)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ROTATION</span><strong style="color:#fdba74;">Retrograde (243d)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">VOLCANOES</span><strong style="color:#eff2f6;">1,600+ Major</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">CLOUD COVER</span><strong style="color:#38bdf8;">H₂SO₄ Acid Fog</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Rotates backwards on its axis, meaning the Sun rises in the west and sets in the east.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('venus');" class="action-link link-primary" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/venus-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(251, 146, 60, 0.3); color: #fdba74;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
         </div>
-        <h3 class="project-title">Chronos API Gateway</h3>
-        <p class="project-desc">
-          A microservice gateway handling load-balancing, access logs, and memory cache buffers. Tested to process 12,000 requests per minute under load.
-        </p>
-        <div class="project-actions">
-          <a href="#" class="action-link link-primary">Live Demo</a>
-          <a href="#" class="action-link link-secondary">View Repo</a>
-        </div>
-      </article>
+      </div>
 
-      <!-- Project 4 -->
-      <article class="project-card glass-panel" data-cat="app">
-        <div class="project-thumbnail">💼</div>
-        <div class="project-tags">
-          <span class="tag">Next.js</span>
-          <span class="tag">PostgreSQL</span>
-          <span class="tag">TailwindCSS</span>
+      <!-- Card 4: Earth -->
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-earth')">
+        <div class="flip-card-inner" id="cardInner-earth">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(14, 165, 233, 0.4); box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(34, 197, 94, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(14, 165, 233, 0.35);">🌍</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(14, 165, 233, 0.4); color: #38bdf8;">Ocean Biosphere</span>
+              <span class="tag" style="border-color: rgba(34, 197, 94, 0.4); color: #4ade80;">Active Life</span>
+              <span class="tag">Luna Satellite</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Earth & Luna</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #0ea5e9, #22c55e); color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 800;">HOME WORLD</span>
+            </h3>
+            <p class="project-desc">
+              Vibrant sanctuary world with stable surface liquid ocean waters, plate tectonics, and thriving life.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#38bdf8;">12,742 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">1.00 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">365.25d</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(14, 165, 233, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #38bdf8;">🌍 Earth & Luna Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">OCEAN COVER</span><strong style="color:#38bdf8;">70.8% Surface</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ATMOSPHERE</span><strong style="color:#4ade80;">N₂ 78% | O₂ 21%</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MOON DIA</span><strong style="color:#eff2f6;">3,474 km (Luna)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ORBITAL VEL</span><strong style="color:#eff2f6;">29.78 km/s</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Shielded by a dynamic geomagnetic field produced by outer liquid iron core convection.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('earth');" class="action-link link-primary" style="background: linear-gradient(135deg, #0ea5e9, #0284c7); color: #fff; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/earth-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(14, 165, 233, 0.3); color: #38bdf8;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
         </div>
-        <h3 class="project-title">TaskForge Engine</h3>
-        <p class="project-desc">
-          A collaborative planner workspace featuring drag-to-sort boards, task timelines, and automatic calendar syncing.
-        </p>
-        <div class="project-actions">
-          <a href="#" class="action-link link-primary">Live Demo</a>
-          <a href="#" class="action-link link-secondary">View Repo</a>
+      </div>
+
+      <!-- Card 5: Mars -->
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-mars')">
+        <div class="flip-card-inner" id="cardInner-mars">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(239, 68, 68, 0.35); box-shadow: 0 0 15px rgba(239, 68, 68, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, rgba(153, 27, 27, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(239, 68, 68, 0.3);">🔴</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">Terrestrial World</span>
+              <span class="tag" style="border-color: rgba(234, 179, 8, 0.3); color: #fde047;">Olympus Mons</span>
+              <span class="tag">Perseverance</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Mars</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; padding: 3px 8px; border-radius: 12px; font-weight: 800;">RED PLANET</span>
+            </h3>
+            <p class="project-desc">
+              Cold dusty iron-oxide world home to Olympus Mons volcano (3x Everest) and deep canyon networks.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#fca5a5;">6,779 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">1.52 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">687 Days</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(239, 68, 68, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #fca5a5;">🔴 Mars Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">OLYMPUS MONS</span><strong style="color:#fde047;">21.9 km High</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">CANYON LENGTH</span><strong style="color:#fca5a5;">4,000 km Valles</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MOONS</span><strong style="color:#eff2f6;">Phobos & Deimos</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">AVG TEMP</span><strong style="color:#38bdf8;">-63°C</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Target of active rover exploration (Perseverance & Curiosity) probing for past microbial biosignatures.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('mars');" class="action-link link-primary" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/mars-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
         </div>
-      </article>
+      </div>
+
+      <!-- Card 6: Jupiter -->
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-jupiter')">
+        <div class="flip-card-inner" id="cardInner-jupiter">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(245, 158, 11, 0.35); box-shadow: 0 0 15px rgba(245, 158, 11, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(180, 83, 9, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(245, 158, 11, 0.3);">♃</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(245, 158, 11, 0.4); color: #fbbf24;">Gas Giant</span>
+              <span class="tag" style="border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">Great Red Spot</span>
+              <span class="tag">95 Satellites</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Jupiter</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #f59e0b, #d97706); color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 800;">KING OF GIANTS</span>
+            </h3>
+            <p class="project-desc">
+              Massive gas giant with swirling atmospheric cloud belts, intense auroras, and giant Great Red Spot storm.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#fbbf24;">139,820 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">5.20 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">11.86 Yr</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(245, 158, 11, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #fbbf24;">♃ Jupiter Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">PLANET MASS</span><strong style="color:#eff2f6;">318 Earths</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">DAY LENGTH</span><strong style="color:#fbbf24;">9h 55m Fast Spin</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">GALILEAN MOONS</span><strong style="color:#38bdf8;">Io, Europa, Ganymede</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">RED SPOT DIA</span><strong style="color:#fca5a5;">16,350 km</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Has the strongest magnetic field of any planet, creating energetic aurora radiation belts.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('jupiter');" class="action-link link-primary" style="background: linear-gradient(135deg, #f59e0b, #b45309); color: #030712; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/jupiter-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(245, 158, 11, 0.3); color: #fbbf24;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7: Saturn -->
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-saturn')">
+        <div class="flip-card-inner" id="cardInner-saturn">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.35); box-shadow: 0 0 15px rgba(234, 179, 8, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, rgba(161, 98, 7, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(234, 179, 8, 0.3);">🪐</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(234, 179, 8, 0.4); color: #fde047;">Gas Giant</span>
+              <span class="tag" style="border-color: rgba(56, 189, 248, 0.3); color: #7dd3fc;">282k km Rings</span>
+              <span class="tag">Titan Seas</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Saturn</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #eab308, #ca8a04); color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 800;">RINGED JEWEL</span>
+            </h3>
+            <p class="project-desc">
+              Famous for its majestic ring system of water ice particles. Host to Titan & Enceladus ocean worlds.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#fde047;">116,460 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">9.58 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">29.45 Yr</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #fde047;">🪐 Saturn Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">DENSITY</span><strong style="color:#4ade80;">0.687 g/cm³ (Floats)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MOONS</span><strong style="color:#eff2f6;">146 Satellites</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">RING THICKNESS</span><strong style="color:#38bdf8;">~10 meters</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">NORTH STORM</span><strong style="color:#fde047;">Hexagonal Vortex</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Enceladus (moon) sprays liquid ocean geysers into orbit, forming Saturn's outer E-ring.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('saturn');" class="action-link link-primary" style="background: linear-gradient(135deg, #eab308, #a16207); color: #030712; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/saturn-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(234, 179, 8, 0.3); color: #fde047;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8: Uranus -->
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-uranus')">
+        <div class="flip-card-inner" id="cardInner-uranus">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(6, 182, 212, 0.35); box-shadow: 0 0 15px rgba(6, 182, 212, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, rgba(14, 116, 144, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(6, 182, 212, 0.3);">♅</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(6, 182, 212, 0.4); color: #67e8f9;">Ice Giant</span>
+              <span class="tag" style="border-color: rgba(168, 85, 247, 0.3); color: #c084fc;">98° Axial Tilt</span>
+              <span class="tag">Methane Cyan</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Uranus</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #06b6d4, #0891b2); color: #030712; padding: 3px 8px; border-radius: 12px; font-weight: 800;">TILTED ICE GIANT</span>
+            </h3>
+            <p class="project-desc">
+              Frigid ice giant knocked 98° on its side by an ancient cosmic collision, creating 42-year polar seasons.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#67e8f9;">50,724 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">19.22 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">84.01 Yr</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(6, 182, 212, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #67e8f9;">♅ Uranus Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">AXIAL TILT</span><strong style="color:#c084fc;">97.77° (Side Spin)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">LOWEST TEMP</span><strong style="color:#67e8f9;">-224°C</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MOONS</span><strong style="color:#eff2f6;">28 Satellites</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">FAINT RINGS</span><strong style="color:#38bdf8;">13 Dark Rings</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Atmospheric methane gas absorbs red light wavelengths, giving Uranus its icy cyan-blue appearance.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('uranus');" class="action-link link-primary" style="background: linear-gradient(135deg, #06b6d4, #0e7490); color: #030712; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/uranus-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(6, 182, 212, 0.3); color: #67e8f9;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 9: Neptune -->
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-neptune')">
+        <div class="flip-card-inner" id="cardInner-neptune">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(59, 130, 246, 0.35); box-shadow: 0 0 15px rgba(59, 130, 246, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(29, 78, 216, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(59, 130, 246, 0.3);">♆</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(59, 130, 246, 0.4); color: #93c5fd;">Ice Giant</span>
+              <span class="tag" style="border-color: rgba(14, 165, 233, 0.3); color: #38bdf8;">2,100 km/h Winds</span>
+              <span class="tag">Deep Azure</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Neptune</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #fff; padding: 3px 8px; border-radius: 12px; font-weight: 800;">SUPERSONIC WINDS</span>
+            </h3>
+            <p class="project-desc">
+              Outermost major planet with deep cobalt atmosphere driven by violent supersonic winds up to 2,100 km/h.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#93c5fd;">49,244 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">30.05 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">164.8 Yr</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(59, 130, 246, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #93c5fd;">♆ Neptune Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">WIND SPEEDS</span><strong style="color:#38bdf8;">2,100 km/h (Mach 1.7)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MOON TRITON</span><strong style="color:#93c5fd;">Retrograde Orbit</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">TRITON GEYSERS</span><strong style="color:#eff2f6;">8 km Nitrogen Ice</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">ATMOSPHERE</span><strong style="color:#38bdf8;">H₂, He, Methane</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Takes nearly 165 Earth years to complete one orbit around the Sun. Discovered via mathematical predictions in 1846.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('neptune');" class="action-link link-primary" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/neptune-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(59, 130, 246, 0.3); color: #93c5fd;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 10: Pluto -->
+      <div class="flip-card-wrapper project-card" data-cat="star visual" onclick="toggleCardFlip('cardInner-pluto')">
+        <div class="flip-card-inner" id="cardInner-pluto">
+          <!-- FRONT -->
+          <div class="flip-card-front glass-panel" style="border: 1px solid rgba(168, 85, 247, 0.35); box-shadow: 0 0 15px rgba(168, 85, 247, 0.12);">
+            <div class="project-thumbnail" style="background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(126, 34, 206, 0.15) 100%); font-size: 3.2rem; border: 1px solid rgba(168, 85, 247, 0.3);">🖤</div>
+            <div class="project-tags">
+              <span class="tag" style="border-color: rgba(168, 85, 247, 0.4); color: #c084fc;">Kuiper Belt Dwarf</span>
+              <span class="tag" style="border-color: rgba(236, 72, 153, 0.3); color: #f472b6;">Tombaugh Regio</span>
+              <span class="tag">Charon Binary</span>
+            </div>
+            <h3 class="project-title" style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Pluto</span>
+              <span style="font-size: 0.65rem; background: linear-gradient(135deg, #a855f7, #7e22ce); color: #fff; padding: 3px 8px; border-radius: 12px; font-weight: 800;">KUIPER WORLD</span>
+            </h3>
+            <p class="project-desc">
+              Dwarf planet in Kuiper Belt sporting Tombaugh Regio heart glacier and mutual orbit with moon Charon.
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; font-size: 0.7rem; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); font-family: var(--font-mono);">
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DIAMETER</span><strong style="color:#c084fc;">2,376 km</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">39.48 AU</strong></div>
+              <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">248 Yr</strong></div>
+            </div>
+            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+          </div>
+          <!-- BACK -->
+          <div class="flip-card-back glass-panel" style="border: 1px solid rgba(168, 85, 247, 0.5);">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 10px;">
+                <span style="font-size: 1.1rem; font-weight: 700; color: #c084fc;">🖤 Pluto Telemetry</span>
+                <span style="font-size: 0.65rem; color: #8a8a8a; font-family: var(--font-mono);">↩ FLIP</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.72rem; margin-bottom: 10px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">HEART GLACIER</span><strong style="color:#f472b6;">Tombaugh Regio</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">MOON CHARON</span><strong style="color:#c084fc;">1,212 km (Binary)</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">SATELLITES</span><strong style="color:#eff2f6;">5 Moons</strong></div>
+                <div style="background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 6px;"><span style="color:#8a8a8a; display:block; font-size:0.6rem;">SURFACE ICE</span><strong style="color:#38bdf8;">Nitrogen & CH₄</strong></div>
+              </div>
+              <p style="font-size: 0.75rem; color: #cbd5e1; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-bottom: 10px;">
+                Pluto and Charon are tidally locked, meaning they always show the exact same face to each other.
+              </p>
+            </div>
+            <div class="project-actions">
+              <button onclick="event.stopPropagation(); inspectPlanetInOrrery('pluto');" class="action-link link-primary" style="background: linear-gradient(135deg, #9333ea, #6b21a8); color: #fff; font-weight: 700; border: none;">🪐 Target Orrery</button>
+              <a href="https://theskylive.com/pluto-info" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="action-link link-secondary" style="border-color: rgba(168, 85, 247, 0.3); color: #c084fc;">🔭 Live Data</a>
+            </div>
+            <div class="flip-hint-badge">↩ Click anywhere to flip back</div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -974,23 +1533,45 @@
       }
     }
 
+    function toggleCardFlip(cardId) {
+      const cardInner = document.getElementById(cardId);
+      if (cardInner) {
+        cardInner.classList.toggle('flipped');
+      }
+    }
+
+    function scrollPlanets(direction) {
+      const container = document.getElementById('planetScrollTrack');
+      if (container) {
+        const scrollAmount = direction === 'left' ? -370 : 370;
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+
+    function inspectPlanetInOrrery(key) {
+      focusPlanet(key);
+      const viewer = document.getElementById('solarViewer');
+      if (viewer) {
+        viewer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
     function filterProjects(category) {
       // Toggle active buttons
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      event.target.classList.add('active');
+      if (event && (event.currentTarget || event.target)) {
+        (event.currentTarget || event.target).classList.add('active');
+      }
 
       // Filter cards
       document.querySelectorAll('.project-card').forEach(card => {
-        if (category === 'all') {
+        const catAttr = card.getAttribute('data-cat') || '';
+        if (category === 'all' || catAttr.includes(category)) {
           card.style.display = 'flex';
         } else {
-          if (card.getAttribute('data-cat') === category) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
+          card.style.display = 'none';
         }
       });
     }
