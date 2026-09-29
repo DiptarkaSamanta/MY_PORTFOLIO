@@ -880,44 +880,51 @@
       </section>
     </div>
 
-    <!-- Exact LeetCode Profile Submission Calendar Card with Auto-Slithering Snake -->
-    <div style="background: #1a1a1a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 22px 24px; margin-top: 24px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+    <!-- 100% Pixel-Perfect Official LeetCode Profile Card -->
+    <div id="leetcodeProfileCard" style="background: #1a1a1a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 20px 24px; margin-top: 24px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
       
-      <!-- Card Header Bar -->
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
-        <!-- Left: Card Title -->
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span style="font-size: 1.1rem; font-weight: 700; color: #eff2f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-            🐍 Contribution Graph Snake
-          </span>
-          <span style="font-size: 0.75rem; color: #c084fc; font-family: var(--font-mono); background: rgba(168,85,247,0.15); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(168,85,247,0.3);">
-            LeetCode Profile (@DiptarkaSamanta)
-          </span>
+      <!-- Top Stat Header Bar (Matching LeetCode UI) -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 14px;">
+        
+        <!-- Left Side: Submissions & Active Days -->
+        <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: baseline; gap: 6px;">
+            <span id="lcTotalSubmissions" style="font-size: 1.25rem; font-weight: 700; color: #eff2f6;">480</span>
+            <span style="font-size: 0.82rem; color: #8a8a8a; font-weight: 500;">submissions in the last year</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 0.78rem; color: #b3b3b3;">
+            <span>Total active days: <strong id="lcActiveDays" style="color: #eff2f6;">290</strong></span>
+            <span style="color: rgba(255,255,255,0.15);">|</span>
+            <span>Max streak: <strong id="lcMaxStreak" style="color: #eff2f6;">85</strong></span>
+          </div>
         </div>
 
-        <!-- Right: Control Buttons -->
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <!-- Reset Board Button -->
-          <button onclick="resetFullSnakeBoard()" class="snake-action-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); color: #eff2f6; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s;">
-            🔄 Reset Board
-          </button>
+        <!-- Right Side: Solved Difficulty Pills & Controls -->
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <!-- Easy / Medium / Hard Solved Pill -->
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.06);">
+            <span style="color: #00b8a3; font-weight: 600;">Easy <span id="lcEasyCount">241</span></span>
+            <span style="color: rgba(255,255,255,0.2);">•</span>
+            <span style="color: #ffc01e; font-weight: 600;">Med <span id="lcMedCount">190</span></span>
+            <span style="color: rgba(255,255,255,0.2);">•</span>
+            <span style="color: #ff375f; font-weight: 600;">Hard <span id="lcHardCount">49</span></span>
+          </div>
 
-          <!-- Auto-Pilot Toggle Button -->
-          <button onclick="toggleFullSnakeAuto()" class="snake-action-btn" style="background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); color: #c084fc; padding: 5px 12px; font-size: 0.75rem; border-radius: 6px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s;">
-            <span id="fullSnakeAutoBtnText">🤖 Auto-Pilot: ON</span>
-          </button>
+          <!-- Snake Controls -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button onclick="toggleFullSnakeAuto()" id="fullSnakeAutoBtn" style="background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.4); color: #c084fc; padding: 5px 12px; font-size: 0.75rem; border-radius: 6px; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s;">
+              <span id="fullSnakeAutoBtnText">🤖 Auto-Pilot: ON</span>
+            </button>
+            <button onclick="resetFullSnakeBoard()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); color: #eff2f6; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-mono); cursor: pointer; transition: all 0.2s;">
+              🔄 Reset Board
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Long & Wide LeetCode Canvas Container -->
+      <!-- LeetCode Submission Canvas Container -->
       <div style="width: 100%; background: #1a1a1a; border-radius: 10px; overflow-x: auto; box-sizing: border-box; display: flex; justify-content: center; padding: 4px 0;">
-        <canvas id="fullContributionSnakeCanvas" width="980" height="165" style="display: block; max-width: 100%; height: auto;"></canvas>
-      </div>
-
-      <!-- LeetCode Footer Status Bar -->
-      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; font-family: var(--font-mono); color: #8a8a8a; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
-        <span id="fullSnakeStatusText" style="color: #c084fc;">🐍 Purple Snake auto-navigating LeetCode profile submissions. Eating green submission tiles converts them into empty blocks.</span>
-        <span>Controls: WASD / Arrow Keys</span>
+        <canvas id="fullContributionSnakeCanvas" width="980" height="160" style="display: block; max-width: 100%; height: auto;"></canvas>
       </div>
     </div>
 
@@ -2341,10 +2348,38 @@ System Diagnostics:
           let calendarStr = null;
 
           if (data && data.data && data.data.matchedUser) {
-            const userCal = data.data.matchedUser.userCalendar;
-            if (userCal && userCal.submissionCalendar) {
+            const mu = data.data.matchedUser;
+            const userCal = mu.userCalendar || {};
+            const stats = mu.submitStats ? mu.submitStats.acSubmissionNum || [] : [];
+            if (userCal.submissionCalendar) {
               calendarStr = userCal.submissionCalendar;
             }
+
+            // Dynamically populate 1:1 LeetCode header stats
+            const totalSubs = userCal.totalSubmissions || 480;
+            const activeDays = userCal.totalActiveDays || 290;
+            const streak = userCal.streak || 85;
+
+            let easyCount = 241, medCount = 190, hardCount = 49;
+            stats.forEach(s => {
+              if (s.difficulty === 'Easy') easyCount = s.count;
+              else if (s.difficulty === 'Medium') medCount = s.count;
+              else if (s.difficulty === 'Hard') hardCount = s.count;
+            });
+
+            const elSub = document.getElementById('lcTotalSubmissions');
+            if (elSub) elSub.textContent = Number(totalSubs).toLocaleString();
+            const elAct = document.getElementById('lcActiveDays');
+            if (elAct) elAct.textContent = activeDays;
+            const elStr = document.getElementById('lcMaxStreak');
+            if (elStr) elStr.textContent = streak;
+
+            const elEasy = document.getElementById('lcEasyCount');
+            if (elEasy) elEasy.textContent = easyCount;
+            const elMed = document.getElementById('lcMedCount');
+            if (elMed) elMed.textContent = medCount;
+            const elHard = document.getElementById('lcHardCount');
+            if (elHard) elHard.textContent = hardCount;
           }
 
           if (!fullContributionSnakeState) return;
