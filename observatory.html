@@ -315,7 +315,7 @@
       background: rgba(255,255,255,0.12);
     }
 
-    /* Horizontal Scroll & 3D Card Flip System */
+    /* 3D Circular Orbit Carousel System */
     .planet-scroll-header {
       display: flex;
       justify-content: space-between;
@@ -354,37 +354,92 @@
       color: #fff;
       transform: translateY(-1px);
     }
+    .scroll-nav-btn.active {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.5);
+    }
 
-    .planet-scroll-container {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      padding: 12px 6px 28px 6px;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(56, 189, 248, 0.4) rgba(3, 7, 18, 0.4);
+    /* 3D Circular Orbit Stage */
+    .planet-orbit-stage {
+      position: relative;
+      width: 100%;
+      height: 580px;
+      margin-top: 10px;
+      margin-bottom: 18px;
+      perspective: 1200px;
+      perspective-origin: 50% 32%;
+      overflow: hidden;
+      border-radius: 24px;
+      background: radial-gradient(ellipse at 50% 45%, rgba(14, 165, 233, 0.1) 0%, rgba(3, 7, 18, 0.95) 75%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85), 0 10px 40px rgba(0, 0, 0, 0.6);
+      user-select: none;
+      touch-action: pan-y;
+      cursor: grab;
     }
-    .planet-scroll-container::-webkit-scrollbar {
-      height: 8px;
+    .planet-orbit-stage:active {
+      cursor: grabbing;
     }
-    .planet-scroll-container::-webkit-scrollbar-track {
-      background: rgba(3, 7, 18, 0.5);
-      border-radius: 10px;
+
+    /* Tilted Glowing Ground Orbit Ring & Central Axis */
+    .orbit-ring-3d {
+      position: absolute;
+      top: 58%;
+      left: 50%;
+      width: 820px;
+      height: 480px;
+      transform: translate(-50%, -50%) rotateX(75deg);
+      border: 2px dashed rgba(56, 189, 248, 0.35);
+      border-radius: 50%;
+      box-shadow: 0 0 35px rgba(14, 165, 233, 0.3), inset 0 0 35px rgba(14, 165, 233, 0.2);
+      pointer-events: none;
+      z-index: 0;
+      animation: orbitRingPulse 4s ease-in-out infinite alternate;
     }
-    .planet-scroll-container::-webkit-scrollbar-thumb {
-      background: linear-gradient(90deg, #0ea5e9, #8b5cf6);
-      border-radius: 10px;
+    @keyframes orbitRingPulse {
+      0% { border-color: rgba(56, 189, 248, 0.3); box-shadow: 0 0 25px rgba(14, 165, 233, 0.2); }
+      100% { border-color: rgba(168, 85, 247, 0.5); box-shadow: 0 0 45px rgba(168, 85, 247, 0.4); }
+    }
+
+    .orbit-center-axis {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      width: 2px;
+      height: 70%;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0) 0%, rgba(56, 189, 248, 0.7) 50%, rgba(168, 85, 247, 0) 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Cards Ring Track */
+    .planet-cards-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform-style: preserve-3d;
     }
 
     /* 3D Flip Card Container */
     .flip-card-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 320px;
+      height: 480px;
+      margin-left: -160px;
+      margin-top: -240px;
       perspective: 1000px;
-      flex: 0 0 350px;
-      height: 520px;
-      scroll-snap-align: start;
       user-select: none;
       cursor: pointer;
+      will-change: transform, opacity;
+      transition: box-shadow 0.3s;
     }
     .flip-card-inner {
       position: relative;
@@ -442,10 +497,56 @@
       color: #fff;
     }
 
+    /* Planet Indicator Ribbon under Orbit Stage */
+    .planet-carousel-indicators {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 6px;
+      margin-bottom: 30px;
+      scrollbar-width: none;
+    }
+    .planet-carousel-indicators::-webkit-scrollbar {
+      display: none;
+    }
+    .planet-carousel-indicator {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .planet-carousel-indicator:hover {
+      background: rgba(14, 165, 233, 0.2);
+      color: #fff;
+    }
+    .planet-carousel-indicator.active {
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+      font-weight: 700;
+    }
+
     @media (max-width: 768px) {
+      .planet-orbit-stage {
+        height: 500px;
+        perspective: 900px;
+      }
+      .orbit-ring-3d {
+        width: 520px;
+        height: 320px;
+      }
       .flip-card-wrapper {
-        flex: 0 0 310px;
-        height: 540px;
+        width: 270px;
+        height: 440px;
+        margin-left: -135px;
+        margin-top: -220px;
       }
     }
   </style>
@@ -823,23 +924,30 @@
       </article>
     </div>
 
-    <!-- Horizontal Planet Cards Carousel Header -->
+    <!-- 3D Circular Planet Cards Carousel Header -->
     <div class="planet-scroll-header">
       <div class="planet-scroll-title">
-        <span>🪐 Planetary Catalogue & Telemetry</span>
-        <span style="font-size: 0.72rem; color: #38bdf8; background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.3); padding: 3px 10px; border-radius: 12px; font-family: var(--font-mono);">Side-by-Side Scroll • 3D Click-to-Flip Cards</span>
+        <span>🪐 3D Planetary Orbit Carousel</span>
+        <span style="font-size: 0.72rem; color: #38bdf8; background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(14, 165, 233, 0.3); padding: 3px 10px; border-radius: 12px; font-family: var(--font-mono);">Spinning 3D Axis • 3 Front Focal Cards • Drag/Wheel to Spin</span>
       </div>
       <div class="scroll-nav-btns">
-        <button class="scroll-nav-btn" onclick="scrollPlanets('left')">◄ Scroll Left</button>
-        <button class="scroll-nav-btn" onclick="scrollPlanets('right')">Scroll Right ►</button>
+        <button class="scroll-nav-btn" onclick="rotateOrbit('left')">◄ Rotate Left</button>
+        <button class="scroll-nav-btn" onclick="rotateOrbit('right')">Rotate Right ►</button>
+        <button class="scroll-nav-btn" id="btnAutoSpin" onclick="toggleAutoSpin()">▶ Auto-Spin Orbit</button>
       </div>
     </div>
 
-    <!-- Side-by-Side Horizontal Scroll Container -->
-    <div class="planet-scroll-container" id="planetScrollTrack">
+    <!-- 3D Circular Orbit Stage Container -->
+    <div class="planet-orbit-stage" id="planetOrbitStage">
+      <!-- 3D Tilted Ground Ring & Central Axis -->
+      <div class="orbit-ring-3d"></div>
+      <div class="orbit-center-axis"></div>
+
+      <!-- Ring of Cards -->
+      <div class="planet-cards-ring" id="planetCardsRing">
       
       <!-- Card 1: The Sun -->
-      <div class="flip-card-wrapper project-card" data-cat="star visual" onclick="toggleCardFlip('cardInner-sun')">
+      <div class="flip-card-wrapper project-card" data-cat="star visual" onclick="handleCardClick(event, this, 'cardInner-sun')">
         <div class="flip-card-inner" id="cardInner-sun">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.35); box-shadow: 0 0 20px rgba(234, 179, 8, 0.12);">
@@ -861,7 +969,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">0.00 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">~230M Yr</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.5); box-shadow: 0 0 25px rgba(234, 179, 8, 0.2);">
@@ -890,7 +998,7 @@
       </div>
 
       <!-- Card 2: Mercury -->
-      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-mercury')">
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="handleCardClick(event, this, 'cardInner-mercury')">
         <div class="flip-card-inner" id="cardInner-mercury">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(148, 163, 184, 0.25);">
@@ -912,7 +1020,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">0.39 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">88 Days</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(148, 163, 184, 0.4);">
@@ -941,7 +1049,7 @@
       </div>
 
       <!-- Card 3: Venus -->
-      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-venus')">
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="handleCardClick(event, this, 'cardInner-venus')">
         <div class="flip-card-inner" id="cardInner-venus">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(251, 146, 60, 0.35); box-shadow: 0 0 15px rgba(251, 146, 60, 0.1);">
@@ -963,7 +1071,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">0.72 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">225 Days</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(251, 146, 60, 0.5);">
@@ -992,7 +1100,7 @@
       </div>
 
       <!-- Card 4: Earth -->
-      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-earth')">
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="handleCardClick(event, this, 'cardInner-earth')">
         <div class="flip-card-inner" id="cardInner-earth">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(14, 165, 233, 0.4); box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);">
@@ -1014,7 +1122,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">1.00 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">365.25d</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(14, 165, 233, 0.5);">
@@ -1043,7 +1151,7 @@
       </div>
 
       <!-- Card 5: Mars -->
-      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="toggleCardFlip('cardInner-mars')">
+      <div class="flip-card-wrapper project-card" data-cat="inner visual" onclick="handleCardClick(event, this, 'cardInner-mars')">
         <div class="flip-card-inner" id="cardInner-mars">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(239, 68, 68, 0.35); box-shadow: 0 0 15px rgba(239, 68, 68, 0.12);">
@@ -1065,7 +1173,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">1.52 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">687 Days</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(239, 68, 68, 0.5);">
@@ -1094,7 +1202,7 @@
       </div>
 
       <!-- Card 6: Jupiter -->
-      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-jupiter')">
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="handleCardClick(event, this, 'cardInner-jupiter')">
         <div class="flip-card-inner" id="cardInner-jupiter">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(245, 158, 11, 0.35); box-shadow: 0 0 15px rgba(245, 158, 11, 0.12);">
@@ -1116,7 +1224,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">5.20 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">11.86 Yr</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(245, 158, 11, 0.5);">
@@ -1145,7 +1253,7 @@
       </div>
 
       <!-- Card 7: Saturn -->
-      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-saturn')">
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="handleCardClick(event, this, 'cardInner-saturn')">
         <div class="flip-card-inner" id="cardInner-saturn">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.35); box-shadow: 0 0 15px rgba(234, 179, 8, 0.12);">
@@ -1167,7 +1275,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">9.58 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">29.45 Yr</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(234, 179, 8, 0.5);">
@@ -1196,7 +1304,7 @@
       </div>
 
       <!-- Card 8: Uranus -->
-      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-uranus')">
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="handleCardClick(event, this, 'cardInner-uranus')">
         <div class="flip-card-inner" id="cardInner-uranus">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(6, 182, 212, 0.35); box-shadow: 0 0 15px rgba(6, 182, 212, 0.12);">
@@ -1218,7 +1326,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">19.22 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">84.01 Yr</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(6, 182, 212, 0.5);">
@@ -1247,7 +1355,7 @@
       </div>
 
       <!-- Card 9: Neptune -->
-      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="toggleCardFlip('cardInner-neptune')">
+      <div class="flip-card-wrapper project-card" data-cat="outer visual" onclick="handleCardClick(event, this, 'cardInner-neptune')">
         <div class="flip-card-inner" id="cardInner-neptune">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(59, 130, 246, 0.35); box-shadow: 0 0 15px rgba(59, 130, 246, 0.12);">
@@ -1269,7 +1377,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">30.05 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">164.8 Yr</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(59, 130, 246, 0.5);">
@@ -1298,7 +1406,7 @@
       </div>
 
       <!-- Card 10: Pluto -->
-      <div class="flip-card-wrapper project-card" data-cat="star visual" onclick="toggleCardFlip('cardInner-pluto')">
+      <div class="flip-card-wrapper project-card" data-cat="star visual" onclick="handleCardClick(event, this, 'cardInner-pluto')">
         <div class="flip-card-inner" id="cardInner-pluto">
           <!-- FRONT -->
           <div class="flip-card-front glass-panel" style="border: 1px solid rgba(168, 85, 247, 0.35); box-shadow: 0 0 15px rgba(168, 85, 247, 0.12);">
@@ -1320,7 +1428,7 @@
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">DISTANCE</span><strong style="color:#e2e8f0;">39.48 AU</strong></div>
               <div><span style="color:var(--text-secondary); display:block; font-size:0.58rem;">ORBIT</span><strong style="color:#e2e8f0;">248 Yr</strong></div>
             </div>
-            <div class="flip-hint-badge">🔄 Click card to flip for full telemetry</div>
+            <div class="flip-hint-badge">🔄 Click front card to flip (or back cards to rotate)</div>
           </div>
           <!-- BACK -->
           <div class="flip-card-back glass-panel" style="border: 1px solid rgba(168, 85, 247, 0.5);">
@@ -1348,6 +1456,21 @@
         </div>
       </div>
 
+      </div>
+    </div>
+
+    <!-- Planet Indicators Ribbon below 3D stage -->
+    <div class="planet-carousel-indicators" id="planetCarouselIndicators">
+      <button class="planet-carousel-indicator active" id="ind-planet-sun" onclick="rotateToCardByKey('sun')">☀️ Sun</button>
+      <button class="planet-carousel-indicator" id="ind-planet-mercury" onclick="rotateToCardByKey('mercury')">☿ Mercury</button>
+      <button class="planet-carousel-indicator" id="ind-planet-venus" onclick="rotateToCardByKey('venus')">♀ Venus</button>
+      <button class="planet-carousel-indicator" id="ind-planet-earth" onclick="rotateToCardByKey('earth')">🌍 Earth</button>
+      <button class="planet-carousel-indicator" id="ind-planet-mars" onclick="rotateToCardByKey('mars')">🔴 Mars</button>
+      <button class="planet-carousel-indicator" id="ind-planet-jupiter" onclick="rotateToCardByKey('jupiter')">♃ Jupiter</button>
+      <button class="planet-carousel-indicator" id="ind-planet-saturn" onclick="rotateToCardByKey('saturn')">🪐 Saturn</button>
+      <button class="planet-carousel-indicator" id="ind-planet-uranus" onclick="rotateToCardByKey('uranus')">♅ Uranus</button>
+      <button class="planet-carousel-indicator" id="ind-planet-neptune" onclick="rotateToCardByKey('neptune')">♆ Neptune</button>
+      <button class="planet-carousel-indicator" id="ind-planet-pluto" onclick="rotateToCardByKey('pluto')">🖤 Pluto</button>
     </div>
   </div>
 
@@ -1540,14 +1663,6 @@
       }
     }
 
-    function scrollPlanets(direction) {
-      const container = document.getElementById('planetScrollTrack');
-      if (container) {
-        const scrollAmount = direction === 'left' ? -370 : 370;
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-      }
-    }
-
     function inspectPlanetInOrrery(key) {
       focusPlanet(key);
       const viewer = document.getElementById('solarViewer');
@@ -1556,8 +1671,211 @@
       }
     }
 
+    // --- 3D Circular Orbit Carousel Controller Engine ---
+    let currentOrbitIndex = 0;
+    let targetOrbitIndex = 0;
+    let isAutoSpinning = false;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartTargetIndex = 0;
+
+    function getVisibleCards() {
+      const allCards = Array.from(document.querySelectorAll('#planetCardsRing .flip-card-wrapper'));
+      return allCards.filter(card => card.style.display !== 'none');
+    }
+
+    function updateOrbitLayout() {
+      const visibleCards = getVisibleCards();
+      const count = visibleCards.length;
+      if (count === 0) return;
+
+      const stage = document.getElementById('planetOrbitStage');
+      const stageWidth = stage ? stage.clientWidth : 1000;
+
+      // Dynamic radius scaling based on stage width
+      let Rx = 410;
+      let Rz = 240;
+      if (stageWidth < 600) {
+        Rx = 180;
+        Rz = 110;
+      } else if (stageWidth < 900) {
+        Rx = 290;
+        Rz = 170;
+      }
+
+      // Smooth cubic interpolation towards target position
+      currentOrbitIndex += (targetOrbitIndex - currentOrbitIndex) * 0.12;
+
+      // Auto rotation update when idle
+      if (isAutoSpinning && !isDragging) {
+        targetOrbitIndex += 0.003;
+      }
+
+      visibleCards.forEach((card, idx) => {
+        let diff = idx - currentOrbitIndex;
+
+        // Wrap diff to [-count/2, count/2)
+        while (diff < -count / 2) diff += count;
+        while (diff >= count / 2) diff -= count;
+
+        const theta = (diff / count) * (2 * Math.PI);
+
+        const x = Math.sin(theta) * Rx;
+        const z = Math.cos(theta) * Rz;
+
+        // Depth perspective mapping
+        const normZ = z / Rz; // -1 (back) to +1 (front)
+
+        const scale = 0.52 + 0.48 * ((normZ + 1) / 2);
+        const opacity = Math.max(0.35, 0.35 + 0.65 * ((normZ + 1) / 2));
+        const zIndex = Math.round(50 + 50 * normZ);
+        const rotY = -theta * (180 / Math.PI) * 0.25;
+
+        card.style.transform = `translate3d(${x.toFixed(1)}px, 0px, ${z.toFixed(1)}px) scale(${scale.toFixed(3)}) rotateY(${rotY.toFixed(1)}deg)`;
+        card.style.opacity = opacity.toFixed(2);
+        card.style.zIndex = zIndex;
+
+        card.dataset.orbitIndex = idx;
+        card.dataset.diff = diff.toFixed(3);
+      });
+
+      // Highlight active planet indicator pill corresponding to front card
+      const frontCardIdx = Math.round(currentOrbitIndex) % count;
+      const normalizedFrontIdx = (frontCardIdx % count + count) % count;
+      const activeCard = visibleCards[normalizedFrontIdx];
+      if (activeCard) {
+        const cardInner = activeCard.querySelector('.flip-card-inner');
+        if (cardInner) {
+          const planetKey = cardInner.id.replace('cardInner-', '');
+          updateActiveIndicatorPill(planetKey);
+        }
+      }
+
+      requestAnimationFrame(updateOrbitLayout);
+    }
+
+    function updateActiveIndicatorPill(planetKey) {
+      if (!planetKey) return;
+      document.querySelectorAll('.planet-carousel-indicator').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById('ind-planet-' + planetKey);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function rotateOrbit(direction) {
+      if (direction === 'left') {
+        targetOrbitIndex -= 1;
+      } else if (direction === 'right') {
+        targetOrbitIndex += 1;
+      }
+    }
+
+    function toggleAutoSpin() {
+      isAutoSpinning = !isAutoSpinning;
+      const btn = document.getElementById('btnAutoSpin');
+      if (btn) {
+        btn.innerHTML = isAutoSpinning ? '⏸ Pause Auto-Spin' : '▶ Auto-Spin Orbit';
+        btn.classList.toggle('active', isAutoSpinning);
+      }
+    }
+
+    function rotateToCardByKey(key) {
+      const cardInner = document.getElementById('cardInner-' + key);
+      if (!cardInner) return;
+      const wrapper = cardInner.closest('.flip-card-wrapper');
+      if (!wrapper) return;
+
+      const visibleCards = getVisibleCards();
+      const idx = visibleCards.indexOf(wrapper);
+      if (idx !== -1) {
+        const count = visibleCards.length;
+        let diff = idx - (currentOrbitIndex % count);
+        while (diff < -count / 2) diff += count;
+        while (diff >= count / 2) diff -= count;
+        targetOrbitIndex = currentOrbitIndex + diff;
+      }
+    }
+
+    function handleCardClick(event, wrapperElement, innerId) {
+      if (event.target.closest('button') || event.target.closest('a')) {
+        return;
+      }
+
+      const diff = parseFloat(wrapperElement.dataset.diff || 0);
+
+      // If card is front-most center (diff very close to 0) -> toggle flip!
+      if (Math.abs(diff) < 0.28) {
+        toggleCardFlip(innerId);
+      } else {
+        // Otherwise -> rotate the circle to bring this card to front!
+        targetOrbitIndex = currentOrbitIndex + diff;
+      }
+    }
+
+    function initOrbitControls() {
+      const stage = document.getElementById('planetOrbitStage');
+      if (!stage) return;
+
+      // Mouse drag controls
+      stage.addEventListener('mousedown', (e) => {
+        if (e.target.closest('button') || e.target.closest('a')) return;
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartTargetIndex = targetOrbitIndex;
+        stage.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - dragStartX;
+        const sensitivity = 0.0035;
+        targetOrbitIndex = dragStartTargetIndex - deltaX * sensitivity;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          stage.style.cursor = 'grab';
+          targetOrbitIndex = Math.round(targetOrbitIndex);
+        }
+      });
+
+      // Mouse wheel rotation
+      stage.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY || e.deltaX;
+        targetOrbitIndex += (delta > 0 ? 0.35 : -0.35);
+      }, { passive: false });
+
+      // Touch swipe for mobile devices
+      let touchStartX = 0;
+      stage.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          touchStartX = e.touches[0].clientX;
+          dragStartTargetIndex = targetOrbitIndex;
+        }
+      }, { passive: true });
+
+      stage.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - touchStartX;
+        targetOrbitIndex = dragStartTargetIndex - deltaX * 0.005;
+      }, { passive: true });
+
+      stage.addEventListener('touchend', () => {
+        if (isDragging) {
+          isDragging = false;
+          targetOrbitIndex = Math.round(targetOrbitIndex);
+        }
+      });
+
+      // Start animation loop
+      requestAnimationFrame(updateOrbitLayout);
+    }
+
     function filterProjects(category) {
-      // Toggle active buttons
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
       });
@@ -1565,7 +1883,6 @@
         (event.currentTarget || event.target).classList.add('active');
       }
 
-      // Filter cards
       document.querySelectorAll('.project-card').forEach(card => {
         const catAttr = card.getAttribute('data-cat') || '';
         if (category === 'all' || catAttr.includes(category)) {
@@ -1574,7 +1891,15 @@
           card.style.display = 'none';
         }
       });
+
+      // Reset orbit rotation index when filtering
+      targetOrbitIndex = 0;
+      currentOrbitIndex = 0;
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initOrbitControls();
+    });
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
 </body>
