@@ -6,26 +6,38 @@
   <title>Iron Wharf - Services & Pricing</title>
   <link rel="stylesheet" href="subpage.css">
   <style>
-    .projects-dual-grid {
+    .subpage-wrapper {
+      max-width: 1400px !important;
+    }
+
+    .industry-dashboard-layout {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 24px;
+      grid-template-columns: 1fr 430px;
+      gap: 28px;
+      align-items: start;
     }
 
-    @media (max-width: 1150px) {
-      .projects-dual-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .projects-dual-grid {
+    @media (max-width: 1180px) {
+      .industry-dashboard-layout {
         grid-template-columns: 1fr;
       }
-      .microclog-spec-grid, .accessmeet-spec-grid, .cargopulse-spec-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+      .industry-right-sidebar {
+        position: static !important;
       }
+    }
+
+    .projects-stacked-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .industry-right-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: sticky;
+      top: 90px;
     }
 
     /* MicroCLog Box Styles */
@@ -408,6 +420,373 @@
       background: rgba(168, 85, 247, 0.1);
       border-color: #c084fc;
     }
+
+    @media (max-width: 768px) {
+      .microclog-spec-grid, .accessmeet-spec-grid, .cargopulse-spec-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    /* --- SIDEBAR WIDGET 1: PROJECT MILESTONE CALENDAR --- */
+    .project-calendar-card {
+      padding: 22px;
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      background: linear-gradient(155deg, rgba(10, 20, 35, 0.85), rgba(5, 12, 25, 0.92));
+      position: relative;
+      overflow: hidden;
+    }
+    .project-calendar-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #38bdf8, #0284c7, #0ea5e9);
+    }
+    .cal-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .cal-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .cal-card-title svg {
+      color: #38bdf8;
+    }
+    .cal-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cal-nav-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cal-nav-btn:hover {
+      background: rgba(14, 165, 233, 0.2);
+      border-color: #0ea5e9;
+      color: #38bdf8;
+    }
+    .cal-today-btn {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: #38bdf8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cal-today-btn:hover {
+      background: rgba(14, 165, 233, 0.35);
+      color: #fff;
+    }
+    .cal-filter-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .cal-filter-tab {
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .cal-filter-tab.active {
+      background: rgba(14, 165, 233, 0.25);
+      border-color: #0ea5e9;
+      color: #38bdf8;
+    }
+    .cal-month-display {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #38bdf8;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .cal-week-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .cal-grid-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-day-cell {
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .cal-day-cell:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .cal-day-cell.other-month {
+      opacity: 0.3;
+    }
+    .cal-day-cell.today {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .cal-day-cell.selected {
+      background: rgba(14, 165, 233, 0.25) !important;
+      border-color: #0ea5e9 !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+    .cal-event-dots {
+      display: flex;
+      gap: 3px;
+      margin-top: 2px;
+    }
+    .cal-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+    .cal-dot.microclog { background: #22c55e; box-shadow: 0 0 5px #22c55e; }
+    .cal-dot.senseconnect { background: #38bdf8; box-shadow: 0 0 5px #38bdf8; }
+    .cal-dot.cargopulse { background: #c084fc; box-shadow: 0 0 5px #c084fc; }
+    .cal-dot.system { background: #f59e0b; box-shadow: 0 0 5px #f59e0b; }
+
+    /* Milestone details inspector panel */
+    .cal-inspector-panel {
+      margin-top: 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .cal-inspector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .cal-inspector-date {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #38bdf8;
+      font-family: var(--font-mono);
+    }
+    .cal-inspector-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cal-tag-microclog { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .cal-tag-senseconnect { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .cal-tag-cargopulse { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3); }
+    .cal-tag-system { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .cal-inspector-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .cal-inspector-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* --- SIDEBAR WIDGET 2: PERFORMANCE TELEMETRY GRAPH --- */
+    .perf-graph-card {
+      padding: 22px;
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      background: linear-gradient(155deg, rgba(8, 24, 18, 0.85), rgba(4, 15, 10, 0.92));
+      position: relative;
+      overflow: hidden;
+    }
+    .perf-graph-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #22c55e, #10b981, #06b6d4);
+    }
+    .perf-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .perf-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    .perf-card-title svg {
+      color: #22c55e;
+    }
+    .perf-live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .perf-live-badge:hover {
+      background: rgba(34, 197, 94, 0.25);
+    }
+    .perf-live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulseDot 1.5s infinite;
+    }
+    .perf-metric-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .perf-metric-tab {
+      flex: 1;
+      text-align: center;
+      padding: 6px 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+    }
+    .perf-metric-tab.active {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+    }
+
+    /* SVG Chart Container */
+    .perf-chart-box {
+      position: relative;
+      width: 100%;
+      height: 185px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 10px 10px 4px 10px;
+      overflow: hidden;
+    }
+    .perf-svg-canvas {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .perf-chart-tooltip {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(10, 25, 20, 0.95);
+      border: 1px solid #22c55e;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #a7f3d0;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 10;
+    }
+    .perf-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .perf-kpi-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .perf-kpi-label {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+    .perf-kpi-val {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #4ade80;
+    }
   </style>
 </head>
 <body class="accent-green">
@@ -658,55 +1037,59 @@
       <h1 class="page-title">Iron Wharf</h1>
     </header>
 
-    <div class="projects-dual-grid">
-      <!-- MicroCLog Industrial Project Box -->
-      <div class="glass-panel microclog-card">
-        <div>
-          <div class="microclog-header">
-            <div class="microclog-title-group">
-              <div class="microclog-icon-box">
-                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-                  <polyline points="4 17 10 11 14 15 20 9"></polyline>
-                  <line x1="20" y1="9" x2="20" y2="14"></line>
-                  <line x1="20" y1="9" x2="15" y2="9"></line>
-                </svg>
+    <!-- Main Dashboard 2-Column Grid Layout -->
+    <div class="industry-dashboard-layout">
+      
+      <!-- Left Column: Industrial Project Cards -->
+      <div class="projects-stacked-grid">
+        <!-- MicroCLog Industrial Project Box -->
+        <div class="glass-panel microclog-card">
+          <div>
+            <div class="microclog-header">
+              <div class="microclog-title-group">
+                <div class="microclog-icon-box">
+                  <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <polyline points="4 17 10 11 14 15 20 9"></polyline>
+                    <line x1="20" y1="9" x2="20" y2="14"></line>
+                    <line x1="20" y1="9" x2="15" y2="9"></line>
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.72rem; font-weight: 700; color: #22c55e; letter-spacing: 0.1em; text-transform: uppercase;">Embedded C Micro-Project</div>
+                  <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">MicroCLog Engine</h3>
+                </div>
               </div>
-              <div>
-                <div style="font-size: 0.72rem; font-weight: 700; color: #22c55e; letter-spacing: 0.1em; text-transform: uppercase;">Embedded C Micro-Project</div>
-                <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">MicroCLog Engine</h3>
+              <div class="microclog-badge-disconnected" id="microclogStatusBadge" title="Standalone Prototype - Pipeline Unconnected">
+                <span class="microclog-status-dot"></span>
+                <span>Pipeline Disconnected</span>
               </div>
             </div>
-            <div class="microclog-badge-disconnected" id="microclogStatusBadge" title="Standalone Prototype - Pipeline Unconnected">
-              <span class="microclog-status-dot"></span>
-              <span>Pipeline Disconnected</span>
-            </div>
-          </div>
 
-          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
-            A high-throughput, zero-allocation micro-logging framework engineered for resource-constrained microcontrollers &amp; real-time embedded system diagnostics. Built with lock-free atomic ring buffers and compile-time verbosity filtering.
-          </p>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+              A high-throughput, zero-allocation micro-logging framework engineered for resource-constrained microcontrollers &amp; real-time embedded system diagnostics. Built with lock-free atomic ring buffers and compile-time verbosity filtering.
+            </p>
 
-          <div class="microclog-spec-grid">
-            <div class="microclog-spec-item">
-              <div class="microclog-spec-label">Overhead</div>
-              <div class="microclog-spec-val">&lt; 1.2 µs</div>
+            <div class="microclog-spec-grid">
+              <div class="microclog-spec-item">
+                <div class="microclog-spec-label">Overhead</div>
+                <div class="microclog-spec-val">&lt; 1.2 µs</div>
+              </div>
+              <div class="microclog-spec-item">
+                <div class="microclog-spec-label">Heap Allocation</div>
+                <div class="microclog-spec-val">0 Bytes</div>
+              </div>
+              <div class="microclog-spec-item">
+                <div class="microclog-spec-label">Buffer Type</div>
+                <div class="microclog-spec-val">Atomic Ring</div>
+              </div>
+              <div class="microclog-spec-item">
+                <div class="microclog-spec-label">Target OS</div>
+                <div class="microclog-spec-val">Bare-Metal / RTOS</div>
+              </div>
             </div>
-            <div class="microclog-spec-item">
-              <div class="microclog-spec-label">Heap Allocation</div>
-              <div class="microclog-spec-val">0 Bytes</div>
-            </div>
-            <div class="microclog-spec-item">
-              <div class="microclog-spec-label">Buffer Type</div>
-              <div class="microclog-spec-val">Atomic Ring</div>
-            </div>
-            <div class="microclog-spec-item">
-              <div class="microclog-spec-label">Target OS</div>
-              <div class="microclog-spec-val">Bare-Metal / RTOS</div>
-            </div>
-          </div>
 
-          <!-- C Code Preview -->
-          <div class="microclog-code-block">
+            <!-- C Code Preview -->
+            <div class="microclog-code-block">
 <span style="color:#6ee7b7;">// MicroCLog Engine Execution Example</span>
 <span style="color:#93c5fd;">#include</span> <span style="color:#fde047;">"microclog.h"</span>
 
@@ -715,164 +1098,310 @@
     <span style="color:#34d399;">MCLOG_INFO</span>(<span style="color:#fde047;">"SYS"</span>, <span style="color:#fde047;">"MicroCLog online. Ring-buffer telemetry ready."</span>);
     <span style="color:#34d399;">MCLOG_WARN</span>(<span style="color:#fde047;">"PWR"</span>, <span style="color:#fde047;">"Voltage anomaly: %d mV"</span>, 3210);
 }
+            </div>
           </div>
+
+          <button class="microclog-action-btn" onclick="handleMicroCLogClick(event)">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>Live Pipeline Link Disconnected (Standalone Mode)</span>
+          </button>
         </div>
 
-        <button class="microclog-action-btn" onclick="handleMicroCLogClick(event)">
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          <span>Live Pipeline Link Disconnected (Standalone Mode)</span>
-        </button>
-      </div>
-
-      <!-- AccessMeet Meeting App for Deaf, Mute & Blind (Skeleton) -->
-      <div class="glass-panel accessmeet-card">
-        <div>
-          <div class="accessmeet-header">
-            <div class="accessmeet-title-group">
-              <div class="accessmeet-icon-box">
-                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="9" cy="7" r="4"></circle>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
+        <!-- AccessMeet Meeting App for Deaf, Mute & Blind (Skeleton) -->
+        <div class="glass-panel accessmeet-card">
+          <div>
+            <div class="accessmeet-header">
+              <div class="accessmeet-title-group">
+                <div class="accessmeet-icon-box">
+                  <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.1em; text-transform: uppercase;">Accessibility &amp; Assistive AI</div>
+                  <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">SenseConnect Meeting App</h3>
+                </div>
               </div>
-              <div>
-                <div style="font-size: 0.72rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.1em; text-transform: uppercase;">Accessibility &amp; Assistive AI</div>
-                <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">SenseConnect Meeting App</h3>
+              <div class="accessmeet-badge-skeleton" id="accessmeetStatusBadge" title="Project Skeleton - Full Specs Pending">
+                <span class="accessmeet-status-dot"></span>
+                <span>Deaf, Mute &amp; Blind Assist</span>
               </div>
             </div>
-            <div class="accessmeet-badge-skeleton" id="accessmeetStatusBadge" title="Project Skeleton - Full Specs Pending">
-              <span class="accessmeet-status-dot"></span>
-              <span>Deaf, Mute &amp; Blind Assist</span>
-            </div>
-          </div>
 
-          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
-            A multi-sensory real-time conferencing platform engineered for deaf, mute, and visually impaired users. Combines computer-vision sign language translation, haptic feedback matrix drivers, live captioning, and 3D spatial audio beacons.
-          </p>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+              A multi-sensory real-time conferencing platform engineered for deaf, mute, and visually impaired users. Combines computer-vision sign language translation, haptic feedback matrix drivers, live captioning, and 3D spatial audio beacons.
+            </p>
 
-          <div class="accessmeet-spec-grid">
-            <div class="accessmeet-spec-item">
-              <div class="accessmeet-spec-label">Sign AI</div>
-              <div class="accessmeet-spec-val">Real-Time</div>
+            <div class="accessmeet-spec-grid">
+              <div class="accessmeet-spec-item">
+                <div class="accessmeet-spec-label">Sign AI</div>
+                <div class="accessmeet-spec-val">Real-Time</div>
+              </div>
+              <div class="accessmeet-spec-item">
+                <div class="accessmeet-spec-label">Blind Mode</div>
+                <div class="accessmeet-spec-val">Spatial 3D Audio</div>
+              </div>
+              <div class="accessmeet-spec-item">
+                <div class="accessmeet-spec-label">Mute Assist</div>
+                <div class="accessmeet-spec-val">TTS &amp; Gesture</div>
+              </div>
+              <div class="accessmeet-spec-item">
+                <div class="accessmeet-spec-label">Haptics</div>
+                <div class="accessmeet-spec-val">Braille Stream</div>
+              </div>
             </div>
-            <div class="accessmeet-spec-item">
-              <div class="accessmeet-spec-label">Blind Mode</div>
-              <div class="accessmeet-spec-val">Spatial 3D Audio</div>
-            </div>
-            <div class="accessmeet-spec-item">
-              <div class="accessmeet-spec-label">Mute Assist</div>
-              <div class="accessmeet-spec-val">TTS &amp; Gesture</div>
-            </div>
-            <div class="accessmeet-spec-item">
-              <div class="accessmeet-spec-label">Haptics</div>
-              <div class="accessmeet-spec-val">Braille Stream</div>
-            </div>
-          </div>
 
-          <!-- Skeleton Pipeline Preview -->
-          <div class="accessmeet-code-block">
+            <!-- Skeleton Pipeline Preview -->
+            <div class="accessmeet-code-block">
 <span style="color:#93c5fd;">// SenseConnect Multi-Sensory Pipeline Skeleton</span>
 <span style="color:#f472b6;">typedef struct</span> {
     <span style="color:#a7f3d0;">GestureCV</span>    sign_to_text_engine;    <span style="color:#6ee7b7;">// Vision -&gt; Subtitles</span>
     <span style="color:#a7f3d0;">TactileBus</span>   haptic_braille_matrix;  <span style="color:#6ee7b7;">// Text -&gt; Haptic Feel</span>
     <span style="color:#a7f3d0;">SpatialAudio</span> spatial_audio_beacon;   <span style="color:#6ee7b7;">// 3D Sound Cues</span>
 } <span style="color:#fde047;">sense_connect_t</span>;
+            </div>
           </div>
+
+          <button class="accessmeet-action-btn" onclick="handleAccessMeetClick(event)">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span>Skeleton Prototype (Detailed Project Specs Pending)</span>
+          </button>
         </div>
 
-        <button class="accessmeet-action-btn" onclick="handleAccessMeetClick(event)">
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
-          <span>Skeleton Prototype (Detailed Project Specs Pending)</span>
-        </button>
-      </div>
-
-      <!-- CargoPulse AI Autonomous Logistics Project Box -->
-      <div class="glass-panel cargopulse-card">
-        <div>
-          <div class="cargopulse-header">
-            <div class="cargopulse-title-group">
-              <div class="cargopulse-icon-box">
-                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
+        <!-- CargoPulse AI Autonomous Logistics Project Box -->
+        <div class="glass-panel cargopulse-card">
+          <div>
+            <div class="cargopulse-header">
+              <div class="cargopulse-title-group">
+                <div class="cargopulse-icon-box">
+                  <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size: 0.72rem; font-weight: 700; color: #c084fc; letter-spacing: 0.1em; text-transform: uppercase;">Autonomous Industrial AI</div>
+                  <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">CargoPulse Routing AI</h3>
+                </div>
               </div>
-              <div>
-                <div style="font-size: 0.72rem; font-weight: 700; color: #c084fc; letter-spacing: 0.1em; text-transform: uppercase;">Autonomous Industrial AI</div>
-                <h3 style="font-size: 1.25rem; font-weight: 700; margin: 2px 0 0 0; color: #f8fafc;">CargoPulse Routing AI</h3>
+              <div class="cargopulse-badge-active" id="cargopulseStatusBadge" title="Autonomous Harbor Mesh Active">
+                <span class="cargopulse-status-dot"></span>
+                <span>Harbor Mesh Online</span>
               </div>
             </div>
-            <div class="cargopulse-badge-active" id="cargopulseStatusBadge" title="Autonomous Harbor Mesh Active">
-              <span class="cargopulse-status-dot"></span>
-              <span>Harbor Mesh Online</span>
-            </div>
-          </div>
 
-          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
-            An autonomous port cargo container routing &amp; predictive crane dispatch engine. Integrates real-time LiDAR sensor fusion, AGV fleet scheduling, and edge AI queue optimization for high-throughput harbor operations.
-          </p>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+              An autonomous port cargo container routing &amp; predictive crane dispatch engine. Integrates real-time LiDAR sensor fusion, AGV fleet scheduling, and edge AI queue optimization for high-throughput harbor operations.
+            </p>
 
-          <div class="cargopulse-spec-grid">
-            <div class="cargopulse-spec-item">
-              <div class="cargopulse-spec-label">Throughput</div>
-              <div class="cargopulse-spec-val">48k TEU/day</div>
+            <div class="cargopulse-spec-grid">
+              <div class="cargopulse-spec-item">
+                <div class="cargopulse-spec-label">Throughput</div>
+                <div class="cargopulse-spec-val">48k TEU/day</div>
+              </div>
+              <div class="cargopulse-spec-item">
+                <div class="cargopulse-spec-label">Latency</div>
+                <div class="cargopulse-spec-val">&lt; 3.5 ms</div>
+              </div>
+              <div class="cargopulse-spec-item">
+                <div class="cargopulse-spec-label">Protocol</div>
+                <div class="cargopulse-spec-val">gRPC / Mesh</div>
+              </div>
+              <div class="cargopulse-spec-item">
+                <div class="cargopulse-spec-label">Edge Engine</div>
+                <div class="cargopulse-spec-val">TensorRT AI</div>
+              </div>
             </div>
-            <div class="cargopulse-spec-item">
-              <div class="cargopulse-spec-label">Latency</div>
-              <div class="cargopulse-spec-val">&lt; 3.5 ms</div>
-            </div>
-            <div class="cargopulse-spec-item">
-              <div class="cargopulse-spec-label">Protocol</div>
-              <div class="cargopulse-spec-val">gRPC / Mesh</div>
-            </div>
-            <div class="cargopulse-spec-item">
-              <div class="cargopulse-spec-label">Edge Engine</div>
-              <div class="cargopulse-spec-val">TensorRT AI</div>
-            </div>
-          </div>
 
-          <!-- Rust Code Preview -->
-          <div class="cargopulse-code-block">
+            <!-- Rust Code Preview -->
+            <div class="cargopulse-code-block">
 <span style="color:#c084fc;">// CargoPulse Harbor Route Optimizer</span>
 <span style="color:#f472b6;">pub fn</span> <span style="color:#60a5fa;">dispatch_crane_agv</span>(vessel: &amp;<span style="color:#fde047;">VesselManifest</span>) -&gt; <span style="color:#34d399;">RouteResult</span> {
     <span style="color:#f472b6;">let</span> queue = <span style="color:#34d399;">TensorRT</span>::<span style="color:#60a5fa;">predict_load</span>(&amp;vessel.containers);
     <span style="color:#34d399;">AGVCluster</span>::<span style="color:#60a5fa;">dispatch_mesh</span>(queue, <span style="color:#fbbf24;">LIDAR_FUSION_ACTIVE</span>);
 }
+            </div>
+          </div>
+
+          <button class="cargopulse-action-btn" onclick="handleCargoPulseClick(event)">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>Inspect Harbor Mesh Telemetry (Interactive Node)</span>
+          </button>
+        </div>
+
+        <!-- Review / Engineering Note Card -->
+        <div class="glass-panel" style="padding: 24px;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--text-primary);">Engineering Spotlight &amp; Client Feedback</h3>
+          <p style="font-style: italic; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4;">
+            "The Chief Architect engineered high-performance embedded systems &amp; multi-sensory accessibility prototypes. Exceptional execution across lock-free telemetry &amp; autonomous harbor logistics mesh."
+          </p>
+          <div style="margin-top: 12px; font-size: 0.8rem; font-weight: 600; color: var(--accent-color);">— Technical Advisory Board, Vortech Energies</div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Sidebar (Project Calendar & Performance Telemetry Graph) -->
+      <div class="industry-right-sidebar">
+
+        <!-- WIDGET 1: PROJECT MILESTONE CALENDAR -->
+        <div class="glass-panel project-calendar-card">
+          <div class="cal-card-header">
+            <div class="cal-card-title">
+              <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Project Roadmap</span>
+            </div>
+            <div class="cal-nav-group">
+              <button class="cal-today-btn" onclick="calGoToToday()">Today</button>
+              <button class="cal-nav-btn" onclick="calChangeMonth(-1)" title="Previous Month">‹</button>
+              <button class="cal-nav-btn" onclick="calChangeMonth(1)" title="Next Month">›</button>
+            </div>
+          </div>
+
+          <!-- Project Filter Pills -->
+          <div class="cal-filter-tabs">
+            <button class="cal-filter-tab active" onclick="setCalFilter('all', this)">All Projects</button>
+            <button class="cal-filter-tab" onclick="setCalFilter('microclog', this)">🟢 MicroCLog</button>
+            <button class="cal-filter-tab" onclick="setCalFilter('senseconnect', this)">🔵 SenseConnect</button>
+            <button class="cal-filter-tab" onclick="setCalFilter('cargopulse', this)">🟣 CargoPulse</button>
+          </div>
+
+          <!-- Month & Year Label -->
+          <div class="cal-month-display" id="calMonthLabel">October 2026</div>
+
+          <!-- Calendar Days Grid -->
+          <div class="cal-week-header">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="cal-grid-days" id="calGridDays">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Milestone Details Inspector -->
+          <div class="cal-inspector-panel" id="calInspector">
+            <div class="cal-inspector-header">
+              <span class="cal-inspector-date" id="inspDate">OCTOBER 12, 2026</span>
+              <span class="cal-inspector-tag cal-tag-cargopulse" id="inspTag">CargoPulse AI</span>
+            </div>
+            <div class="cal-inspector-title" id="inspTitle">CargoPulse AGV Harbor Dispatch Sync</div>
+            <div class="cal-inspector-desc" id="inspDesc">Deploying TensorRT edge neural net for harbor container queue scheduling and crane sync.</div>
           </div>
         </div>
 
-        <button class="cargopulse-action-btn" onclick="handleCargoPulseClick(event)">
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
-          </svg>
-          <span>Inspect Harbor Mesh Telemetry (Interactive Node)</span>
-        </button>
-      </div>
-    </div>
+        <!-- WIDGET 2: PERFORMANCE TELEMETRY GRAPH -->
+        <div class="glass-panel perf-graph-card">
+          <div class="perf-card-header">
+            <div class="perf-card-title">
+              <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>Performance Telemetry</span>
+            </div>
+            <button class="perf-live-badge" id="perfLiveToggle" onclick="togglePerfLiveStream()" title="Click to toggle live telemetry streaming">
+              <span class="perf-live-dot" id="perfLiveDot"></span>
+              <span id="perfLiveText">LIVE</span>
+            </button>
+          </div>
 
-    <!-- Review / Engineering Note Card -->
-    <div class="glass-panel" style="padding: 24px; margin-top: 20px;">
-      <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--text-primary);">Engineering Spotlight &amp; Client Feedback</h3>
-      <p style="font-style: italic; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4;">
-        "The Chief Architect engineered high-performance embedded systems &amp; multi-sensory accessibility prototypes. Exceptional execution across lock-free telemetry &amp; autonomous harbor logistics mesh."
-      </p>
-      <div style="margin-top: 12px; font-size: 0.8rem; font-weight: 600; color: var(--accent-color);">— Technical Advisory Board, Vortech Energies</div>
+          <!-- Metric Switching Tabs -->
+          <div class="perf-metric-tabs">
+            <button class="perf-metric-tab active" onclick="switchPerfMetric('throughput', this)">Throughput</button>
+            <button class="perf-metric-tab" onclick="switchPerfMetric('latency', this)">Latency</button>
+            <button class="perf-metric-tab" onclick="switchPerfMetric('efficiency', this)">Efficiency</button>
+          </div>
+
+          <!-- Real-Time Interactive SVG Graph Canvas -->
+          <div class="perf-chart-box" id="perfChartBox" onmousemove="handlePerfGraphHover(event)" onmouseleave="hidePerfGraphTooltip()">
+            <!-- SVG Element -->
+            <svg class="perf-svg-canvas" id="perfSvgCanvas" viewBox="0 0 380 160" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="perfGradThroughput" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#22c55e" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#22c55e" stop-opacity="0.0"/>
+                </linearGradient>
+                <linearGradient id="perfGradLatency" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+                </linearGradient>
+                <linearGradient id="perfGradEfficiency" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#c084fc" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#c084fc" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Grid Lines -->
+              <line x1="0" y1="40" x2="380" y2="40" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+              <line x1="0" y1="80" x2="380" y2="80" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+              <line x1="0" y1="120" x2="380" y2="120" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+
+              <!-- Area Gradient Fill -->
+              <path id="perfAreaPath" fill="url(#perfGradThroughput)" d="" />
+
+              <!-- Main Glowing Line Curve -->
+              <path id="perfLinePath" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="" />
+
+              <!-- Interactive Hover Vertical Guide Line -->
+              <line id="perfHoverLine" x1="0" y1="0" x2="0" y2="160" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2,2" opacity="0" />
+              
+              <!-- Hover Data Point Circle -->
+              <circle id="perfHoverCircle" r="5" fill="#22c55e" stroke="#ffffff" stroke-width="2" opacity="0" />
+            </svg>
+
+            <!-- Floating Hover Tooltip -->
+            <div class="perf-chart-tooltip" id="perfTooltip" style="display: none;">
+              <span style="color: var(--text-secondary); font-size: 0.65rem;" id="perfTtTime">10:42:15 AM</span>
+              <span style="font-weight: bold; color: #4ade80;" id="perfTtVal">48,450 TEU / day</span>
+            </div>
+          </div>
+
+          <!-- KPI Counters Grid -->
+          <div class="perf-kpi-grid">
+            <div class="perf-kpi-card">
+              <div class="perf-kpi-label">Peak Operations</div>
+              <div class="perf-kpi-val" id="kpiPeakOps">48.4k / sec</div>
+            </div>
+            <div class="perf-kpi-card">
+              <div class="perf-kpi-label">Avg Micro Overhead</div>
+              <div class="perf-kpi-val" id="kpiAvgOverhead">0.82 µs</div>
+            </div>
+            <div class="perf-kpi-card">
+              <div class="perf-kpi-label">System Efficiency</div>
+              <div class="perf-kpi-val" id="kpiEfficiency">98.9%</div>
+            </div>
+            <div class="perf-kpi-card">
+              <div class="perf-kpi-label">Harbor Uptime</div>
+              <div class="perf-kpi-val" style="color: #38bdf8;">99.98%</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
 
   <script>
+    /* Handlers for project action buttons */
     function handleMicroCLogClick(e) {
       if (e) e.preventDefault();
       alert("⚡ MicroCLog Module Status:\n\nMicroCLog micro-logging engine card implemented in Industry section.\nLive pipeline link is currently DISCONNECTED (standalone mode).");
@@ -886,6 +1415,378 @@
     function handleCargoPulseClick(e) {
       if (e) e.preventDefault();
       alert("📦 CargoPulse Autonomous Routing AI:\n\nHarbor Mesh Status: ONLINE\nActive AGV Units: 142\nCrane Dispatch Efficiency: 99.4%\nReal-Time Telemetry & TensorRT Queue Optimization active across Iron Wharf.");
+    }
+
+    /* =========================================================================
+       PROJECT ROADMAP & MILESTONE CALENDAR LOGIC
+       ========================================================================= */
+    const PROJECT_MILESTONES = [
+      {
+        year: 2026, month: 9, day: 5, // October (0-indexed 9)
+        title: "MicroCLog v2.1 Ring Buffer Benchmark",
+        project: "microclog",
+        projectName: "MicroCLog Engine",
+        tagClass: "cal-tag-microclog",
+        dotClass: "microclog",
+        desc: "Benchmarking lock-free atomic ring buffer throughput under 1.2M req/sec bare-metal simulated workload.",
+        status: "Completed"
+      },
+      {
+        year: 2026, month: 9, day: 12,
+        title: "CargoPulse AGV Harbor Dispatch Sync",
+        project: "cargopulse",
+        projectName: "CargoPulse AI",
+        tagClass: "cal-tag-cargopulse",
+        dotClass: "cargopulse",
+        desc: "Deploying TensorRT edge neural net for harbor container queue scheduling and autonomous crane sync.",
+        status: "Active Milestone"
+      },
+      {
+        year: 2026, month: 9, day: 18,
+        title: "SenseConnect Spatial Audio & Braille Stream",
+        project: "senseconnect",
+        projectName: "SenseConnect AI",
+        tagClass: "cal-tag-senseconnect",
+        dotClass: "senseconnect",
+        desc: "Integration of 3D spatial audio beacons and low-latency tactile Braille matrix drivers for visually impaired users.",
+        status: "Upcoming"
+      },
+      {
+        year: 2026, month: 9, day: 25,
+        title: "Iron Wharf Integrated Benchmark Run",
+        project: "system",
+        projectName: "System-wide",
+        tagClass: "cal-tag-system",
+        dotClass: "system",
+        desc: "Full end-to-end industrial telemetry integration test across all embedded micro-logging & autonomous AI modules.",
+        status: "Scheduled"
+      },
+      {
+        year: 2026, month: 10, day: 2, // November (month index 10)
+        title: "MicroCLog RTOS Zero-Alloc Port",
+        project: "microclog",
+        projectName: "MicroCLog Engine",
+        tagClass: "cal-tag-microclog",
+        dotClass: "microclog",
+        desc: "Zero-overhead static memory ring buffer verification on FreeRTOS & Zephyr embedded kernels.",
+        status: "Planned"
+      },
+      {
+        year: 2026, month: 10, day: 10,
+        title: "CargoPulse 48k TEU Autonomous Scale Test",
+        project: "cargopulse",
+        projectName: "CargoPulse AI",
+        tagClass: "cal-tag-cargopulse",
+        dotClass: "cargopulse",
+        desc: "Autonomous harbor mesh scaling test targeting 48,000 TEU per day container dispatch throughput.",
+        status: "Planned"
+      }
+    ];
+
+    let calCurrentDate = new Date(2026, 9, 12); // Default focused on Oct 2026
+    let calSelectedDayKey = "2026-9-12";
+    let calCurrentFilter = "all";
+
+    function initCalendar() {
+      renderCalendar();
+    }
+
+    function calChangeMonth(delta) {
+      calCurrentDate.setMonth(calCurrentDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    function calGoToToday() {
+      const today = new Date();
+      calCurrentDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      calSelectedDayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+      renderCalendar();
+    }
+
+    function setCalFilter(filterType, btnEl) {
+      calCurrentFilter = filterType;
+      document.querySelectorAll('.cal-filter-tab').forEach(t => t.classList.remove('active'));
+      btnEl.classList.add('active');
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const year = calCurrentDate.getFullYear();
+      const month = calCurrentDate.getMonth();
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      
+      document.getElementById("calMonthLabel").textContent = `${monthNames[month]} ${year}`;
+
+      const gridEl = document.getElementById("calGridDays");
+      gridEl.innerHTML = "";
+
+      const firstDayIndex = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+      const prevMonthTotalDays = new Date(year, month, 0).getDate();
+
+      const today = new Date();
+      const todayKey = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+
+      // Prev Month Padded Days
+      for (let x = firstDayIndex; x > 0; x--) {
+        const pDay = prevMonthTotalDays - x + 1;
+        const cell = document.createElement("div");
+        cell.className = "cal-day-cell other-month";
+        cell.textContent = pDay;
+        gridEl.appendChild(cell);
+      }
+
+      // Current Month Days
+      for (let day = 1; day <= totalDays; day++) {
+        const dateKey = `${year}-${month}-${day}`;
+        const cell = document.createElement("div");
+        cell.className = "cal-day-cell";
+        if (dateKey === todayKey) cell.classList.add("today");
+        if (dateKey === calSelectedDayKey) cell.classList.add("selected");
+
+        const dayNumSpan = document.createElement("span");
+        dayNumSpan.textContent = day;
+        cell.appendChild(dayNumSpan);
+
+        // Find matching milestone events
+        const dayMilestones = PROJECT_MILESTONES.filter(m => 
+          m.year === year && m.month === month && m.day === day &&
+          (calCurrentFilter === "all" || m.project === calCurrentFilter)
+        );
+
+        if (dayMilestones.length > 0) {
+          const dotsDiv = document.createElement("div");
+          dotsDiv.className = "cal-event-dots";
+          dayMilestones.forEach(m => {
+            const dot = document.createElement("span");
+            dot.className = `cal-dot ${m.dotClass}`;
+            dotsDiv.appendChild(dot);
+          });
+          cell.appendChild(dotsDiv);
+        }
+
+        cell.onclick = () => {
+          calSelectedDayKey = dateKey;
+          document.querySelectorAll(".cal-day-cell").forEach(c => c.classList.remove("selected"));
+          cell.classList.add("selected");
+          updateCalInspector(year, month, day, dayMilestones);
+        };
+
+        gridEl.appendChild(cell);
+      }
+
+      // Trigger initial inspector for selected day
+      const selParts = calSelectedDayKey.split('-').map(Number);
+      const selMilestones = PROJECT_MILESTONES.filter(m => 
+        m.year === selParts[0] && m.month === selParts[1] && m.day === selParts[2] &&
+        (calCurrentFilter === "all" || m.project === calCurrentFilter)
+      );
+      updateCalInspector(selParts[0], selParts[1], selParts[2], selMilestones);
+    }
+
+    function updateCalInspector(year, month, day, milestones) {
+      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+      const dateStr = `${monthNames[month]} ${day}, ${year}`;
+      document.getElementById("inspDate").textContent = dateStr;
+
+      const tagEl = document.getElementById("inspTag");
+      const titleEl = document.getElementById("inspTitle");
+      const descEl = document.getElementById("inspDesc");
+
+      if (milestones && milestones.length > 0) {
+        const m = milestones[0];
+        tagEl.className = `cal-inspector-tag ${m.tagClass}`;
+        tagEl.textContent = `${m.projectName} (${m.status})`;
+        titleEl.textContent = m.title;
+        descEl.textContent = m.desc;
+      } else {
+        tagEl.className = "cal-inspector-tag cal-tag-system";
+        tagEl.textContent = "SCHEDULE CLEAR";
+        titleEl.textContent = "No Major Milestone Scheduled";
+        descEl.textContent = "Industrial telemetry operating under standard harbor parameters. Click another marked date to inspect project milestones.";
+      }
+    }
+
+    /* =========================================================================
+       PERFORMANCE TELEMETRY GRAPH ENGINE
+       ========================================================================= */
+    const PERF_DATASETS = {
+      throughput: {
+        unit: "ops / sec",
+        color: "#22c55e",
+        gradId: "perfGradThroughput",
+        kpiOps: "48.4k / s",
+        kpiOverhead: "0.82 µs",
+        kpiEff: "98.9%",
+        data: [32000, 34500, 31000, 39000, 42000, 38500, 44000, 41200, 47500, 48400, 46200, 49100]
+      },
+      latency: {
+        unit: "ms",
+        color: "#38bdf8",
+        gradId: "perfGradLatency",
+        kpiOps: "1.25 µs",
+        kpiOverhead: "0.45 ms",
+        kpiEff: "99.4%",
+        data: [2.8, 2.4, 2.1, 1.8, 1.5, 1.6, 1.2, 1.1, 0.95, 0.85, 0.82, 0.78]
+      },
+      efficiency: {
+        unit: "%",
+        color: "#c084fc",
+        gradId: "perfGradEfficiency",
+        kpiOps: "99.4%",
+        kpiOverhead: "0.12%",
+        kpiEff: "99.8%",
+        data: [94.2, 95.1, 94.8, 96.5, 97.2, 96.8, 98.1, 98.4, 98.9, 99.2, 99.5, 99.8]
+      }
+    };
+
+    let activePerfMetric = 'throughput';
+    let isPerfLiveStreaming = true;
+    let perfLiveInterval = null;
+
+    function initPerfGraph() {
+      renderPerfGraph();
+      startPerfLiveStream();
+    }
+
+    function switchPerfMetric(metricKey, btnEl) {
+      activePerfMetric = metricKey;
+      document.querySelectorAll('.perf-metric-tab').forEach(t => t.classList.remove('active'));
+      btnEl.classList.add('active');
+
+      const ds = PERF_DATASETS[metricKey];
+      document.getElementById('kpiPeakOps').textContent = ds.kpiOps;
+      document.getElementById('kpiAvgOverhead').textContent = ds.kpiOverhead;
+      document.getElementById('kpiEfficiency').textContent = ds.kpiEff;
+
+      renderPerfGraph();
+    }
+
+    function togglePerfLiveStream() {
+      isPerfLiveStreaming = !isPerfLiveStreaming;
+      const dot = document.getElementById("perfLiveDot");
+      const txt = document.getElementById("perfLiveText");
+      if (isPerfLiveStreaming) {
+        dot.style.background = "#22c55e";
+        dot.style.boxShadow = "0 0 8px #22c55e";
+        txt.textContent = "LIVE";
+        startPerfLiveStream();
+      } else {
+        dot.style.background = "#f59e0b";
+        dot.style.boxShadow = "none";
+        txt.textContent = "PAUSED";
+        if (perfLiveInterval) clearInterval(perfLiveInterval);
+      }
+    }
+
+    function startPerfLiveStream() {
+      if (perfLiveInterval) clearInterval(perfLiveInterval);
+      perfLiveInterval = setInterval(() => {
+        if (!isPerfLiveStreaming) return;
+        const ds = PERF_DATASETS[activePerfMetric];
+        const lastVal = ds.data[ds.data.length - 1];
+        let delta = 0;
+        if (activePerfMetric === 'throughput') delta = (Math.random() - 0.48) * 1200;
+        else if (activePerfMetric === 'latency') delta = (Math.random() - 0.52) * 0.12;
+        else delta = (Math.random() - 0.45) * 0.25;
+
+        let newVal = Math.max(0.1, lastVal + delta);
+        if (activePerfMetric === 'efficiency') newVal = Math.min(99.9, newVal);
+
+        ds.data.shift();
+        ds.data.push(Number(newVal.toFixed(2)));
+        renderPerfGraph();
+      }, 1600);
+    }
+
+    function renderPerfGraph() {
+      const ds = PERF_DATASETS[activePerfMetric];
+      const svgW = 380;
+      const svgH = 160;
+      const data = ds.data;
+
+      const minVal = Math.min(...data) * 0.9;
+      const maxVal = Math.max(...data) * 1.1;
+
+      const points = data.map((val, idx) => {
+        const x = (idx / (data.length - 1)) * svgW;
+        const y = svgH - ((val - minVal) / (maxVal - minVal)) * (svgH - 25) - 15;
+        return { x, y, val };
+      });
+
+      // Construct Smooth Cubic Bezier Curve
+      let dStr = `M ${points[0].x},${points[0].y}`;
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i];
+        const p1 = points[i + 1];
+        const cpX = (p0.x + p1.x) / 2;
+        dStr += ` C ${cpX},${p0.y} ${cpX},${p1.y} ${p1.x},${p1.y}`;
+      }
+
+      const areaDStr = dStr + ` L ${svgW},${svgH} L 0,${svgH} Z`;
+
+      const linePathEl = document.getElementById("perfLinePath");
+      const areaPathEl = document.getElementById("perfAreaPath");
+
+      linePathEl.setAttribute("d", dStr);
+      linePathEl.setAttribute("stroke", ds.color);
+      areaPathEl.setAttribute("d", areaDStr);
+      areaPathEl.setAttribute("fill", `url(#${ds.gradId})`);
+
+      // Store points globally for hover tracking
+      window._currentPerfPoints = points;
+    }
+
+    function handlePerfGraphHover(e) {
+      const box = document.getElementById("perfChartBox");
+      const rect = box.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const svgW = rect.width;
+      const points = window._currentPerfPoints;
+      if (!points || points.length === 0) return;
+
+      const percent = Math.max(0, Math.min(1, mouseX / svgW));
+      const pointIdx = Math.round(percent * (points.length - 1));
+      const pt = points[pointIdx];
+
+      const hoverLine = document.getElementById("perfHoverLine");
+      const hoverCircle = document.getElementById("perfHoverCircle");
+      const tooltip = document.getElementById("perfTooltip");
+      const ds = PERF_DATASETS[activePerfMetric];
+
+      const scaleX = (pt.x / 380) * svgW;
+      const scaleY = (pt.y / 160) * rect.height;
+
+      hoverLine.setAttribute("x1", scaleX);
+      hoverLine.setAttribute("x2", scaleX);
+      hoverLine.setAttribute("opacity", "1");
+
+      hoverCircle.setAttribute("cx", scaleX);
+      hoverCircle.setAttribute("cy", scaleY);
+      hoverCircle.setAttribute("fill", ds.color);
+      hoverCircle.setAttribute("opacity", "1");
+
+      const now = new Date();
+      document.getElementById("perfTtTime").textContent = now.toLocaleTimeString();
+      document.getElementById("perfTtVal").textContent = `${pt.val.toLocaleString()} ${ds.unit}`;
+      tooltip.style.display = "flex";
+    }
+
+    function hidePerfGraphTooltip() {
+      document.getElementById("perfHoverLine").setAttribute("opacity", "0");
+      document.getElementById("perfHoverCircle").setAttribute("opacity", "0");
+      document.getElementById("perfTooltip").style.display = "none";
+    }
+
+    // Initialize widgets on load
+    document.addEventListener("DOMContentLoaded", () => {
+      initCalendar();
+      initPerfGraph();
+    });
+    // Fallback if DOM already loaded
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      initCalendar();
+      initPerfGraph();
     }
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
