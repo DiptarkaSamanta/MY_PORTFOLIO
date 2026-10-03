@@ -30,7 +30,7 @@
 | :--- | :--- | :--- |
 | 🔭 **Stellar Observatory** | [`observatory.html`](observatory.html) | Featured technical builds, AI/ML repositories, live demos (including Scanimation Studio), and system architectures. |
 | 🎓 **Grand Academy** | [`academy.html`](academy.html) | Educational history, academic degrees, research certifications, and machine learning credentials. |
-| ⌛ **Chronos Clock Tower** | [`clock_tower.html`](clock_tower.html) | Professional career timeline, work experience history, milestones, and engineering achievements. |
+| ⌛ **Chronos Clock Tower** | [`clock_tower.html`](clock_tower.html) | Professional career timeline, work experience history, milestones, and the interactive 360° Island Panorama Observatory Deck. |
 | 💻 **Core Terminal** | [`code_terminal.html`](code_terminal.html) | Interactive terminal shell analyzing programming languages, deep learning frameworks, and dev toolkits. |
 | 🏰 **Home Manor** | [`home.html`](home.html) | Personal quarters of Diptarka Samanta featuring biography, core engineering values, goals, and downloadable resume. |
 | 📚 **Grand Library** | [`library.html`](library.html) | Technical publications, research blog posts, book notes, and AI/NLP academic documentation. |

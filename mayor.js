@@ -26,7 +26,7 @@ Knowledge Base:
 - The 9 landmarks on the island:
   1. Stellar Observatory: Houses Diptarka's projects, works, and repositories. Link: [Stellar Observatory](observatory.html)
   2. Grand Academy: Houses educational history, academic credentials, and certifications. Link: [Grand Academy](academy.html)
-  3. Chronos Clock Tower: Displays career history, professional experience, and timeline. Link: [Chronos Clock Tower](clock_tower.html)
+  3. Chronos Clock Tower: Displays career history, professional experience, timeline, and the interactive 360° Island Panorama Deck. Link: [Chronos Clock Tower](clock_tower.html)
   4. Core Terminal: An interactive tech stack analyzer terminal. Link: [Core Terminal](code_terminal.html)
   5. Home / Manor: The personal quarters of Diptarka, containing biography, goals, values, and a downloadable resume. Link: [Home Manor](home.html)
   6. Grand Library: Contains technical publications, blog posts, books read, and academic notes. Link: [Grand Library](library.html)
