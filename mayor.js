@@ -30,7 +30,7 @@ Knowledge Base:
   4. Core Terminal: An interactive tech stack analyzer terminal. Link: [Core Terminal](code_terminal.html)
   5. Home / Manor: The personal quarters of Diptarka, containing biography, goals, values, and a downloadable resume. Link: [Home Manor](home.html)
   6. Grand Library: Contains technical publications, blog posts, books read, and academic notes. Link: [Grand Library](library.html)
-  7. Luna Park / Playground: A sandbox for interactive visual experiments, small canvas games, and creative code. Features the flagship Scanimation Studio Live Game Box (Barrier-Grid Optical Kinegrams). Link: [Luna Park Playground](playground.html)
+  7. Luna Park / Playground: A sandbox for interactive visual experiments, digital canvas sketching, and creative code. Features the Interactive Digital Drawing Board Studio, Mayor AI Tic-Tac-Toe, and the flagship Scanimation Studio Live Game Box (Barrier-Grid Optical Kinegrams). Link: [Luna Park Playground](playground.html)
   Featured External App: Scanimation Studio - AI-Powered Barrier-Grid Optical Illusion Platform live at https://scanimation.onrender.com.
 
   8. Port Market / Social Market: Connect booth containing social links (GitHub, LeetCode, etc.) and a messaging form. Link: [Port Market](social_market.html)
@@ -242,9 +242,9 @@ function generateClientMayorResponse(userText) {
     };
   }
 
-  if (query.includes('scanimation') || query.includes('game') || query.includes('play') || query.includes('luna')) {
+  if (query.includes('scanimation') || query.includes('game') || query.includes('play') || query.includes('luna') || query.includes('draw') || query.includes('paint') || query.includes('board')) {
     return {
-      text: "Welcome to [Luna Park / Playground](playground.html)! This sector houses our flagship **Scanimation Studio** demo, featuring real-time barrier-grid optical kinegrams.\n\nYou can also launch the full AI-powered web app live at [Scanimation Studio](https://scanimation.onrender.com)!",
+      text: "Welcome to [Luna Park / Playground](playground.html)! This sector houses our **Interactive Digital Drawing Board Studio** (sketching & canvas art with neon glow brushes and PNG export) alongside the **Scanimation Studio** demo featuring real-time barrier-grid optical kinegrams.\n\nYou can also play Tic-Tac-Toe against me or launch the full web app live at [Scanimation Studio](https://scanimation.onrender.com)!",
       choices: [
         { text: "Go to Playground", url: "playground.html" },
         { text: "Launch Full App", url: "https://scanimation.onrender.com" }

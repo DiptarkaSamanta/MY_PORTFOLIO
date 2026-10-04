@@ -34,7 +34,7 @@
 | 💻 **Core Terminal** | [`code_terminal.html`](code_terminal.html) | Interactive terminal shell analyzing programming languages, deep learning frameworks, and dev toolkits. |
 | 🏰 **Home Manor** | [`home.html`](home.html) | Personal quarters of Diptarka Samanta featuring biography, core engineering values, goals, and downloadable resume. |
 | 📚 **Grand Library** | [`library.html`](library.html) | Technical publications, research blog posts, book notes, and AI/NLP academic documentation. |
-| 🎮 **Luna Park (Sandbox)** | [`playground.html`](playground.html) | Creative sandbox featuring the Scanimation Live Video Demo & Mayor AI Tic-Tac-Toe Challenge side-by-side. |
+| 🎮 **Luna Park (Sandbox)** | [`playground.html`](playground.html) | Creative sandbox featuring the Interactive Digital Drawing Board Studio, Scanimation Live Video Demo & Mayor AI Tic-Tac-Toe Challenge. |
 | 🏪 **Port Market** | [`social_market.html`](social_market.html) | Social network booth containing GitHub, LeetCode, and LinkedIn links plus an interactive messaging form. |
 | ⚓ **Iron Wharf** | [`industry_port.html`](industry_port.html) | Engineering consultancy details, freelancing options, rate cards, and technical solutions packages. |
 

@@ -767,6 +767,123 @@
       transform: translateY(0);
       opacity: 1;
     }
+
+    /* ==================================================== */
+    /* INTERACTIVE DRAWING BOARD STUDIO STYLES               */
+    /* ==================================================== */
+    .drawing-board-card {
+      background: radial-gradient(circle at 50% 20%, rgba(14, 165, 233, 0.15), rgba(3, 7, 18, 0.95));
+      border: 1px solid rgba(14, 165, 233, 0.35);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 35px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(14, 165, 233, 0.15);
+      position: relative;
+    }
+    .drawing-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(3, 7, 18, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .tool-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .draw-tool-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .draw-tool-btn:hover {
+      background: rgba(14, 165, 233, 0.15);
+      border-color: #0ea5e9;
+      color: #38bdf8;
+    }
+    .draw-tool-btn.active {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
+    }
+    .color-swatch-picker {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .color-swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .color-swatch:hover, .color-swatch.active {
+      transform: scale(1.25);
+      border-color: #ffffff;
+      box-shadow: 0 0 10px currentColor;
+    }
+    .canvas-viewport-frame {
+      width: 100%;
+      height: 480px;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      background: #0b1120;
+    }
+    .canvas-viewport-frame.grid-bg {
+      background-size: 20px 20px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-color: #0b1120;
+    }
+    .canvas-viewport-frame.blueprint-bg {
+      background-color: #032b45;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 25px 25px;
+    }
+    .canvas-viewport-frame.light-bg {
+      background-color: #ffffff;
+    }
+    #drawingCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+    .brush-size-preview {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #0ea5e9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
+    }
   </style>
 </head>
 <body class="accent-pink">
@@ -1106,6 +1223,95 @@
       </section>
 
     </div>
+
+    <!-- ========================================================= -->
+    <!-- INTERACTIVE DIGITAL DRAWING BOARD STUDIO                  -->
+    <!-- ========================================================= -->
+    <section class="drawing-board-card glass-panel" id="drawingBoardSection">
+      <div class="uno-header-row">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="scanimation-badge" style="background: linear-gradient(135deg, #0ea5e9, #6366f1); font-size: 0.65rem;">DIGITAL CANVAS STUDIO</span>
+          <span class="scanimation-badge-live" style="font-size: 0.65rem;">LIVE DRAWING</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="draw-tool-btn" onclick="undoCanvasStep()" title="Undo (Ctrl+Z)">
+            ↩️ Undo
+          </button>
+          <button class="draw-tool-btn" onclick="redoCanvasStep()" title="Redo (Ctrl+Y)">
+            ↪️ Redo
+          </button>
+          <button class="draw-tool-btn" onclick="clearCanvasSurface()" style="color: #f43f5e; border-color: rgba(244,63,94,0.3);" title="Clear Canvas">
+            🗑️ Clear
+          </button>
+          <button class="draw-tool-btn active" onclick="downloadCanvasArtwork()" style="background: linear-gradient(135deg, #10b981, #059669);" title="Download Image">
+            💾 Export PNG
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 4px 0; display: flex; align-items: center; gap: 10px;">
+          🎨 Interactive Digital Drawing Board
+        </h2>
+        <p style="font-size: 0.83rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+          Sketch, draw, and design in real-time! Use neon glow brushes, shape tools, custom colors, and canvas presets. Export your artwork instantly.
+        </p>
+      </div>
+
+      <!-- TOOLBAR ROW 1: TOOLS & BRUSHES -->
+      <div class="drawing-toolbar">
+        <!-- BRUSH / TOOL SELECTOR -->
+        <div class="tool-btn-group">
+          <button class="draw-tool-btn active" id="toolBtn-pencil" onclick="setDrawTool('pencil')">✏️ Pencil</button>
+          <button class="draw-tool-btn" id="toolBtn-neon" onclick="setDrawTool('neon')">💡 Neon Glow</button>
+          <button class="draw-tool-btn" id="toolBtn-rainbow" onclick="setDrawTool('rainbow')">🌈 Rainbow</button>
+          <button class="draw-tool-btn" id="toolBtn-calligraphy" onclick="setDrawTool('calligraphy')">🖊️ Chisel</button>
+          <button class="draw-tool-btn" id="toolBtn-rect" onclick="setDrawTool('rect')">🟩 Rect</button>
+          <button class="draw-tool-btn" id="toolBtn-circle" onclick="setDrawTool('circle')">⭕ Circle</button>
+          <button class="draw-tool-btn" id="toolBtn-line" onclick="setDrawTool('line')">📏 Line</button>
+          <button class="draw-tool-btn" id="toolBtn-eraser" onclick="setDrawTool('eraser')">🧹 Eraser</button>
+        </div>
+
+        <!-- COLOR PALETTE SWATCHES -->
+        <div class="color-swatch-picker">
+          <span style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 700;">COLOR:</span>
+          <div class="color-swatch active" style="background: #0ea5e9; color: #0ea5e9;" onclick="setDrawColor('#0ea5e9', this)"></div>
+          <div class="color-swatch" style="background: #ec4899; color: #ec4899;" onclick="setDrawColor('#ec4899', this)"></div>
+          <div class="color-swatch" style="background: #10b981; color: #10b981;" onclick="setDrawColor('#10b981', this)"></div>
+          <div class="color-swatch" style="background: #f59e0b; color: #f59e0b;" onclick="setDrawColor('#f59e0b', this)"></div>
+          <div class="color-swatch" style="background: #a855f7; color: #a855f7;" onclick="setDrawColor('#a855f7', this)"></div>
+          <div class="color-swatch" style="background: #ffffff; color: #ffffff;" onclick="setDrawColor('#ffffff', this)"></div>
+          <input type="color" id="drawCustomColorPicker" value="#0ea5e9" onchange="setDrawColor(this.value, null)" style="width: 26px; height: 26px; border: none; background: transparent; cursor: pointer;" title="Custom Color Picker">
+        </div>
+      </div>
+
+      <!-- TOOLBAR ROW 2: SIZE & CANVAS PRESETS -->
+      <div class="drawing-toolbar" style="margin-bottom: 16px; padding: 8px 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 700;">BRUSH SIZE:</span>
+          <input type="range" id="drawSizeSlider" min="1" max="40" value="5" oninput="updateBrushSize(this.value)" style="accent-color: #0ea5e9; width: 120px; cursor: pointer;">
+          <span id="brushSizeValLabel" style="font-size: 0.72rem; font-family: var(--font-mono); color: #fff;">5px</span>
+          <div class="brush-size-preview" id="brushSizePreviewCircle">
+            <div id="brushInnerDot" style="width: 5px; height: 5px; border-radius: 50%; background: #fff;"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 700;">BACKGROUND:</span>
+          <select id="canvasBgStyleSelect" onchange="setCanvasBackgroundStyle(this.value)" style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer;">
+            <option value="dark">Dark Glass Studio</option>
+            <option value="grid">Grid Graph Paper</option>
+            <option value="blueprint">Blueprint Grid</option>
+            <option value="light">Clean Light Paper</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CANVAS VIEWPORT SURFACE -->
+      <div class="canvas-viewport-frame" id="canvasViewportFrame">
+        <canvas id="drawingCanvas"></canvas>
+      </div>
+    </section>
 
     <!-- ========================================================= -->
     <!-- POPULAR GAMES SHOWCASE & ACCOUNT CONNECT HUB             -->
@@ -1816,6 +2022,273 @@
         toast.classList.remove('show');
       }, 3500);
     }
+
+    // ====================================================
+    // INTERACTIVE DIGITAL DRAWING BOARD ENGINE
+    // ====================================================
+    (function() {
+      let canvas = null;
+      let ctx = null;
+      let isDrawing = false;
+      let currentTool = 'pencil';
+      let strokeColor = '#0ea5e9';
+      let strokeSize = 5;
+      let startX = 0;
+      let startY = 0;
+      let rainbowHue = 0;
+      let snapshot = null;
+
+      let undoStack = [];
+      let redoStack = [];
+      const MAX_HISTORY = 25;
+
+      function initDrawingBoard() {
+        canvas = document.getElementById('drawingCanvas');
+        if (!canvas) return;
+
+        ctx = canvas.getContext('2d');
+        resizeCanvas();
+
+        window.addEventListener('resize', resizeCanvas);
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        document.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+            if (e.shiftKey) window.redoCanvasStep();
+            else window.undoCanvasStep();
+          } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+            window.redoCanvasStep();
+          }
+        });
+
+        saveCanvasState();
+      }
+
+      function resizeCanvas() {
+        if (!canvas || !ctx) return;
+        const container = canvas.parentElement;
+        const rect = container.getBoundingClientRect();
+        
+        const tempImage = ctx.getImageData(0, 0, canvas.width || 1, canvas.height || 1);
+
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+
+        if (tempImage && tempImage.width > 1) {
+          ctx.putImageData(tempImage, 0, 0);
+        }
+      }
+
+      function saveCanvasState() {
+        if (!canvas || !ctx) return;
+        if (undoStack.length >= MAX_HISTORY) {
+          undoStack.shift();
+        }
+        undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+        redoStack = [];
+      }
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+
+      function startDrawing(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        startX = pos.x;
+        startY = pos.y;
+
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+
+        snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+
+        if (currentTool === 'pencil' || currentTool === 'eraser' || currentTool === 'neon' || currentTool === 'rainbow' || currentTool === 'calligraphy') {
+          ctx.lineWidth = strokeSize;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+
+          if (currentTool === 'eraser') {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.strokeStyle = 'rgba(0,0,0,1)';
+            ctx.shadowBlur = 0;
+          } else {
+            ctx.globalCompositeOperation = 'source-over';
+            
+            if (currentTool === 'neon') {
+              ctx.strokeStyle = strokeColor;
+              ctx.shadowColor = strokeColor;
+              ctx.shadowBlur = strokeSize * 2.5;
+            } else if (currentTool === 'rainbow') {
+              rainbowHue = (rainbowHue + 4) % 360;
+              const rainbowColor = `hsl(${rainbowHue}, 100%, 60%)`;
+              ctx.strokeStyle = rainbowColor;
+              ctx.shadowColor = rainbowColor;
+              ctx.shadowBlur = 8;
+            } else if (currentTool === 'calligraphy') {
+              ctx.strokeStyle = strokeColor;
+              ctx.shadowBlur = 0;
+              ctx.lineCap = 'square';
+              ctx.lineWidth = strokeSize * 1.8;
+            } else {
+              ctx.strokeStyle = strokeColor;
+              ctx.shadowBlur = 0;
+            }
+          }
+
+          ctx.lineTo(pos.x, pos.y);
+          ctx.stroke();
+
+        } else if (currentTool === 'rect' || currentTool === 'circle' || currentTool === 'line') {
+          ctx.putImageData(snapshot, 0, 0);
+
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.lineWidth = strokeSize;
+          ctx.strokeStyle = strokeColor;
+          ctx.shadowBlur = 0;
+          ctx.beginPath();
+
+          if (currentTool === 'rect') {
+            ctx.rect(startX, startY, pos.x - startX, pos.y - startY);
+          } else if (currentTool === 'circle') {
+            const radius = Math.sqrt(Math.pow(pos.x - startX, 2) + Math.pow(pos.y - startY, 2));
+            ctx.arc(startX, startY, radius, 0, 2 * Math.PI);
+          } else if (currentTool === 'line') {
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(pos.x, pos.y);
+          }
+          ctx.stroke();
+        }
+      }
+
+      function stopDrawing() {
+        if (isDrawing) {
+          isDrawing = false;
+          ctx.beginPath();
+          saveCanvasState();
+        }
+      }
+
+      function handleTouchStart(e) {
+        e.preventDefault();
+        startDrawing(e);
+      }
+
+      function handleTouchMove(e) {
+        e.preventDefault();
+        draw(e);
+      }
+
+      window.setDrawTool = function(toolName) {
+        currentTool = toolName;
+        document.querySelectorAll('.draw-tool-btn').forEach(btn => {
+          if (btn.id === `toolBtn-${toolName}`) btn.classList.add('active');
+          else btn.classList.remove('active');
+        });
+      };
+
+      window.setDrawColor = function(color, swatchElem) {
+        strokeColor = color;
+        if (swatchElem) {
+          document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+          swatchElem.classList.add('active');
+        }
+        const customPicker = document.getElementById('drawCustomColorPicker');
+        if (customPicker) customPicker.value = color;
+
+        const dot = document.getElementById('brushInnerDot');
+        if (dot) dot.style.background = color;
+      };
+
+      window.updateBrushSize = function(val) {
+        strokeSize = parseInt(val, 10);
+        const label = document.getElementById('brushSizeValLabel');
+        if (label) label.textContent = `${strokeSize}px`;
+
+        const dot = document.getElementById('brushInnerDot');
+        if (dot) {
+          dot.style.width = `${Math.min(strokeSize, 24)}px`;
+          dot.style.height = `${Math.min(strokeSize, 24)}px`;
+        }
+      };
+
+      window.setCanvasBackgroundStyle = function(styleName) {
+        const frame = document.getElementById('canvasViewportFrame');
+        if (!frame) return;
+        frame.className = `canvas-viewport-frame ${styleName}-bg`;
+      };
+
+      window.undoCanvasStep = function() {
+        if (!canvas || !ctx || undoStack.length <= 1) return;
+        redoStack.push(undoStack.pop());
+        const previousState = undoStack[undoStack.length - 1];
+        ctx.putImageData(previousState, 0, 0);
+      };
+
+      window.redoCanvasStep = function() {
+        if (!canvas || !ctx || redoStack.length === 0) return;
+        const nextState = redoStack.pop();
+        undoStack.push(nextState);
+        ctx.putImageData(nextState, 0, 0);
+      };
+
+      window.clearCanvasSurface = function() {
+        if (!canvas || !ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        saveCanvasState();
+      };
+
+      window.downloadCanvasArtwork = function() {
+        if (!canvas) return;
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+
+        const frameStyle = document.getElementById('canvasBgStyleSelect')?.value;
+        if (frameStyle === 'light') tempCtx.fillStyle = '#ffffff';
+        else if (frameStyle === 'blueprint') tempCtx.fillStyle = '#032b45';
+        else tempCtx.fillStyle = '#0b1120';
+        
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(canvas, 0, 0);
+
+        const link = document.createElement('a');
+        link.download = `aethelgard_artwork_${Date.now()}.png`;
+        link.href = tempCanvas.toDataURL('image/png');
+        link.click();
+
+        if (window.showGameToast) {
+          window.showGameToast('🎨 Artwork exported successfully as PNG!');
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initDrawingBoard();
+      });
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(initDrawingBoard, 200);
+      }
+    })();
   </script>
   <script src="toolbox.js?v=2.2.0"></script>
 </body>
