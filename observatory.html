@@ -1675,8 +1675,8 @@
     let currentOrbitIndex = 0;
     let targetOrbitIndex = 0;
     let isAutoSpinning = false;
-    let isDragging = false;
-    let dragStartX = 0;
+    let orbitIsDragging = false;
+    let orbitDragStartX = 0;
     let dragStartTargetIndex = 0;
 
     function getVisibleCards() {
@@ -1707,7 +1707,7 @@
       currentOrbitIndex += (targetOrbitIndex - currentOrbitIndex) * 0.12;
 
       // Auto rotation update when idle
-      if (isAutoSpinning && !isDragging) {
+      if (isAutoSpinning && !orbitIsDragging) {
         targetOrbitIndex += 0.003;
       }
 
@@ -1820,22 +1820,22 @@
       // Mouse drag controls
       stage.addEventListener('mousedown', (e) => {
         if (e.target.closest('button') || e.target.closest('a')) return;
-        isDragging = true;
-        dragStartX = e.clientX;
+        orbitIsDragging = true;
+        orbitDragStartX = e.clientX;
         dragStartTargetIndex = targetOrbitIndex;
         stage.style.cursor = 'grabbing';
       });
 
       window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const deltaX = e.clientX - dragStartX;
+        if (!orbitIsDragging) return;
+        const deltaX = e.clientX - orbitDragStartX;
         const sensitivity = 0.0035;
         targetOrbitIndex = dragStartTargetIndex - deltaX * sensitivity;
       });
 
       window.addEventListener('mouseup', () => {
-        if (isDragging) {
-          isDragging = false;
+        if (orbitIsDragging) {
+          orbitIsDragging = false;
           stage.style.cursor = 'grab';
           targetOrbitIndex = Math.round(targetOrbitIndex);
         }
@@ -1852,21 +1852,21 @@
       let touchStartX = 0;
       stage.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
-          isDragging = true;
+          orbitIsDragging = true;
           touchStartX = e.touches[0].clientX;
           dragStartTargetIndex = targetOrbitIndex;
         }
       }, { passive: true });
 
       stage.addEventListener('touchmove', (e) => {
-        if (!isDragging || e.touches.length !== 1) return;
+        if (!orbitIsDragging || e.touches.length !== 1) return;
         const deltaX = e.touches[0].clientX - touchStartX;
         targetOrbitIndex = dragStartTargetIndex - deltaX * 0.005;
       }, { passive: true });
 
       stage.addEventListener('touchend', () => {
-        if (isDragging) {
-          isDragging = false;
+        if (orbitIsDragging) {
+          orbitIsDragging = false;
           targetOrbitIndex = Math.round(targetOrbitIndex);
         }
       });

@@ -51,9 +51,11 @@
 
 /* Collapsed State: Horizontal Pill Bar */
 .toolbox.collapsed {
-  width: 310px;
+  width: auto;
+  min-width: 320px;
+  max-width: fit-content;
   height: 42px;
-  padding: 0 12px;
+  padding: 0 14px;
   border-radius: 21px;
   display: flex;
   flex-direction: row;
@@ -67,7 +69,8 @@
   height: 100%;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
+  white-space: nowrap;
 }
 
 .toolbox.collapsed .toolbox-minimized-content {
@@ -94,6 +97,13 @@
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#minimizedClock, #minimizedTemp {
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .minimized-time svg, .minimized-weather svg {

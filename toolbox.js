@@ -24,16 +24,16 @@ const themeBaseTemps = {
 };
 
 // Ambient Nature Soundscape Synthesizer (Web Audio API)
-let audioCtx = null;
-let windNoiseNode = null;
-let waveNoiseNode = null;
-let windFilter = null;
-let waveFilter = null;
-let windGain = null;
-let waveGain = null;
-let waveLfo = null;
-let waveLfoGain = null;
-let audioPlaying = false;
+var audioCtx = window.audioCtx || null;
+var windNoiseNode = null;
+var waveNoiseNode = null;
+var windFilter = null;
+var waveFilter = null;
+var windGain = null;
+var waveGain = null;
+var waveLfo = null;
+var waveLfoGain = null;
+var audioPlaying = false;
 
 function initAudio() {
   if (audioCtx) return;
@@ -188,10 +188,6 @@ function toggleAmbientSound(e) {
 }
 
 function applyMuteState() {
-  const btn = document.getElementById('soundToggle');
-  const icon = document.getElementById('soundIcon');
-  const path = icon ? icon.querySelector('path') : null;
-
   audioPlayer.muted = isMuted;
 
   if (isMuted) {
@@ -199,10 +195,6 @@ function applyMuteState() {
       audioCtx.suspend().catch(() => {});
     }
     audioPlaying = false;
-    if (btn) btn.classList.remove('playing');
-    if (path) {
-      path.setAttribute('d', 'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.96-3.87l-1.48 1.48c.33.73.52 1.54.52 2.39 0 2.25-1.28 4.2-3.17 5.16l1.49 1.49C20.52 16.92 22 14.64 22 12c0-1.45-.42-2.8-1.04-3.87zM2.81 2.81L1.39 4.22l4.5 4.5H3v6h4l5 5V3.88l4.87 4.87c-.6.38-1.25.68-1.96.86v2.02c1.25-.26 2.4-.87 3.34-1.72l2.06 2.06 1.41-1.41L2.81 2.81zM10 16.12L7.83 14H5v-4h2.83L10 7.88v8.24z');
-    }
   } else {
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().catch(() => {});
@@ -215,11 +207,9 @@ function applyMuteState() {
     if (typeof window.currentTheme !== 'undefined') {
       modulateSynthForTheme(window.currentTheme);
     }
-    if (btn) btn.classList.add('playing');
-    if (path) {
-      path.setAttribute('d', 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z');
-    }
   }
+
+  updateMusicUIState();
 }
 
 // Environment Controllers
@@ -567,11 +557,11 @@ function toggleToolboxCollapse(e) {
 }
 
 // Draggable Toolbox Logic
-let isDragging = false;
-let dragStartX = 0;
-let dragStartY = 0;
-let toolboxStartX = 0;
-let toolboxStartY = 0;
+var toolboxIsDragging = false;
+var toolboxDragStartX = 0;
+var toolboxDragStartY = 0;
+var toolboxStartX = 0;
+var toolboxStartY = 0;
 
 function onDragStart(e) {
   // Disable dragging on mobile layout
@@ -583,14 +573,14 @@ function onDragStart(e) {
   const toolboxEl = document.getElementById('mainToolbox');
   if (!toolboxEl) return;
 
-  isDragging = true;
+  toolboxIsDragging = true;
 
   // Support touch events
   const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
   const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
 
-  dragStartX = clientX;
-  dragStartY = clientY;
+  toolboxDragStartX = clientX;
+  toolboxDragStartY = clientY;
 
   // Get current offsets
   const rect = toolboxEl.getBoundingClientRect();
@@ -610,7 +600,7 @@ function onDragStart(e) {
 }
 
 function onDragMove(e) {
-  if (!isDragging) return;
+  if (!toolboxIsDragging) return;
 
   const toolboxEl = document.getElementById('mainToolbox');
   if (!toolboxEl) return;
@@ -618,8 +608,8 @@ function onDragMove(e) {
   const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
   const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0].clientY);
 
-  const deltaX = clientX - dragStartX;
-  const deltaY = clientY - dragStartY;
+  const deltaX = clientX - toolboxDragStartX;
+  const deltaY = clientY - toolboxDragStartY;
 
   let newX = toolboxStartX + deltaX;
   let newY = toolboxStartY + deltaY;
@@ -645,7 +635,7 @@ function onDragMove(e) {
 }
 
 function onDragEnd() {
-  isDragging = false;
+  toolboxIsDragging = false;
   document.removeEventListener('mousemove', onDragMove);
   document.removeEventListener('mouseup', onDragEnd);
   document.removeEventListener('touchmove', onDragMove);
@@ -1175,7 +1165,34 @@ function updateMusicUIState() {
     else vis.classList.remove('active');
   }
 
-  // Mini Bar Music Icon & Play State Symbol
+  // Header Sound Toggle Button (#soundToggle)
+  const soundBtn = document.getElementById('soundToggle');
+  const soundIcon = document.getElementById('soundIcon');
+  const soundPath = soundIcon ? soundIcon.querySelector('path') : null;
+
+  if (soundBtn) {
+    if (isMuted) {
+      soundBtn.classList.remove('playing');
+      soundBtn.title = "Unmute Sound";
+      if (soundPath) {
+        soundPath.setAttribute('d', 'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.96-3.87l-1.48 1.48c.33.73.52 1.54.52 2.39 0 2.25-1.28 4.2-3.17 5.16l1.49 1.49C20.52 16.92 22 14.64 22 12c0-1.45-.42-2.8-1.04-3.87zM2.81 2.81L1.39 4.22l4.5 4.5H3v6h4l5 5V3.88l4.87 4.87c-.6.38-1.25.68-1.96.86v2.02c1.25-.26 2.4-.87 3.34-1.72l2.06 2.06 1.41-1.41L2.81 2.81zM10 16.12L7.83 14H5v-4h2.83L10 7.88v8.24z');
+      }
+    } else if (isPlaying) {
+      soundBtn.classList.add('playing');
+      soundBtn.title = "Mute Sound";
+      if (soundPath) {
+        soundPath.setAttribute('d', 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z');
+      }
+    } else {
+      soundBtn.classList.remove('playing');
+      soundBtn.title = "Sound Paused (Click to Mute)";
+      if (soundPath) {
+        soundPath.setAttribute('d', 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z');
+      }
+    }
+  }
+
+  // Mini Bar Music Icon & Play State Symbol (#miniMusicToggleBtn)
   const miniIcon = document.getElementById('miniMusicIcon');
   if (miniIcon) {
     if (isMuted) {
@@ -1196,7 +1213,7 @@ function updateMusicUIState() {
   const miniPlayState = document.querySelectorAll('.mini-play-state, #musicMiniPlayState');
   miniPlayState.forEach(el => {
     if (isMuted) {
-      el.textContent = '🔇';
+      el.textContent = '';
       el.style.color = 'var(--text-secondary)';
     } else if (isPlaying) {
       el.textContent = '▶';
@@ -1207,13 +1224,38 @@ function updateMusicUIState() {
     }
   });
 
-  // Main Player Play/Pause Button Icon SVG
+  // Main Player Play/Pause Button Icon SVG (Inside button)
+  const playBtn = document.getElementById('musicPlayBtn');
   const playIcon = document.getElementById('musicPlayIcon');
   if (playIcon) {
     if (isPlaying) {
       playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
     } else {
       playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    }
+  } else if (playBtn) {
+    if (isPlaying) {
+      playBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+    } else {
+      playBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M8 5v14l11-7z"/></svg>';
+    }
+  }
+
+  if (playBtn) {
+    playBtn.title = isPlaying ? "Pause Soundtrack" : "Play Soundtrack";
+  }
+  const miniBtn = document.getElementById('miniMusicToggleBtn');
+  if (miniBtn) {
+    miniBtn.title = isPlaying ? "Pause Soundtrack" : "Play Soundtrack";
+  }
+
+  // Volume Slider Row Mute Icon (#volumeSvgPath inside music player)
+  const volPath = document.getElementById('volumeSvgPath');
+  if (volPath) {
+    if (isMuted || !isPlaying) {
+      volPath.setAttribute('d', 'M11 5L6 9H2v6h4l5 4V5z');
+    } else {
+      volPath.setAttribute('d', 'M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 0 1 0 7.07');
     }
   }
 
@@ -1244,6 +1286,17 @@ function playMusicSynth() {
   localStorage.setItem('musicPlaying', 'true');
   localStorage.setItem('userPaused', 'false');
 
+  // Ensure exact saved timestamp is restored before playing
+  const savedTimeStr = localStorage.getItem('musicCurrentTime');
+  if (savedTimeStr) {
+    const parsed = parseFloat(savedTimeStr);
+    if (!isNaN(parsed) && parsed > 0 && (!audioPlayer.currentTime || Math.abs(audioPlayer.currentTime - parsed) > 1)) {
+      try {
+        audioPlayer.currentTime = parsed;
+      } catch (e) {}
+    }
+  }
+
   setupAudioVisualNodes();
 
   try {
@@ -1268,6 +1321,11 @@ function pauseMusicSynth() {
   musicPlaying = false;
   localStorage.setItem('musicPlaying', 'false');
   localStorage.setItem('userPaused', 'true');
+
+  if (audioPlayer.currentTime > 0) {
+    localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
+  }
+
   audioPlayer.pause();
 
   if (animationFrameId) {
@@ -1471,6 +1529,9 @@ function initToolbox() {
   requestUserLocation();
 }
 
+// Execute clock update immediately on script load if DOM elements are present
+try { updateClock(); } catch (e) {}
+
 if (document.readyState === 'loading') {
   window.addEventListener('DOMContentLoaded', initToolbox);
 } else {
@@ -1582,8 +1643,11 @@ function handleMusicUpload(e) {
 }
 
 function toggleMusicPlaybackDirect(e) {
-  if (e) e.stopPropagation();
-  toggleMusicPlayback();
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  toggleAmbientSound(e);
 }
 
 // Seek Progress & Duration Trackers

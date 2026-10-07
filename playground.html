@@ -1703,24 +1703,24 @@
     ];
 
     // Audio Synthesis for beeps
-    let audioCtx = null;
+    let gameAudioCtx = null;
     function playBeep(freq, type = 'sine', duration = 0.15) {
       try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
+        if (!gameAudioCtx) gameAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = gameAudioCtx.createOscillator();
+        const gainNode = gameAudioCtx.createGain();
         
         osc.type = type;
         osc.frequency.value = freq;
         
-        gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        gainNode.gain.setValueAtTime(0.06, gameAudioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, gameAudioCtx.currentTime + duration);
         
         osc.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+        gainNode.connect(gameAudioCtx.destination);
         
         osc.start();
-        osc.stop(audioCtx.currentTime + duration);
+        osc.stop(gameAudioCtx.currentTime + duration);
       } catch (e) { console.log(e); }
     }
 
