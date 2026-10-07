@@ -180,6 +180,11 @@ function toggleAmbientSound(e) {
   isMuted = !isMuted;
   localStorage.setItem('isMuted', isMuted ? 'true' : 'false');
   applyMuteState();
+  if (isMuted) {
+    pauseMusicSynth();
+  } else {
+    playMusicSynth();
+  }
 }
 
 function applyMuteState() {
@@ -187,12 +192,11 @@ function applyMuteState() {
   const icon = document.getElementById('soundIcon');
   const path = icon ? icon.querySelector('path') : null;
 
-  if (isMuted) {
-    // Stop soundtrack music completely
-    pauseMusicSynth();
+  audioPlayer.muted = isMuted;
 
+  if (isMuted) {
     if (audioCtx) {
-      audioCtx.suspend();
+      audioCtx.suspend().catch(() => {});
     }
     audioPlaying = false;
     if (btn) btn.classList.remove('playing');
@@ -200,11 +204,8 @@ function applyMuteState() {
       path.setAttribute('d', 'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm1.96-3.87l-1.48 1.48c.33.73.52 1.54.52 2.39 0 2.25-1.28 4.2-3.17 5.16l1.49 1.49C20.52 16.92 22 14.64 22 12c0-1.45-.42-2.8-1.04-3.87zM2.81 2.81L1.39 4.22l4.5 4.5H3v6h4l5 5V3.88l4.87 4.87c-.6.38-1.25.68-1.96.86v2.02c1.25-.26 2.4-.87 3.34-1.72l2.06 2.06 1.41-1.41L2.81 2.81zM10 16.12L7.83 14H5v-4h2.83L10 7.88v8.24z');
     }
   } else {
-    // Play soundtrack music
-    playMusicSynth();
-
     if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
+      audioCtx.resume().catch(() => {});
     }
     if (!windNoiseNode) {
       initAudio();
@@ -894,9 +895,9 @@ function initMusicPlayer() {
     }
   }
 
-  // Load the current audio source
+  // Load current audio source
   audioPlayer.src = songs[currentSongIndex].file;
-  audioPlayer.preload = "metadata";
+  audioPlayer.preload = "auto";
 
   const savedVolume = localStorage.getItem('musicVolume') || '0.8';
   audioPlayer.volume = parseFloat(savedVolume);
@@ -905,27 +906,42 @@ function initMusicPlayer() {
     volumeSlider.value = savedVolume;
   }
 
-  // Audio events
+  // Restore playback timestamp reliably once metadata is ready
+  let timeSynced = false;
+  const savedTimeStr = localStorage.getItem('musicCurrentTime');
+  const targetTime = savedTimeStr ? parseFloat(savedTimeStr) : 0;
+
+  const syncPlaybackTime = () => {
+    if (!timeSynced && !isNaN(targetTime) && targetTime > 0) {
+      try {
+        audioPlayer.currentTime = targetTime;
+        timeSynced = true;
+      } catch (e) {}
+    } else if (targetTime === 0) {
+      timeSynced = true;
+    }
+  };
+
+  audioPlayer.addEventListener('loadedmetadata', () => {
+    syncPlaybackTime();
+    updateSeekProgress();
+  });
+
+  audioPlayer.addEventListener('canplay', () => {
+    syncPlaybackTime();
+  });
+
   audioPlayer.addEventListener('ended', () => {
     playNextSong();
   });
 
-  audioPlayer.addEventListener('loadedmetadata', () => {
-    updateSeekProgress();
-  });
-
-  const savedTime = localStorage.getItem('musicCurrentTime');
-  const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
-
-  if (savedTime) {
-    audioPlayer.currentTime = parseFloat(savedTime);
-  }
-
   audioPlayer.addEventListener('timeupdate', () => {
+    // Only update musicCurrentTime AFTER initial time restore has completed!
+    if (timeSynced && audioPlayer.currentTime > 0) {
+      localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
+    }
     if (musicPlaying) {
       updateLyricsActive();
-      localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
-      localStorage.setItem('musicPlaying', 'true');
     }
     updateSeekProgress();
   });
@@ -934,22 +950,39 @@ function initMusicPlayer() {
   renderPlaylist();
   applyMuteState();
 
-  // Autoplay handler function on user interaction
-  const startAutoplay = (e) => {
+  // Determine initial play state:
+  // First time site ever opened (musicPlaying is null) -> default to TRUE
+  const musicPlayingStored = localStorage.getItem('musicPlaying');
+  const userPausedStored = localStorage.getItem('userPaused') === 'true';
+  const isMutedStored = localStorage.getItem('isMuted') === 'true';
+
+  const shouldPlay = !isMutedStored && !userPausedStored && (musicPlayingStored === null || musicPlayingStored === 'true');
+
+  const startAutoplayOnInteraction = (e) => {
     if (e && e.target && (e.target.closest('#mainToolbox') || e.target.closest('.music-btn'))) {
       return;
     }
-    if (wasPlaying && !musicPlaying) {
+    document.removeEventListener('click', startAutoplayOnInteraction);
+    document.removeEventListener('keydown', startAutoplayOnInteraction);
+
+    const mutedNow = localStorage.getItem('isMuted') === 'true';
+    const pausedNow = localStorage.getItem('userPaused') === 'true';
+    const playingStored = localStorage.getItem('musicPlaying');
+    const playingNow = !mutedNow && !pausedNow && (playingStored === null || playingStored === 'true');
+
+    if (playingNow && !musicPlaying) {
       playMusicSynth();
     }
-    document.removeEventListener('click', startAutoplay);
-    document.removeEventListener('keydown', startAutoplay);
   };
 
-  if (wasPlaying) {
+  if (shouldPlay) {
+    syncPlaybackTime();
     try {
       audioPlayer.play().then(() => {
         musicPlaying = true;
+        localStorage.setItem('musicPlaying', 'true');
+        localStorage.setItem('userPaused', 'false');
+        timeSynced = true;
         const vinyl = document.getElementById('vinylRecord');
         const vis = document.getElementById('visualizer');
         if (vinyl) vinyl.classList.add('playing');
@@ -974,13 +1007,24 @@ function initMusicPlayer() {
 
         animateVisualizerActive();
       }).catch(() => {
-        document.addEventListener('click', startAutoplay);
-        document.addEventListener('keydown', startAutoplay);
+        musicPlaying = false;
+        document.addEventListener('click', startAutoplayOnInteraction);
+        document.addEventListener('keydown', startAutoplayOnInteraction);
       });
     } catch (err) {
-      document.addEventListener('click', startAutoplay);
-      document.addEventListener('keydown', startAutoplay);
+      musicPlaying = false;
+      document.addEventListener('click', startAutoplayOnInteraction);
+      document.addEventListener('keydown', startAutoplayOnInteraction);
     }
+  } else {
+    // Explicitly stay paused if was not playing, paused by user, or is muted
+    musicPlaying = false;
+    localStorage.setItem('musicPlaying', 'false');
+    const miniPlayState = document.querySelectorAll('.mini-play-state, #musicMiniPlayState');
+    miniPlayState.forEach(el => {
+      el.textContent = '⏸';
+      el.style.color = 'var(--text-secondary)';
+    });
   }
 }
 
@@ -1134,18 +1178,15 @@ function toggleSaveCurrentSong(e) {
 }
 
 function playMusicSynth() {
-  if (musicPlaying) return;
-
-  // Auto unmute if master muted when playing explicitly
   if (isMuted) {
     isMuted = false;
     localStorage.setItem('isMuted', 'false');
     applyMuteState();
-    return;
   }
 
   musicPlaying = true;
   localStorage.setItem('musicPlaying', 'true');
+  localStorage.setItem('userPaused', 'false');
 
   setupAudioVisualNodes();
 
@@ -1195,6 +1236,7 @@ function playMusicSynth() {
 function pauseMusicSynth() {
   musicPlaying = false;
   localStorage.setItem('musicPlaying', 'false');
+  localStorage.setItem('userPaused', 'true');
   audioPlayer.pause();
 
   if (animationFrameId) {
@@ -1429,12 +1471,22 @@ if (document.readyState === 'loading') {
 
 // Window beforeunload / pagehide to save exact audio time persistently
 window.addEventListener('pagehide', () => {
-  localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
+  if (audioPlayer.currentTime > 0) {
+    localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
+  }
   localStorage.setItem('musicPlaying', musicPlaying ? 'true' : 'false');
+  if (!musicPlaying) {
+    localStorage.setItem('userPaused', 'true');
+  }
 });
 window.addEventListener('beforeunload', () => {
-  localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
+  if (audioPlayer.currentTime > 0) {
+    localStorage.setItem('musicCurrentTime', audioPlayer.currentTime);
+  }
   localStorage.setItem('musicPlaying', musicPlaying ? 'true' : 'false');
+  if (!musicPlaying) {
+    localStorage.setItem('userPaused', 'true');
+  }
 });
 
 // Helper Functions for Music Player Features
@@ -1447,8 +1499,11 @@ function updateMusicVolume(val) {
 }
 
 function toggleMusicMuteDirect(e) {
-  if (e) e.stopPropagation();
-  audioPlayer.muted = !audioPlayer.muted;
+  toggleAmbientSound(e);
+}
+
+function toggleMusicMute(e) {
+  toggleAmbientSound(e);
 }
 
 function triggerMusicUpload(e) {
