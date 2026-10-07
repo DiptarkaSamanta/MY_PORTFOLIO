@@ -913,10 +913,16 @@ function initMusicPlayer() {
 
   const syncPlaybackTime = () => {
     if (!timeSynced && !isNaN(targetTime) && targetTime > 0) {
-      try {
-        audioPlayer.currentTime = targetTime;
-        timeSynced = true;
-      } catch (e) {}
+      if (audioPlayer.readyState >= 1) {
+        try {
+          if (!audioPlayer.duration || targetTime < audioPlayer.duration) {
+            audioPlayer.currentTime = targetTime;
+          }
+          timeSynced = true;
+        } catch (e) {
+          console.warn("Could not sync currentTime yet:", e);
+        }
+      }
     } else if (targetTime === 0) {
       timeSynced = true;
     }
@@ -929,6 +935,7 @@ function initMusicPlayer() {
 
   audioPlayer.addEventListener('canplay', () => {
     syncPlaybackTime();
+    updateSeekProgress();
   });
 
   audioPlayer.addEventListener('ended', () => {
@@ -976,55 +983,31 @@ function initMusicPlayer() {
   };
 
   if (shouldPlay) {
-    syncPlaybackTime();
     try {
       audioPlayer.play().then(() => {
         musicPlaying = true;
         localStorage.setItem('musicPlaying', 'true');
         localStorage.setItem('userPaused', 'false');
-        timeSynced = true;
-        const vinyl = document.getElementById('vinylRecord');
-        const vis = document.getElementById('visualizer');
-        if (vinyl) vinyl.classList.add('playing');
-        if (vis) vis.classList.add('active');
-
-        const playIcon = document.getElementById('musicPlayIcon');
-        if (playIcon) {
-          playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-        }
-
-        const activeItem = document.getElementById(`playlist-item-${songs[currentSongIndex].id}`);
-        if (activeItem) {
-          const indicator = activeItem.querySelector('.playlist-play-indicator');
-          if (indicator) indicator.style.display = 'block';
-        }
-
-        const miniPlayState = document.querySelectorAll('.mini-play-state, #musicMiniPlayState');
-        miniPlayState.forEach(el => {
-          el.textContent = '▶';
-          el.style.color = 'var(--accent-color)';
-        });
-
+        syncPlaybackTime();
+        updateMusicUIState();
         animateVisualizerActive();
       }).catch(() => {
         musicPlaying = false;
         document.addEventListener('click', startAutoplayOnInteraction);
         document.addEventListener('keydown', startAutoplayOnInteraction);
+        updateMusicUIState();
       });
     } catch (err) {
       musicPlaying = false;
       document.addEventListener('click', startAutoplayOnInteraction);
       document.addEventListener('keydown', startAutoplayOnInteraction);
+      updateMusicUIState();
     }
   } else {
     // Explicitly stay paused if was not playing, paused by user, or is muted
     musicPlaying = false;
     localStorage.setItem('musicPlaying', 'false');
-    const miniPlayState = document.querySelectorAll('.mini-play-state, #musicMiniPlayState');
-    miniPlayState.forEach(el => {
-      el.textContent = '⏸';
-      el.style.color = 'var(--text-secondary)';
-    });
+    updateMusicUIState();
   }
 }
 
@@ -1177,6 +1160,79 @@ function toggleSaveCurrentSong(e) {
   renderPlaylist();
 }
 
+function updateMusicUIState() {
+  const isPlaying = musicPlaying && !audioPlayer.paused;
+
+  // Vinyl Record & Visualizer
+  const vinyl = document.getElementById('vinylRecord');
+  const vis = document.getElementById('visualizer');
+  if (vinyl) {
+    if (isPlaying) vinyl.classList.add('playing');
+    else vinyl.classList.remove('playing');
+  }
+  if (vis) {
+    if (isPlaying) vis.classList.add('active');
+    else vis.classList.remove('active');
+  }
+
+  // Mini Bar Music Icon & Play State Symbol
+  const miniIcon = document.getElementById('miniMusicIcon');
+  if (miniIcon) {
+    if (isMuted) {
+      miniIcon.textContent = '🔇';
+      miniIcon.style.color = 'var(--text-secondary)';
+      miniIcon.style.filter = '';
+    } else if (isPlaying) {
+      miniIcon.textContent = '🎵';
+      miniIcon.style.color = 'var(--accent-color)';
+      miniIcon.style.filter = 'drop-shadow(0 0 5px var(--accent-glow))';
+    } else {
+      miniIcon.textContent = '🎵';
+      miniIcon.style.color = 'var(--text-secondary)';
+      miniIcon.style.filter = '';
+    }
+  }
+
+  const miniPlayState = document.querySelectorAll('.mini-play-state, #musicMiniPlayState');
+  miniPlayState.forEach(el => {
+    if (isMuted) {
+      el.textContent = '🔇';
+      el.style.color = 'var(--text-secondary)';
+    } else if (isPlaying) {
+      el.textContent = '▶';
+      el.style.color = 'var(--accent-color)';
+    } else {
+      el.textContent = '⏸';
+      el.style.color = 'var(--text-secondary)';
+    }
+  });
+
+  // Main Player Play/Pause Button Icon SVG
+  const playIcon = document.getElementById('musicPlayIcon');
+  if (playIcon) {
+    if (isPlaying) {
+      playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+    } else {
+      playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    }
+  }
+
+  // Playlist Active Item Indicators
+  const currentSong = songs[currentSongIndex];
+  if (currentSong) {
+    document.querySelectorAll('.playlist-play-indicator').forEach(ind => {
+      ind.style.display = 'none';
+    });
+    if (isPlaying) {
+      const activeItem = document.getElementById(`playlist-item-${currentSong.id}`);
+      if (activeItem) {
+        const indicator = activeItem.querySelector('.playlist-play-indicator');
+        if (indicator) indicator.style.display = 'block';
+      }
+    }
+  }
+}
+
 function playMusicSynth() {
   if (isMuted) {
     isMuted = false;
@@ -1192,44 +1248,19 @@ function playMusicSynth() {
 
   try {
     audioPlayer.play().then(() => {
-      const vinyl = document.getElementById('vinylRecord');
-      const vis = document.getElementById('visualizer');
-      if (vinyl) vinyl.classList.add('playing');
-      if (vis) vis.classList.add('active');
-
-      const miniIcon = document.getElementById('miniMusicIcon');
-      if (miniIcon) {
-        miniIcon.style.color = 'var(--accent-color)';
-        miniIcon.style.filter = 'drop-shadow(0 0 5px var(--accent-glow))';
-      }
-
-      const miniPlayState = document.querySelectorAll('.mini-play-state');
-      miniPlayState.forEach(el => {
-        el.textContent = '▶';
-        el.style.color = 'var(--accent-color)';
-      });
-
-      const playIcon = document.getElementById('musicPlayIcon');
-      if (playIcon) {
-        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-      }
-
-      const activeItem = document.getElementById(`playlist-item-${songs[currentSongIndex].id}`);
-      if (activeItem) {
-        const indicator = activeItem.querySelector('.playlist-play-indicator');
-        if (indicator) indicator.style.display = 'block';
-      }
-
+      updateMusicUIState();
       animateVisualizerActive();
     }).catch(err => {
       console.error("Audio playback failed:", err);
       musicPlaying = false;
       localStorage.setItem('musicPlaying', 'false');
+      updateMusicUIState();
     });
   } catch (err) {
     console.error("Synchronous audio playback failed:", err);
     musicPlaying = false;
     localStorage.setItem('musicPlaying', 'false');
+    updateMusicUIState();
   }
 }
 
@@ -1244,31 +1275,7 @@ function pauseMusicSynth() {
     animationFrameId = null;
   }
 
-  const vinyl = document.getElementById('vinylRecord');
-  const vis = document.getElementById('visualizer');
-  if (vinyl) vinyl.classList.remove('playing');
-  if (vis) vis.classList.remove('active');
-
-  const miniIcon = document.getElementById('miniMusicIcon');
-  if (miniIcon) {
-    miniIcon.style.color = 'var(--text-secondary)';
-    miniIcon.style.filter = '';
-  }
-
-  const miniPlayState = document.querySelectorAll('.mini-play-state');
-  miniPlayState.forEach(el => {
-    el.textContent = '⏸';
-    el.style.color = 'var(--text-secondary)';
-  });
-
-  const playIcon = document.getElementById('musicPlayIcon');
-  if (playIcon) {
-    playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-  }
-
-  document.querySelectorAll('.playlist-play-indicator').forEach(ind => {
-    ind.style.display = 'none';
-  });
+  updateMusicUIState();
 }
 
 function animateVisualizerActive() {
@@ -1382,14 +1389,15 @@ function initToolbox() {
     `;
   });
 
-  // Replace minimized horizontal bar indicators with single song icon button
+  // Replace minimized horizontal bar indicators with single interactive song icon & play state button
   const miniPlayStateEls = document.querySelectorAll('#musicMiniPlayState');
   miniPlayStateEls.forEach(el => {
     const parent = el.parentElement;
     if (parent) {
       parent.outerHTML = `
-        <button id="miniMusicToggleBtn" onclick="toggleMusicPlaybackDirect(event)" style="background: none; border: none; cursor: pointer; font-size: 0.9rem; padding: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;" title="Toggle Soundtrack">
-          <span id="miniMusicIcon" style="color: var(--text-secondary); transition: all 0.3s ease;">🎵</span>
+        <button id="miniMusicToggleBtn" onclick="toggleMusicPlaybackDirect(event)" style="background: none; border: none; cursor: pointer; padding: 2px 6px; display: inline-flex; align-items: center; gap: 4px; border-radius: 4px; transition: transform 0.2s;" title="Play / Pause Soundtrack">
+          <span id="miniMusicIcon" style="font-size: 0.85rem; color: var(--text-secondary); transition: all 0.3s ease;">🎵</span>
+          <span id="musicMiniPlayState" class="mini-play-state" style="font-size: 0.75rem; font-family: monospace; font-weight: bold; color: var(--text-secondary);">⏸</span>
         </button>
       `;
     }
@@ -1499,10 +1507,18 @@ function updateMusicVolume(val) {
 }
 
 function toggleMusicMuteDirect(e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
   toggleAmbientSound(e);
 }
 
 function toggleMusicMute(e) {
+  if (e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
   toggleAmbientSound(e);
 }
 
